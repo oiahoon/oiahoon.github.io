@@ -6,6 +6,15 @@ author:     "黄药师"
 date: 2018-03-24
 tags:
     - Notes
+    - Mac
+    - Sublime Text
+    - iterm2
+    - homebrew
+    - zsh
+    - oh-my-zsh
+    - rbenv
+    - postman
+    - Alfred
 ---
 
 本文主要以rails为例子，介绍拿到新的rmbp以后如何迅速搭建开发环境，并推荐一些基础软件。
