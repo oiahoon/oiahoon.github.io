@@ -3,6 +3,7 @@ layout:     post
 title:      "[初闻道]搭建mac开发环境"
 subtitle:   "拿到一台mac以后怎么初始化开发环境"
 author:     "黄药师"
+date: 2018-03-24
 tags:
     - Notes
 ---
@@ -20,21 +21,21 @@ tags:
 
 ## 安装iterm2
 > http://iterm2.com
-> ![Alt text](./1522039731957.png)
+> ![Alt text](/uploads/1522039731957.png)
 > 下载安装就行，打开以后保留在dock里面，方便以后快速打开
 > 这是主力开发工具之一
 
 
 ## 安装homebrew
 > https://brew.sh
-> ![Alt text](./1522039842393.png)
+> ![Alt text](/uploads/1522039842393.png)
 > 打开iterm2, 粘贴以下命令回车，根据提示继续操作就行
 > `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 > 中间可能会需要授权，输入mac的登录密码就可以了。
 > 安装时间根据网络情况可能会比较长，半个小时左右吧，慢慢等。
 > 等homebrew装完以后就方便多了，很多软件都可以用brew来安装
 > 相关命令可以查阅网站文档
-> ![Alt text](./1522039638512.png)
+> ![Alt text](/uploads/1522039638512.png)
 
 ## 安装zsh，oh-my-zsh
 > 用brew安装文档是很方便的
@@ -60,7 +61,7 @@ tags:
 第一个就是换成自己喜欢的theme，用起来顺手顺眼
 [Themes](https://github.com/robbyrussell/oh-my-zsh#themes)
 我喜欢的是 agnoster 这个theme，所以先修改配置
-![Alt text](./1522041444038.png)
+![Alt text](/uploads/1522041444038.png)
 然后根据提示去安装字体，via [fonts-powerline](https://github.com/powerline/fonts)
 ```powershell
 git clone https://github.com/powerline/fonts.git --depth=1
@@ -70,20 +71,20 @@ cd ..
 rm -rf fonts
 ```
 然后打开iterm的偏好设置，修改默认字体
-![Alt text](./1522042214924.png)
+![Alt text](/uploads/1522042214924.png)
 不喜欢iterm配色还可以去下载一堆回来慢慢试
 [iTerm Themes](http://iterm2colorschemes.com/)
 
 
 ## 安装sublime text 或者 vim
 > http://www.sublimetext.com/3
->![Alt text](./1522039693029.png)
+>![Alt text](/uploads/1522039693029.png)
 > 我个人的习惯是给sublime text设置一个命令行启动
 > ```powershell
 > $ ln -f -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl /usr/local/bin/subl
 > ```
 > 记得在~/.zshrc 里面加上PATH 或者去掉该行注释
-> ![Alt text](./1522047294708.png)
+> ![Alt text](/uploads/1522047294708.png)
 > 这样的好处是可以从命令行快速的用sublime打开文件
 > ```powershell
 > $ subl ~/.zshrc
@@ -111,7 +112,7 @@ $ pbcopy < ~/.ssh/id_rsa.pub
 ```
 粘贴到GitHub的账户设置里面
 [SSH keys / Add new](https://github.com/settings/ssh/new)
-![Alt text](./1522051389139.png)
+![Alt text](/uploads/1522051389139.png)
 
 ## 额外的工具推荐
 1. thefuck
