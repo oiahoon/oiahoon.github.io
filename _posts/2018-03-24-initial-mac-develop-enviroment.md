@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "[初闻道]搭建mac开发环境"
-subtitle:   "拿到一台mac以后怎么初始化开发环境"
+subtitle:   "初闻道系列之一，磨刀不误砍柴工。"
 author:     "黄药师"
 date: 2018-03-24
 tags:
@@ -16,7 +16,7 @@ tags:
     - postman
     - Alfred
 ---
-
+拿到一台mac以后怎么初始化开发环境。
 本文主要以rails为例子，介绍拿到新的rmbp以后如何迅速搭建开发环境，并推荐一些基础软件。
 
 ---
