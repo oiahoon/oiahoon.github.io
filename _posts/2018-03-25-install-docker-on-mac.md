@@ -9,6 +9,7 @@ tags:
     - Mac
     - docker-compose
     - rails
+    - Notes
 ---
 
 本文主要解决在mac上安装docker[-compose]，以及启动一个nginx实例。
