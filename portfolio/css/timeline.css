@@ -181,6 +181,32 @@ body, html {
 	background-size: 22px;
 }
 
+.i-rails:before {
+	content: "";
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url("../images/logo-rails.png") 50% 50% no-repeat;
+	background-size: 22px;
+}
+
+.i-js:before {
+	content: "";
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url("../images/logo-js.png") 50% 50% no-repeat;
+	background-size: 22px;
+}
+
+.i-chrome:before {
+	content: "";
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url("../images/logo-chrome.png") 50% 50% no-repeat;
+	background-size: 22px;
+}
 /******* Hux Branch *****/
 
 /* navbar - dark mode */
