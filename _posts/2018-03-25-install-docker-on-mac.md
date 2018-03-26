@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "[初闻道]在mac上安装docker，及docker-compose"
-subtitle:   "初闻道系列是为了给新人用的"
+subtitle:   "初闻道系列之二，装好docker好搞事。"
 date:       2018-03-25 00:31:30
 author:     "黄药师"
 tags:
@@ -11,7 +11,7 @@ tags:
     - rails
     - Notes
 ---
-
+现在流行用docker作容器来开发部署。
 本文主要解决在mac上安装docker[-compose]，以及启动一个nginx实例。
 
 ---
