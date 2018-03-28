@@ -49,7 +49,7 @@ tags:
 > ![Alt text](/uploads/1522039638512.png)
 
 ## 安装zsh，oh-my-zsh
-> 用brew安装文档是很方便的\
+> 用brew安装文档是很方便的  
 > install ZSH via [wiki](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH#macos)
 > http://github.com/robbyrussell/oh-my-zsh
 > 
