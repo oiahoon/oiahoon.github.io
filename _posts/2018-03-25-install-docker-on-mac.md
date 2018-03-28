@@ -28,7 +28,7 @@ tags:
 
 ### 使用 Homebrew 安装
 macOS 我们可以使用 Homebrew 来安装 Docker：
-{% highlight ruby %}
+{% highlight powershell %}
 ```powershell
 $ brew cask install docker
 
@@ -43,7 +43,7 @@ Password:          # 输入 macOS 密码
 ==> Moving App 'Docker.app' to '/Applications/Docker.app'.
 &#x1f37a;  docker was successfully installed!
 ```
-{% highlight ruby %}
+{% endhighlight %}
 在载入 Docker app 后，点击 Next，可能会询问你的 macOS 登陆密码，你输入即可。之后会弹出一个 Docker 运行的提示窗口，状态栏上也有有个小鲸鱼的图标（![](https://ws2.sinaimg.cn/large/006tKfTcgy1fpnqyej3taj300u00lwec.jpg)）。
 
 ----
