@@ -2,7 +2,7 @@
 > 旅行和咖啡才是生活的主题
 > 代码不过是对生活的消遣。
 
-我是黄药师: [博客](https://notes.miaowu.org)、[微博](weibo.com/desiver)、[Github](http://github.com/oiahoon)。
+我是黄药师: [博客](https://notes.miaowu.org)、[微博](https://weibo.com/desiver)、[Github](http://github.com/oiahoon)。
 
 职业是软件工程师，养了一只猫，喜欢拿着单反到处拍，还喜欢做咖啡给自己喝。
 
