@@ -28,7 +28,7 @@ tags:
 
 ### 使用 Homebrew 安装
 macOS 我们可以使用 Homebrew 来安装 Docker：
-{% highlight powershell %}
+{% highlight powershell linenos %}
 ```powershell
 $ brew cask install docker
 
