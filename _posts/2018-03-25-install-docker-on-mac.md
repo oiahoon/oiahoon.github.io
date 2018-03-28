@@ -11,7 +11,7 @@ tags:
     - rails
     - Notes
 ---
-现在流行用docker作容器来开发部署。
+现在流行用docker作容器来开发部署。\
 本文主要解决在mac上安装docker[-compose]，以及启动一个nginx实例。
 
 ---
@@ -47,8 +47,8 @@ Password:          # 输入 macOS 密码
 ----
 
 ###手动下载安装
-如果需要手动下载，请点击以下链接下载 [Stable](https://download.docker.com/mac/stable/Docker.dmg) 或 [Edge](https://download.docker.com/mac/edge/Docker.dmg) 版本的 Docker for Mac。
-双击下载的 .dmg 文件，然后将鲸鱼图标拖拽到 Application 文件夹即可。
+如果需要手动下载，请点击以下链接下载 [Stable](https://download.docker.com/mac/stable/Docker.dmg) 或 [Edge](https://download.docker.com/mac/edge/Docker.dmg) 版本的 Docker for Mac。\
+双击下载的 .dmg 文件，然后将鲸鱼图标拖拽到 Application 文件夹即可。\
 ![](https://ws2.sinaimg.cn/large/006tKfTcly1fpnr1f9lylj30jg09wt9g.jpg)
 从应用中找到 Docker 图标并点击运行， 或者呼出Alfred输入`docker`回车。可能会询问 macOS 的登陆密码，输入即可。
 
