@@ -16,7 +16,7 @@ tags:
     - postman
     - Alfred
 ---
-拿到一台mac以后怎么初始化开发环境。\
+拿到一台mac以后怎么初始化开发环境.  
 本文主要以rails为例子，介绍拿到新的rmbp以后如何迅速搭建开发环境，并推荐一些基础软件。
 
 ---
@@ -31,7 +31,7 @@ tags:
 ## 安装iterm2
 > http://iterm2.com
 > ![Alt text](/uploads/1522039731957.png)
-> 下载安装就行，打开以后保留在dock里面，方便以后快速打开\
+> 下载安装就行，打开以后保留在dock里面，方便以后快速打开.  
 > 这是主力开发工具之一
 
 
@@ -42,9 +42,9 @@ tags:
 > ```powershell
 > $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 > ```
-> 中间可能会需要授权，输入mac的登录密码就可以了。
-> 安装时间根据网络情况可能会比较长，半个小时左右吧，慢慢等。
-> 等homebrew装完以后就方便多了，很多软件都可以用brew来安装
+> 中间可能会需要授权，输入mac的登录密码就可以了。  
+> 安装时间根据网络情况可能会比较长，半个小时左右吧，慢慢等。  
+> 等homebrew装完以后就方便多了，很多软件都可以用brew来安装. 
 > 相关命令可以查阅网站文档
 > ![Alt text](/uploads/1522039638512.png)
 
@@ -69,7 +69,7 @@ tags:
 > ```
 
 ## 配置zshrc，oh-my-zsh
-第一个就是换成自己喜欢的theme，用起来顺手顺眼\
+第一个就是换成自己喜欢的theme，用起来顺手顺眼.  
 [Themes](https://github.com/robbyrussell/oh-my-zsh#themes)
 我喜欢的是 agnoster 这个theme，所以先修改配置
 ![Alt text](/uploads/1522041444038.png)
@@ -83,7 +83,7 @@ rm -rf fonts
 ```
 然后打开iterm的偏好设置，修改默认字体
 ![Alt text](/uploads/1522042214924.png)
-不喜欢iterm配色还可以去下载一堆回来慢慢试\
+不喜欢iterm配色还可以去下载一堆回来慢慢试.  
 [iTerm Themes](http://iterm2colorschemes.com/)
 
 
@@ -110,8 +110,8 @@ rm -rf fonts
 > ```
 
 ## 配置github的ssh key
-> 目的是为了本地命令行不用每次都输入GitHub的账号密码\
-> https://github.com/settings/keys\
+> 目的是为了本地命令行不用每次都输入GitHub的账号密码  
+> https://github.com/settings/keys  
 > https://help.github.com/articles/connecting-to-github-with-ssh/
 
 ```powershell
