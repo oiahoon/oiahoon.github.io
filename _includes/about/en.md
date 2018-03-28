@@ -2,7 +2,7 @@
 > since i have a cat
 > and i can drink my coffee.
 
-I am Joey: [Notes](https://notes.miaowu.org)、[Weibo](weibo.com/desiver)、[Github](http://github.com/oiahoon)。
+I am Joey: [Notes](https://notes.miaowu.org)、[Weibo](https://weibo.com/desiver)、[Github](http://github.com/oiahoon)。
 
 A shutterbug major in software development.
 
