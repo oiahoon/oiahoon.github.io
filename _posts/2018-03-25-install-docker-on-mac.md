@@ -35,12 +35,12 @@ $ brew cask install docker
 ==> We'll set permissions properly so we won't need sudo in the future
 Password:          # 输入 macOS 密码
 ==> Satisfying dependencies
-==> Downloading https://download.docker.com/mac/stable/21090/Docker.dmg
+==> Downloading https://download.docker.com/mac/stable/23608/Docker.dmg
 ######################################################################## 100.0%
 ==> Verifying checksum for Cask docker
 ==> Installing Cask docker
 ==> Moving App 'Docker.app' to '/Applications/Docker.app'.
-&#x1f37a;  docker was successfully installed!
+🍺  docker was successfully installed!
 ```
 在载入 Docker app 后，点击 Next，可能会询问你的 macOS 登陆密码，你输入即可。之后会弹出一个 Docker 运行的提示窗口，状态栏上也有有个小鲸鱼的图标（![](https://ws2.sinaimg.cn/large/006tKfTcgy1fpnqyej3taj300u00lwec.jpg)）。
 
@@ -60,6 +60,17 @@ Password:          # 输入 macOS 密码
 第一次点击图标，可能会看到这个安装成功的界面，点击 "Got it!" 可以关闭这个窗口。
 ![](https://ws2.sinaimg.cn/large/006tKfTcgy1fpnr5m8oxfj308o0kmt9y.jpg)
 
+> 这里有个小提示：
+> 自己注册一个 docker 的账号，然后在小鲸鱼菜单里面登录
+> 登录的时候用ID登录，不要用email，否则后续的命令行可能会出现
+> ```powershell
+> Unable to find image 'nginx:latest' locally
+docker: Error response from daemon: Get https://registry-1.docker.io/v2/library/nginx/manifests/latest: unauthorized: incorrect username or password.
+See 'docker run --help'.
+>```
+> 要找到自己的ID很简单，打开 [docker store](https://store.docker.com/),  
+> 登录以后看右上角，头像旁边就是自己注册的ID
+
 启动终端后，通过命令可以检查安装后的 Docker 版本。
 ```powershell
 $ docker --version
@@ -78,7 +89,7 @@ $ docker run -d -p 80:80 --name webserver nginx
 ```
 > 参数的含义和用法参考网上的文档
 
-服务运行后，可以访问 http://localhost，如果看到了 "Welcome to nginx!"，就说明 Docker for Mac 安装成功了。
+服务运行后，可以访问 [http://localhost](http://localhost)，如果看到了 "Welcome to nginx!"，就说明 Docker for Mac 安装成功了。
 ![](https://ws3.sinaimg.cn/large/006tKfTcgy1fpnrjws8loj312q0ki421.jpg)
 
 要停止 Nginx 服务器并删除执行下面的命令：
