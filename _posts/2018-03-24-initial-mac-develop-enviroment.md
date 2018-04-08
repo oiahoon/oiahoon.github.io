@@ -130,6 +130,10 @@ $ pbcopy < ~/.ssh/id_rsa.pub
 > 一款自动纠正上一条打错的命令
 > https://github.com/nvbn/thefuck
 
+2. autojump
+> 具备学习功能的快速跳转路径的命令行工具
+> https://github.com/wting/autojump
+
 3. Alfred
 > 一款mac上的快捷神器，不仅可以快速打开app
 > 还可以自制或者下载一些高效的workflow
