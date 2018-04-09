@@ -2,8 +2,8 @@
 layout:     post
 title:      "[初闻道]在mac上安装docker，及docker-compose"
 subtitle:   "初闻道系列之二，装好docker好搞事。"
-date:       2018-03-25 00:31:30
 author:     "黄药师"
+date:       2018-03-25 00:31:30
 tags:
     - Docker
     - Mac

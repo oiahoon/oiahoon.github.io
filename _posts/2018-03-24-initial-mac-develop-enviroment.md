@@ -3,7 +3,7 @@ layout:     post
 title:      "[初闻道]搭建mac开发环境"
 subtitle:   "初闻道系列之一，磨刀不误砍柴工。"
 author:     "黄药师"
-date: 2018-03-24
+date:       2018-03-24
 tags:
     - Notes
     - Mac
