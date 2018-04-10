@@ -11,11 +11,11 @@ tags:
     - error
 ---
 
-本文解决MacOS升级后出现xcrun: error: invalid active developer path, missing xcrun的问题。
+本文解决MacOS升级后出现`xcrun: error: invalid active developer path, missing xcrun`的问题。
 
 ---
 
-今天升级macOS High Sierra，终端里使用git的时候，弹出一行莫名其妙的错误：
+今天升级**macOS High Sierra**，终端里使用git的时候，弹出一行莫名其妙的错误：
 
 ```powershell
 xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun
