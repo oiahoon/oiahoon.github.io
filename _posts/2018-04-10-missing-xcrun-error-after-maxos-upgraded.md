@@ -25,11 +25,11 @@ xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools
 解决方法，重装xcode command line：
 
 ```powershell
-xcode-select --install
+$ xcode-select --install
 ```
 
 如果没有解决问题，执行以下命令
 
 ```powershell
-sudo xcode-select -switch /
+$ sudo xcode-select -switch /
 ```
