@@ -103,5 +103,17 @@ friends: [
     {
         title: "超神",
         href: "http://zouchao.me/"
+    },
+    {
+        title: "Star Zhou",
+        href: "https://zouchao.me/"
+    },
+    {
+        title: "ZhongFox",
+        href: "https://zhongfox.github.io/"
+    },
+    {
+        title: "小涛",
+        href: "http://chenxiaotao.github.io/"
     }
 ]
