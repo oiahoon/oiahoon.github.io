@@ -102,11 +102,11 @@ service-worker: true
 friends: [
     {
         title: "超神",
-        href: "http://zouchao.me/"
+        href: "https://zouchao.me/"
     },
     {
         title: "Star Zhou",
-        href: "https://zouchao.me/"
+        href: "https://starzhou.com/"
     },
     {
         title: "ZhongFox",
