@@ -1,9 +1,9 @@
 ---
 layout:     post
 title:      "自行搭建ELK相关事宜"
-subtitle:   "结合rails介绍如何开始docker之旅"
+subtitle:   "公司需要搭建ELK系统的可以参考一下。"
 author:     "黄药师"
-date:   2018-04-11
+date:   2018-04-19
 tags:
     - Notes
     - ELK
