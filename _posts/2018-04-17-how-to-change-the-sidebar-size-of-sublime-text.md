@@ -20,7 +20,7 @@ tags:
 1. 打开Sublime Text 的 **Preferences(个人偏好)** -> **浏览插件(Browse Packages)**
 ![Browse Packages](https://ws3.sinaimg.cn/large/006tKfTcgy1fqhbg3sbt4j30qq0iyn39.jpg)
 2. 打开 `User` 目录
-3. 创建一个新文件 `Default.sublime-theme`， 如果你没有使用默认主题而是自己的主题的话，比如我是 **itg.flat.dark.sublime-theme** 那文件名就是 `itg.flat.dark.sublime-theme`， 写入
+3. 创建一个新文件 `Default.sublime-theme`，如果你没有使用默认主题而是自己的主题的话，比如我是 **itg.flat.dark.sublime-theme** 那文件名就是 `itg.flat.dark.sublime-theme`， 写入
 ```
 [
     {
@@ -32,10 +32,10 @@ tags:
 ]
 ```
 实测你可以去掉 color 那一行，或者自己修改成自己喜欢的颜色。  
-保存及时生效，如果没生效肯定是文件名错了。
+保存及时生效，如果没生效肯定是文件名错了。  
 ![](https://ws3.sinaimg.cn/large/006tKfTcgy1fqhbnibm3tj31760xegqy.jpg)
 
-还有很多参数可以配置，可以参考一下：[Default.sublime-theme](https://gist.github.com/oiahoon/6b6a0a715ccb8f0f9c40ef9e6fb9d6db)
+还有很多参数可以配置，可以参考一下：[Default.sublime-theme](https://gist.github.com/oiahoon/6b6a0a715ccb8f0f9c40ef9e6fb9d6db)  
 我只列出一部分：
 ```
 [
