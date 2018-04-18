@@ -175,22 +175,26 @@ connecting to: dds-xxxx.mongodb.rds.aliyuncs.com:3007/test
 exception: login failed
 ```
 排除密码错误以后，推测是 mongo shell 的版本太低，阿里云的mongodb是3.+的
+
 ```powershell
 $ mongo --version
 MongoDB shell version: 2.6.10
 ```
+
 我们是 ubuntu 16 所以卸载以后重新安装最新版，
 > The important thing is: use `mongodb-org-tools` instead of `mongodb-clients`
+
 ```powershell
 $ sudo apt-get remove mongodb-clients
 $ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
 $ echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
-
 $ sudo apt-get update
 $ sudo apt-get install mongodb-org-tools
 $ sudo apt-get install mongodb-org-shell=3.2.19
 ```
+
 依然认证失败
+
 ```powershell
 $ mongo --host dds-xxxx.mongodb.rds.aliyuncs.com:3007 --authenticationDatabase admin -u readonly -p
 MongoDB shell version: 3.2.19
