@@ -21,9 +21,9 @@ tags:
 
 ---
 
-0. Environment
-    macOS: **High Sierra 10.13.4**
-    ruby version: `2.4.2`
+0. Environment  
+    macOS: **High Sierra 10.13.4**  
+    ruby version: `2.4.2`  
 
     ```powershell
     $ gem install rmagick
@@ -40,8 +40,9 @@ tags:
     checking for outdated ImageMagick version (<= 6.4.9)... *** extconf.rb failed ***
     ...
     ```
-    第一个问题是因为没有安装 `imagemagick`, 遂安装之，
-    然后把 PATH 加载一下，重新 `gem install rmagick`
+    第一个问题是因为没有安装 `imagemagick`, 遂安装之，  
+    然后把 PATH 加载一下，重新 `gem install rmagick`  
+
     ```
     $ brew install imagemagick
     $ mdfind MagickCore.pc
@@ -74,11 +75,11 @@ tags:
     $ mdfind MagickWand.h
     $ C_INCLUDE_PATH=/usr/local/Cellar/imagemagick/7.0.7-28/include/ImageMagick-7/
     ```
-    还是继续这个错误，and then i got this:
+    还是继续这个错误，and then i got this:  
     > [RMagick installation: Can't find MagickWand.h
     ](https://stackoverflow.com/questions/39494672/rmagick-installation-cant-find-magickwand-h)
 
-    和我是一个版本 **RMagick 2.16.0**, 然后也是安装得了 version 7 的 **imagemagick**，
+    和我是一个版本 **RMagick 2.16.0**, 然后也是安装得了 version 7 的 **imagemagick**， 
     下面的解决方案是重新安装 version 6。 
     ```powershell
     $ brew unlink imagemagick
@@ -91,7 +92,7 @@ tags:
     $ echo 'export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"' >> ~/.zshrc
     ```
 
-3. 仍然出现 **Can't install RMagick 2.16.0. Can't find MagickWand.h.**
+3. 仍然出现 **Can't install RMagick 2.16.0. Can't find MagickWand.h.**  
     思考了一下可能是`PATH`没换过来，回到第二个问题开始的地方
  
     ```powershell
@@ -148,9 +149,9 @@ tags:
     $ brew install imagemagick@6 --with-x11
     Warning: imagemagick@6: this formula has no --with-x11 option so it will be ignored!
     ```
-    看来带版本的 不能这样玩儿啊。官网论坛看一下：
-    > [**Mac OS X binary is not X11 enabled**](https://imagemagick.org/discourse-server/viewtopic.php?t=32616)
-    > If your issue is that you cannot display images without X11, then you need to download and install XQuartz. Apple does not provide X11 any more. See https://www.xquartz.org and https://support.apple.com/en-us/HT201341
+    看来带版本的 不能这样玩儿啊。官网论坛看一下：  
+    > [**Mac OS X binary is not X11 enabled**](https://imagemagick.org/discourse-server/viewtopic.php?t=32616)  
+    > If your issue is that you cannot display images without X11, then you  need to download and install XQuartz. Apple does not provide X11 any more. See https://www.xquartz.org and https://support.apple.com/en-us/HT201341
 
     好的看来装一下 **xquartz**就行
     ```powershell
@@ -171,5 +172,5 @@ tags:
     ```
 
 7. 尝试往图片上写中文乱码
-  字体的原因，除了需要安装 **7.** 里面那个扩展，还需要下载中文字体，放在可以访问的路径，最终代码差不多这样，给背景图上加上了图片和文字：
+  字体的原因，除了需要安装 **7.** 里面那个扩展，还需要下载中文字体，放在可以访问的路径，最终代码差不多这样，给背景图上加上了图片和文字：  
   ![](https://ws1.sinaimg.cn/large/006tNc79gy1fqshntqoqfj30bq0j4795.jpg)
