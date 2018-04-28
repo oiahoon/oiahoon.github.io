@@ -20,12 +20,12 @@ tags:
 [demo code](https://github.com/oiahoon/rmagick-composing-demo)
 ---
 
-macOS: **High Sierra 10.13.4**
-ruby version: `2.4.2`
+    macOS: **High Sierra 10.13.4**
+    ruby version: `2.4.2`
 
-```powershell
-$ gem install rmagick
-```
+    ```powershell
+    $ gem install rmagick
+    ```
 
 1. **No package 'MagickCore' found**
 
