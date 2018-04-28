@@ -17,7 +17,7 @@ tags:
 
 在 `High Sierra` macOS 上安装 `rmagick` 然后用来合成图片的时候遇到的一些问题和解决方案。
 花了大半天把问题解决了，必须把遇到的问题和解决方案放出来，还剩下 X11 的问题么有解决，估计只能等rmagick更新才能得到解决了, anyway, 不影响功能，who care.
-
+[demo code](https://github.com/oiahoon/rmagick-composing-demo)
 ---
 
 macOS: **High Sierra 10.13.4**
