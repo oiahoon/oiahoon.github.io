@@ -16,7 +16,7 @@ tags:
 ---
 
 在 `High Sierra` macOS 上安装 `rmagick` 然后用来合成图片的时候遇到的一些问题和解决方案。
-花了大半天把问题解决了，必须把遇到的问题和解决方案放出来，还剩下 X11 的问题么有解决，估计只能等rmagick更新才能得到解决了, anyway, 不影响功能，who care.  
+花了大半天把问题解决了，必须把遇到的问题和解决方案记录下来，还剩下`X11` 的问题么有解决，估计只能等rmagick更新才能得到解决了, anyway, 不影响功能，who care.  
 [demo code](https://github.com/oiahoon/rmagick-composing-demo)
 
 ---
@@ -33,19 +33,19 @@ tags:
 
     ```powershell
     ...
-    ackage MagickCore was not found in the pkg-config search path.
-    Perhaps you should add the directory containing `MagickCore.pc'
-    to the PKG_CONFIG_PATH environment variable
-    No package 'MagickCore' found
-    checking for outdated ImageMagick version (<= 6.4.9)... *** extconf.rb failed ***
+    ackage MagickCore was not found in the pkg-config search path.  
+    Perhaps you should add the directory containing `MagickCore.pc'  
+    to the PKG_CONFIG_PATH environment variable  
+    No package 'MagickCore' found  
+    checking for outdated ImageMagick version (<= 6.4.9)... *** extconf.rb failed ***  
     ...
     ```
     第一个问题是因为没有安装 `imagemagick`, 遂安装之，  
     然后把 PATH 加载一下，重新 `gem install rmagick`  
 
     ```
-    $ brew install imagemagick
-    $ mdfind MagickCore.pc
+    $ brew install imagemagick  
+    $ mdfind MagickCore.pc  
     $ export PKG_CONFIG_PATH=/usr/local/Cellar/imagemagick/7.0.7-28/lib/pkgconfig
     ```
 
@@ -172,5 +172,5 @@ tags:
     ```
 
 7. 尝试往图片上写中文乱码
-  字体的原因，除了需要安装 **7.** 里面那个扩展，还需要下载中文字体，放在可以访问的路径，最终代码差不多这样，给背景图上加上了图片和文字：  
+  字体的原因，除了需要安装 **上一步** 里面那个扩展，还需要下载中文字体，放在可以访问的路径，最终代码差不多这样，给背景图上加上了图片和文字：  
   ![](https://ws1.sinaimg.cn/large/006tNc79gy1fqshntqoqfj30bq0j4795.jpg)
