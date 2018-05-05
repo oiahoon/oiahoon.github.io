@@ -77,11 +77,10 @@ alias dockerclean='dockercleanc || true && dockercleani'
 ```
 
 
-[^dangling]: > **Dangling Images**
-Docker images consist of multiple layers. Dangling images, are layers that have no relationship to any tagged images. They no longer serve a purpose and consume disk space.
-To list dangling images by adding the filter flag, -f with a value of dangling=true to the docker images. 
-**List Dangling images**: 
-`docker images -f dangling=true`
-**Remove Dangling Images**: 
-`docker rmi $(docker images -f dangling=true -q)` 
+[^dangling]: **Dangling Images**: Docker images consist of multiple layers. Dangling images, are layers that have no relationship to any tagged images. They no longer serve a purpose and consume disk space.  
+To list dangling images by adding the filter flag, -f with a value of dangling=true to the docker images.   
+**List Dangling images**:   
+`docker images -f dangling=true`  
+**Remove Dangling Images**:   
+`docker rmi $(docker images -f dangling=true -q)`   
 This is the safest and easiest way to cleanup dangling images and get back our disk space back for use. 
