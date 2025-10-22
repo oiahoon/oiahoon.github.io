@@ -1,0 +1,80 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="retro-container">
+    <div class="footer-content">
+      <div class="social-links">
+        <a href="https://weibo.com/desiver" target="_blank">微博</a>
+        <a href="https://github.com/oiahoon" target="_blank">GitHub</a>
+        <a href="/rss.xml" target="_blank">RSS</a>
+      </div>
+      
+      <div class="copyright">
+        <p>© {currentYear} Joey's Notes • 
+          <a href="https://astro.build" target="_blank">Powered by Astro</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--retro-bg-light);
+    border-top: 1px solid #333;
+    padding: 48px 0 32px;
+    margin-top: 80px;
+  }
+  
+  .footer-content {
+    text-align: center;
+  }
+  
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 24px;
+  }
+  
+  .social-links a {
+    color: var(--retro-text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  
+  .social-links a:hover {
+    color: var(--retro-orange);
+  }
+  
+  .copyright {
+    color: var(--retro-text-dim);
+    font-size: 0.9rem;
+  }
+  
+  .copyright a {
+    color: var(--retro-text-dim);
+    text-decoration: none;
+  }
+  
+  .copyright a:hover {
+    color: var(--retro-orange);
+  }
+  
+  @media (max-width: 768px) {
+    .footer {
+      padding: 32px 0 24px;
+    }
+    
+    .social-links {
+      gap: 24px;
+    }
+    
+    .copyright {
+      font-size: 0.8rem;
+    }
+  }
+</style>

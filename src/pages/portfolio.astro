@@ -1,0 +1,185 @@
+---
+import SpotlightLayout from '../layouts/SpotlightLayout.astro';
+---
+
+<SpotlightLayout 
+  title="作品集 | Joey's Notes"
+  description="黄药师的个人作品和开源项目展示"
+>
+  <div class="sm:px-8 mt-16 lg:mt-32">
+    <div class="mx-auto w-full max-w-7xl lg:px-8">
+      <div class="relative px-4 sm:px-8 lg:px-12">
+        <div class="mx-auto max-w-2xl lg:max-w-5xl">
+          
+          <!-- Header -->
+          <header class="max-w-2xl">
+            <h1 class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
+              我创造的一些东西
+            </h1>
+            <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
+              多年来，我参与了许多项目，但这些是我最引以为豪的。其中许多是开源的，
+              所以如果你看到感兴趣的东西，请查看代码并贡献想法以改进。
+            </p>
+          </header>
+          
+          <!-- Projects Grid -->
+          <div class="mt-16 sm:mt-20">
+            <ul role="list" class="grid grid-cols-1 gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+              
+              <!-- Project 1: Jan Ken Pon -->
+              <li class="group relative flex flex-col items-start">
+                <div class="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    aria-hidden="true" 
+                    class="h-8 w-8 fill-zinc-500 dark:fill-zinc-400"
+                  >
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"></path>
+                  </svg>
+                </div>
+                <h2 class="mt-6 text-base font-semibold text-zinc-800 dark:text-zinc-100">
+                  <div class="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl dark:bg-zinc-800/50"></div>
+                  <a href="http://jan.miaowu.org" target="_blank">
+                    <span class="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl"></span>
+                    <span class="relative z-10">Jan Ken Pon</span>
+                  </a>
+                </h2>
+                <p class="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                  一个在线猜拳小游戏，使用 Ruby on Rails、JavaScript 和 React 构建。
+                  简单有趣的交互设计，支持多人对战。
+                </p>
+                <p class="relative z-10 mt-6 flex text-sm font-medium text-zinc-400 transition group-hover:text-orange-500 dark:text-zinc-200">
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke-width="1.5" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round" 
+                    aria-hidden="true" 
+                    class="h-6 w-6 flex-none"
+                  >
+                    <path d="M15.75 17.25 12 21m0 0-3.75-3.75M12 21V3"></path>
+                  </svg>
+                  <span class="ml-2">jan.miaowu.org</span>
+                </p>
+              </li>
+              
+              <!-- Project 2: Poker -->
+              <li class="group relative flex flex-col items-start">
+                <div class="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    aria-hidden="true" 
+                    class="h-8 w-8 fill-zinc-500 dark:fill-zinc-400"
+                  >
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                  </svg>
+                </div>
+                <h2 class="mt-6 text-base font-semibold text-zinc-800 dark:text-zinc-100">
+                  <div class="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl dark:bg-zinc-800/50"></div>
+                  <span class="relative z-10">Poker Planning</span>
+                </h2>
+                <p class="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                  包含匿名聊天室和在线 Planning Poker 的网站。
+                  使用 Ruby on Rails、WebSocket 和 Vue.js 构建，支持实时协作。
+                </p>
+                <p class="relative z-10 mt-6 flex text-sm font-medium text-zinc-400 dark:text-zinc-200">
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke-width="1.5" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round" 
+                    aria-hidden="true" 
+                    class="h-6 w-6 flex-none"
+                  >
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                  <span class="ml-2">已归档</span>
+                </p>
+              </li>
+              
+              <!-- Project 3: Joey's Notes -->
+              <li class="group relative flex flex-col items-start">
+                <div class="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    aria-hidden="true" 
+                    class="h-8 w-8 fill-zinc-500 dark:fill-zinc-400"
+                  >
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"></path>
+                  </svg>
+                </div>
+                <h2 class="mt-6 text-base font-semibold text-zinc-800 dark:text-zinc-100">
+                  <div class="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl dark:bg-zinc-800/50"></div>
+                  <a href="https://github.com/oiahoon/oiahoon.github.io" target="_blank">
+                    <span class="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl"></span>
+                    <span class="relative z-10">Joey's Notes</span>
+                  </a>
+                </h2>
+                <p class="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                  这个博客本身就是一个项目。从 Jekyll 迁移到 Astro，
+                  采用现代化的技术栈和 Spotlight 设计系统。
+                </p>
+                <p class="relative z-10 mt-6 flex text-sm font-medium text-zinc-400 transition group-hover:text-orange-500 dark:text-zinc-200">
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    aria-hidden="true" 
+                    class="h-6 w-6 flex-none fill-current"
+                  >
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.475 2 2 6.588 2 12.253c0 4.537 2.862 8.369 6.838 9.727.5.09.687-.218.687-.487 0-.243-.013-1.05-.013-1.91C7 20.059 6.35 18.957 6.15 18.38c-.113-.295-.6-1.205-1.025-1.448-.35-.192-.85-.667-.013-.68.788-.012 1.35.744 1.538 1.051.9 1.551 2.338 1.116 2.912.846.088-.666.35-1.115.638-1.371-2.225-.256-4.55-1.14-4.55-5.062 0-1.115.387-2.038 1.025-2.756-.1-.256-.45-1.307.1-2.717 0 0 .837-.269 2.75 1.051.8-.23 1.65-.346 2.5-.346.85 0 1.7.115 2.5.346 1.912-1.333 2.75-1.05 2.75-1.05.55 1.409.2 2.46.1 2.716.637.718 1.025 1.628 1.025 2.756 0 3.934-2.337 4.806-4.562 5.062.362.32.675.936.675 1.897 0 1.371-.013 2.473-.013 2.82 0 .268.188.589.688.486a10.039 10.039 0 0 0 4.932-3.74A10.447 10.447 0 0 0 22 12.253C22 6.588 17.525 2 12 2Z"></path>
+                  </svg>
+                  <span class="ml-2">github.com</span>
+                </p>
+              </li>
+              
+            </ul>
+          </div>
+          
+          <!-- Call to Action -->
+          <div class="mt-16 sm:mt-20">
+            <div class="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
+              <h2 class="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                <svg 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke-width="1.5" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  aria-hidden="true" 
+                  class="h-6 w-6 flex-none"
+                >
+                  <path d="M2.75 9.75a3 3 0 0 1 3-3h12.5a3 3 0 0 1 3 3v8.5a3 3 0 0 1-3 3H5.75a3 3 0 0 1-3-3v-8.5Z" class="fill-zinc-100 stroke-zinc-400 dark:fill-zinc-100/10 dark:stroke-zinc-500"></path>
+                  <path d="M3 14.25h6.249c.484 0 .952-.002 1.316-.319l.777-.682a.996.996 0 0 1 1.316 0l.777.682c.364.317.832.319 1.316.319H21M8.75 6.5V4.75a2 2 0 0 1 2-2h2.5a2 2 0 0 1 2 2V6.5" class="stroke-zinc-400 dark:stroke-zinc-500"></path>
+                </svg>
+                <span class="ml-3">更多项目</span>
+              </h2>
+              <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                想要查看更多项目？访问我的 GitHub 和码云仓库，那里有我的开源项目和实验性代码。
+              </p>
+              <div class="mt-6 flex gap-4">
+                <a 
+                  href="https://github.com/oiahoon"
+                  target="_blank"
+                  class="flex-none rounded-md bg-zinc-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 dark:bg-zinc-700 dark:hover:bg-zinc-600"
+                >
+                  GitHub
+                </a>
+                <a 
+                  href="https://gitee.com/onice"
+                  target="_blank"
+                  class="flex-none rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-900 shadow-sm hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-300 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+                >
+                  码云
+                </a>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</SpotlightLayout>

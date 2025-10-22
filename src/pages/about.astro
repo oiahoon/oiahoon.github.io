@@ -1,0 +1,126 @@
+---
+import SpotlightLayout from '../layouts/SpotlightLayout.astro';
+---
+
+<SpotlightLayout 
+  title="关于我 | Joey's Notes"
+  description="黄药师的个人介绍 - 软件工程师、摄影爱好者、猫奴"
+>
+  <div class="sm:px-8 mt-16 lg:mt-32">
+    <div class="mx-auto w-full max-w-7xl lg:px-8">
+      <div class="relative px-4 sm:px-8 lg:px-12">
+        <div class="mx-auto max-w-2xl lg:max-w-5xl">
+          <div class="grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-y-12">
+            
+            <!-- Left Column - Portrait -->
+            <div class="lg:pl-20">
+              <div class="max-w-xs px-2.5 lg:max-w-none">
+                <img 
+                  src="/img/avatar-joey.jpg" 
+                  alt="Joey Huang"
+                  class="aspect-square rotate-3 rounded-2xl bg-zinc-100 object-cover dark:bg-zinc-800"
+                />
+              </div>
+            </div>
+            
+            <!-- Right Column - Content -->
+            <div class="lg:order-first lg:row-span-2">
+              <h1 class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
+                我是黄药师，软件工程师，摄影爱好者，猫奴
+              </h1>
+              
+              <div class="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
+                <p>
+                  拍拍照，养养猫，旅行和咖啡才是生活的主题，代码不过是对生活的消遣。
+                </p>
+                
+                <p>
+                  我是一名软件工程师，专注于Web开发和系统架构设计。热爱编程，但更热爱生活。
+                  养了一只猫，喜欢拿着单反到处拍照，还喜欢做咖啡给自己喝。
+                </p>
+                
+                <p>
+                  这个博客记录了我在技术路上的一些思考和实践，也分享一些生活中的感悟。
+                  希望这些内容能对你有所帮助，也欢迎与我交流。
+                </p>
+              </div>
+            </div>
+            
+            <!-- Social Links -->
+            <div class="lg:pl-20">
+              <ul role="list">
+                <li class="flex">
+                  <a 
+                    href="https://github.com/oiahoon"
+                    target="_blank"
+                    class="group flex text-sm font-medium text-zinc-800 transition hover:text-orange-500 dark:text-zinc-200 dark:hover:text-orange-400"
+                  >
+                    <svg 
+                      viewBox="0 0 24 24" 
+                      aria-hidden="true" 
+                      class="h-6 w-6 flex-none fill-zinc-500 transition group-hover:fill-orange-500"
+                    >
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.475 2 2 6.588 2 12.253c0 4.537 2.862 8.369 6.838 9.727.5.09.687-.218.687-.487 0-.243-.013-1.05-.013-1.91C7 20.059 6.35 18.957 6.15 18.38c-.113-.295-.6-1.205-1.025-1.448-.35-.192-.85-.667-.013-.68.788-.012 1.35.744 1.538 1.051.9 1.551 2.338 1.116 2.912.846.088-.666.35-1.115.638-1.371-2.225-.256-4.55-1.14-4.55-5.062 0-1.115.387-2.038 1.025-2.756-.1-.256-.45-1.307.1-2.717 0 0 .837-.269 2.75 1.051.8-.23 1.65-.346 2.5-.346.85 0 1.7.115 2.5.346 1.912-1.333 2.75-1.05 2.75-1.05.55 1.409.2 2.46.1 2.716.637.718 1.025 1.628 1.025 2.756 0 3.934-2.337 4.806-4.562 5.062.362.32.675.936.675 1.897 0 1.371-.013 2.473-.013 2.82 0 .268.188.589.688.486a10.039 10.039 0 0 0 4.932-3.74A10.447 10.447 0 0 0 22 12.253C22 6.588 17.525 2 12 2Z"></path>
+                    </svg>
+                    <span class="ml-4">在 GitHub 上关注我</span>
+                  </a>
+                </li>
+                <li class="mt-4 flex">
+                  <a 
+                    href="https://weibo.com/desiver"
+                    target="_blank"
+                    class="group flex text-sm font-medium text-zinc-800 transition hover:text-orange-500 dark:text-zinc-200 dark:hover:text-orange-400"
+                  >
+                    <svg 
+                      viewBox="0 0 24 24" 
+                      aria-hidden="true" 
+                      class="h-6 w-6 flex-none fill-zinc-500 transition group-hover:fill-orange-500"
+                    >
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15c-2.5 0-4.5-2-4.5-4.5S7.5 8 10 8s4.5 2 4.5 4.5S12.5 17 10 17z"></path>
+                    </svg>
+                    <span class="ml-4">在微博上关注我</span>
+                  </a>
+                </li>
+                <li class="mt-4 flex">
+                  <a 
+                    href="/rss.xml"
+                    class="group flex text-sm font-medium text-zinc-800 transition hover:text-orange-500 dark:text-zinc-200 dark:hover:text-orange-400"
+                  >
+                    <svg 
+                      viewBox="0 0 24 24" 
+                      aria-hidden="true" 
+                      class="h-6 w-6 flex-none fill-zinc-500 transition group-hover:fill-orange-500"
+                    >
+                      <path d="M3.429 2.571c9.729 0 17.714 7.985 17.714 17.714h-3.714c0-7.771-6.229-14-14-14v-3.714zM3.429 9.714c4.457 0 8.286 3.829 8.286 8.286h-3.714c0-2.514-2.057-4.571-4.571-4.571v-3.714zM6.857 16.571c0 1.271-1.014 2.286-2.286 2.286s-2.286-1.014-2.286-2.286 1.014-2.286 2.286-2.286 2.286 1.014 2.286 2.286z"></path>
+                    </svg>
+                    <span class="ml-4">RSS 订阅</span>
+                  </a>
+                </li>
+                <li class="mt-8 border-t border-zinc-100 pt-8 dark:border-zinc-700/40 flex">
+                  <a 
+                    href="mailto:4296411@qq.com"
+                    class="group flex text-sm font-medium text-zinc-800 transition hover:text-orange-500 dark:text-zinc-200 dark:hover:text-orange-400"
+                  >
+                    <svg 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke-width="1.5" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round" 
+                      aria-hidden="true" 
+                      class="h-6 w-6 flex-none"
+                    >
+                      <path d="M2.75 7.75a3 3 0 0 1 3-3h12.5a3 3 0 0 1 3 3v8.5a3 3 0 0 1-3 3H5.75a3 3 0 0 1-3-3v-8.5Z" class="fill-zinc-100 stroke-zinc-400 dark:fill-zinc-100/10 dark:stroke-zinc-500"></path>
+                      <path d="m4 6 6.024 5.479a2.915 2.915 0 0 0 3.952 0L20 6" class="stroke-zinc-400 dark:stroke-zinc-500"></path>
+                    </svg>
+                    <span class="ml-4">4296411@qq.com</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</SpotlightLayout>

@@ -1,0 +1,168 @@
+---
+import SpotlightLayout from './SpotlightLayout.astro';
+
+export interface Props {
+  title: string;
+  subtitle?: string;
+  author: string;
+  date: Date;
+  tags: string[];
+  header_img?: string;
+  description?: string;
+  lang: 'zh' | 'en';
+  gallery?: Array<{
+    src: string;
+    alt?: string;
+    caption?: string;
+    width?: number;
+    height?: number;
+  }>;
+  camera?: {
+    model?: string;
+    lens?: string;
+    settings?: string;
+  };
+  location?: string;
+}
+
+const { title, subtitle, author, date, tags, header_img, description, lang, gallery, camera, location } = Astro.props;
+---
+
+<SpotlightLayout 
+  title={`${title} | Joey's Notes`}
+  description={description || subtitle || title}
+  image={header_img || (gallery && gallery[0]?.src)}
+  lang={lang}
+>
+  <!-- Full-screen photo gallery with floating text -->
+  <div class="relative pt-16">
+    
+    <!-- Back Navigation - Fixed -->
+    <button 
+      onclick="history.back()" 
+      type="button" 
+      class="fixed top-6 left-6 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/20 backdrop-blur-sm text-white hover:bg-black/40 transition"
+      aria-label="返回"
+    >
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+
+    <!-- Gallery -->
+    {gallery && gallery.length > 0 && (
+      <div class="space-y-0">
+        {gallery.map((photo, index) => (
+          <div class="relative min-h-screen flex items-center justify-center bg-black">
+            <img 
+              src={photo.src}
+              alt={photo.alt || `Photo ${index + 1}`}
+              class="max-w-full max-h-screen object-contain"
+              loading={index < 2 ? 'eager' : 'lazy'}
+            />
+            
+            <!-- Floating text overlay for first image -->
+            {index === 0 && (
+              <div class="absolute inset-0 flex items-end">
+                <div class="w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent p-8 sm:p-12">
+                  <div class="max-w-4xl mx-auto text-white">
+                    <h1 class="text-4xl sm:text-6xl font-bold mb-4 drop-shadow-lg">{title}</h1>
+                    {subtitle && (
+                      <p class="text-xl sm:text-2xl mb-6 text-white/95 drop-shadow-md">{subtitle}</p>
+                    )}
+                    
+                    <!-- Meta info -->
+                    <div class="flex flex-wrap items-center gap-6 text-sm text-white/90 mb-6 drop-shadow-md">
+                      <time datetime={date.toISOString()}>
+                        {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </time>
+                      
+                      {location && (
+                        <div class="flex items-center gap-1">
+                          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          </svg>
+                          <span>{location}</span>
+                        </div>
+                      )}
+                      
+                      {camera?.model && (
+                        <div class="flex items-center gap-1">
+                          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                          </svg>
+                          <span>{camera.model}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <!-- Tags -->
+                    {tags.length > 0 && (
+                      <div class="flex flex-wrap gap-2">
+                        {tags.map(tag => (
+                          <span class="px-3 py-1 bg-white/25 backdrop-blur-sm rounded-full text-sm text-white drop-shadow-md">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <!-- Photo caption -->
+            {photo.caption && (
+              <div class="absolute bottom-4 left-4 right-4 text-center">
+                <p class="text-white/90 text-sm bg-black/40 backdrop-blur-sm px-4 py-2 rounded-lg inline-block">
+                  {photo.caption}
+                </p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    )}
+    
+    <!-- Article content (if any) -->
+    <div class="bg-white dark:bg-zinc-900 py-16">
+      <div class="max-w-4xl mx-auto px-6 sm:px-8">
+        <div class="prose prose-lg max-w-none prose-zinc dark:prose-invert">
+          <slot />
+        </div>
+        
+        <!-- Camera details -->
+        {camera && (camera.lens || camera.settings) && (
+          <div class="mt-12 p-6 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl">
+            <h3 class="text-lg font-semibold mb-4 text-zinc-900 dark:text-zinc-100">拍摄信息</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-zinc-600 dark:text-zinc-400">
+              {camera.model && (
+                <div><span class="font-medium">相机:</span> {camera.model}</div>
+              )}
+              {camera.lens && (
+                <div><span class="font-medium">镜头:</span> {camera.lens}</div>
+              )}
+              {camera.settings && (
+                <div><span class="font-medium">参数:</span> {camera.settings}</div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</SpotlightLayout>
+
+<style>
+  .prose p {
+    @apply text-zinc-600 dark:text-zinc-400 leading-7;
+  }
+  
+  .prose a {
+    @apply text-orange-500 hover:text-orange-600;
+  }
+</style>
