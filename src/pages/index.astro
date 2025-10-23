@@ -12,6 +12,9 @@ const sortedPosts = posts.sort((a, b) =>
   new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 
+// Get latest photography posts for hero section
+const photosPosts = sortedPosts.filter(p => p.data.type === 'photography').slice(0, 3);
+
 // Pagination settings
 const POSTS_PER_PAGE = 6;
 const currentPage = 1;
@@ -88,27 +91,19 @@ const description = "分享软件开发经验、技术心得和摄影作品。�
           <!-- Photos Section -->
           <div class="mt-16 sm:mt-20">
             <div class="-my-4 flex justify-center gap-5 overflow-hidden py-4 sm:gap-8">
-              <div class="relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800 rotate-2">
-                <img 
-                  src="/img/avatar-joey-home.jpg" 
-                  alt="Joey with cat"
-                  class="absolute inset-0 h-full w-full object-cover"
-                />
-              </div>
-              <div class="relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800 -rotate-2">
-                <img 
-                  src="/img/about-bg-bench.jpg" 
-                  alt="Photography"
-                  class="absolute inset-0 h-full w-full object-cover"
-                />
-              </div>
-              <div class="relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800 rotate-2">
-                <img 
-                  src="/img/home-bg-art.jpg" 
-                  alt="Coffee and life"
-                  class="absolute inset-0 h-full w-full object-cover"
-                />
-              </div>
+              {photosPosts.map((photo, index) => {
+                const rotation = index === 0 ? 'rotate-2' : index === 1 ? '-rotate-2' : 'rotate-2';
+                const photoUrl = photo.data.gallery?.[0]?.src || getPreviewImage(photo);
+                return photoUrl && (
+                  <div class={`relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800 ${rotation}`}>
+                    <img 
+                      src={photoUrl}
+                      alt={photo.data.title}
+                      class="absolute inset-0 h-full w-full object-cover"
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
           
