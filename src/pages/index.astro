@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
+import FeaturedPhotos from '../components/FeaturedPhotos.astro';
 import { getPreviewImage } from '../utils/extractFirstImage';
 
 const posts = await getCollection('posts', ({ data }) => {
@@ -291,6 +292,9 @@ const description = "分享软件开发经验、技术心得和摄影作品。�
               </nav>
             </div>
           )}
+          
+          <!-- 精选摄影作品 -->
+          <FeaturedPhotos />
           
         </div>
       </div>

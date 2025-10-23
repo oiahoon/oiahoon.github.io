@@ -1,0 +1,26 @@
+[
+  {
+    "id": "photo-1705368041778-926f2a0045f8",
+    "title": "城市夜景",
+    "url": "https://images.unsplash.com/photo-1705368041778-926f2a0045f8?ixlib=rb-4.1.0&auto=format&fit=crop&w=600&q=80",
+    "alt": "城市夜景",
+    "views": 15420,
+    "location": "上海"
+  },
+  {
+    "id": "photo-1710398554448-80cc53e7b15b",
+    "title": "自然风光",
+    "url": "https://images.unsplash.com/photo-1710398554448-80cc53e7b15b?ixlib=rb-4.1.0&auto=format&fit=crop&w=600&q=80",
+    "alt": "自然风光",
+    "views": 12850,
+    "location": "黄山"
+  },
+  {
+    "id": "photo-1710398605637-70637b083efe",
+    "title": "街头摄影",
+    "url": "https://images.unsplash.com/photo-1710398605637-70637b083efe?ixlib=rb-4.1.0&auto=format&fit=crop&w=600&q=80",
+    "alt": "街头摄影",
+    "views": 9876,
+    "location": "东京"
+  }
+]
