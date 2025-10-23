@@ -6,6 +6,7 @@ const navigation = [
   { name: '关于', href: '/about/' },
   { name: '文章', href: '/tags/' },
   { name: '作品', href: '/portfolio/' },
+  { name: '跑步', href: 'https://run2.miaowu.org/', external: true },
 ];
 ---
 
@@ -64,6 +65,8 @@ const navigation = [
                       <li>
                         <a 
                           href={item.href}
+                          target={item.external ? '_blank' : undefined}
+                          rel={item.external ? 'noopener noreferrer' : undefined}
                           class={`relative block px-3 py-2 transition ${
                             currentPath === item.href 
                               ? 'text-orange-500 dark:text-orange-400' 
@@ -71,6 +74,9 @@ const navigation = [
                           }`}
                         >
                           {item.name}
+                          {item.external && (
+                            <span class="ml-1 text-xs opacity-60">↗</span>
+                          )}
                           {currentPath === item.href && (
                             <span class="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-orange-500/0 via-orange-500/40 to-orange-500/0 dark:from-orange-400/0 dark:via-orange-400/40 dark:to-orange-400/0"></span>
                           )}
@@ -146,9 +152,14 @@ const navigation = [
           <li>
             <a 
               href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
               class="block py-2 transition hover:text-orange-500 dark:hover:text-orange-400"
             >
               {item.name}
+              {item.external && (
+                <span class="ml-1 text-xs opacity-60">↗</span>
+              )}
             </a>
           </li>
         ))}
