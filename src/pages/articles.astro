@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
 
 const posts = await getCollection('posts', ({ data }) => {
-  return !data.draft;
+  return !data.draft && data.type !== 'photography';
 });
 
 const sortedPosts = posts.sort((a, b) => 
