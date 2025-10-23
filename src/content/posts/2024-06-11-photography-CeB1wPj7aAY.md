@@ -1,0 +1,13 @@
+---
+author: Joey
+date: 2024-06-11
+tags: ["摄影"]
+type: photography
+gallery:
+  - src: "https://images.unsplash.com/photo-1718123734763-a78eed668cd8?ixid=M3w4MjA3NjB8MHwxfGFsbHx8fHx8fHx8fDE3NjEyNjE1Njl8&ixlib=rb-4.1.0?ixlib=rb-4.1.0&auto=format&fit=crop&w=1200&q=80"
+    alt: "摄影作品"
+camera:
+  model: "Leica Camera AG, LEICA M (Typ 262)"
+publishedDate: "June 11, 2024"
+draft: false
+---
