@@ -1,0 +1,110 @@
+---
+import { getCollection } from 'astro:content';
+import SpotlightLayout from '../layouts/SpotlightLayout.astro';
+
+const posts = await getCollection('posts', ({ data }) => {
+  return !data.draft;
+});
+
+const sortedPosts = posts.sort((a, b) => 
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<SpotlightLayout 
+  title="文章 | Joey's Notes"
+  description="我的技术文章和思考，涵盖软件开发、架构设计、工具使用等方面的经验分享。"
+  lang="zh"
+>
+  <div class="sm:px-8 mt-16 sm:mt-32">
+    <div class="mx-auto w-full max-w-7xl lg:px-8">
+      <div class="relative px-4 sm:px-8 lg:px-12">
+        <div class="mx-auto max-w-2xl lg:max-w-5xl">
+          
+          <!-- Header -->
+          <header class="max-w-2xl">
+            <h1 class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
+              技术文章与思考
+            </h1>
+            <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
+              记录我在软件开发、技术架构、工具使用等方面的经验和思考，按时间顺序整理。
+            </p>
+          </header>
+
+          <!-- Articles List -->
+          <div class="mt-16 sm:mt-20">
+            <div class="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
+              <div class="flex max-w-3xl flex-col space-y-16">
+                {sortedPosts.map((post) => (
+                  <article class="md:grid md:grid-cols-4 md:items-baseline">
+                    <div class="md:col-span-3 group relative flex flex-col items-start">
+                      <h2 class="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
+                        <div class="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl dark:bg-zinc-800/50"></div>
+                        <a href={`/posts/${post.slug}/`}>
+                          <span class="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl"></span>
+                          <span class="relative z-10">{post.data.title}</span>
+                        </a>
+                      </h2>
+                      
+                      <!-- Mobile date -->
+                      <time 
+                        class="md:hidden relative z-10 order-first mb-3 flex items-center text-sm text-zinc-400 dark:text-zinc-500 pl-3.5" 
+                        datetime={post.data.date.toISOString()}
+                      >
+                        <span class="absolute inset-y-0 left-0 flex items-center" aria-hidden="true">
+                          <span class="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-500"></span>
+                        </span>
+                        {post.data.date.toLocaleDateString('zh-CN', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </time>
+                      
+                      <!-- Description -->
+                      <p class="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                        {post.data.description || post.data.subtitle || `${post.data.title}的详细内容...`}
+                      </p>
+                      
+                      <!-- Tags -->
+                      {post.data.tags && post.data.tags.length > 0 && (
+                        <div class="relative z-10 mt-4 flex flex-wrap gap-2">
+                          {post.data.tags.slice(0, 3).map(tag => (
+                            <span class="inline-flex items-center rounded-full bg-zinc-100 px-2 py-1 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      
+                      <!-- Read more -->
+                      <div aria-hidden="true" class="relative z-10 mt-4 flex items-center text-sm font-medium text-orange-500">
+                        阅读文章
+                        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" class="ml-1 h-4 w-4 stroke-current">
+                          <path d="M6.75 5.75 9.25 8l-2.5 2.25" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    
+                    <!-- Desktop date -->
+                    <time 
+                      class="mt-1 max-md:hidden relative z-10 order-first mb-3 flex items-center text-sm text-zinc-400 dark:text-zinc-500" 
+                      datetime={post.data.date.toISOString()}
+                    >
+                      {post.data.date.toLocaleDateString('zh-CN', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </time>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</SpotlightLayout>
