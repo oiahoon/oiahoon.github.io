@@ -2,7 +2,7 @@
 import SpotlightLayout from './SpotlightLayout.astro';
 
 export interface Props {
-  title: string;
+  title?: string;
   subtitle?: string;
   author: string;
   date: Date;
@@ -23,9 +23,10 @@ export interface Props {
     settings?: string;
   };
   location?: string;
+  publishedDate?: string;
 }
 
-const { title, subtitle, author, date, tags, header_img, description, lang, gallery, camera, location } = Astro.props;
+const { title, subtitle, author, date, tags, header_img, description, lang, gallery, camera, location, publishedDate } = Astro.props;
 ---
 
 <SpotlightLayout 
@@ -66,27 +67,21 @@ const { title, subtitle, author, date, tags, header_img, description, lang, gall
               <div class="absolute inset-0 flex items-end">
                 <div class="w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent p-8 sm:p-12">
                   <div class="max-w-4xl mx-auto text-white">
-                    <h1 class="text-4xl sm:text-6xl font-bold mb-4 drop-shadow-lg">{title}</h1>
+                    {title && (
+                      <h1 class="text-4xl sm:text-6xl font-bold mb-4 drop-shadow-lg">{title}</h1>
+                    )}
                     {subtitle && (
                       <p class="text-xl sm:text-2xl mb-6 text-white/95 drop-shadow-md">{subtitle}</p>
                     )}
                     
                     <!-- Meta info -->
                     <div class="flex flex-wrap items-center gap-6 text-sm text-white/90 mb-6 drop-shadow-md">
-                      <time datetime={date.toISOString()}>
-                        {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
-                      </time>
-                      
-                      {location && (
+                      {publishedDate && (
                         <div class="flex items-center gap-1">
                           <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
-                          <span>{location}</span>
+                          <span>Published on {publishedDate}</span>
                         </div>
                       )}
                       
@@ -98,6 +93,13 @@ const { title, subtitle, author, date, tags, header_img, description, lang, gall
                           <span>{camera.model}</span>
                         </div>
                       )}
+                      
+                      <div class="flex items-center gap-1 text-white/70">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        <span>Free to use under the Unsplash License</span>
+                      </div>
                     </div>
 
                     <!-- Tags -->
