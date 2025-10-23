@@ -37,6 +37,17 @@ Joey's Notes是我的个人技术博客，主要分享软件开发经验、技�
 - Lighthouse评分都在95分以上
 - 没有安全漏洞，依赖都是最新的
 
+## Environment Variables
+
+To fetch photography metadata from Unsplash, you need to set up an API key:
+
+1. Copy `.env.example` to `.env`
+2. Get your Unsplash API key from https://unsplash.com/oauth/applications
+3. Add your key to `.env`:
+   ```
+   UNSPLASH_ACCESS_KEY=your_key_here
+   ```
+
 ## 本地开发
 
 ### 环境准备
