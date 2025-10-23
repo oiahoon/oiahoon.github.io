@@ -1,6 +1,8 @@
 ---
 import SpotlightLayout from './SpotlightLayout.astro';
 import PhotographyLayout from './PhotographyLayout.astro';
+import { generateBlogPostStructuredData } from '../utils/seo';
+import { getPreviewImage } from '../utils/extractFirstImage';
 
 export interface Props {
   title: string;
@@ -28,6 +30,20 @@ export interface Props {
 }
 
 const { title, subtitle, author, date, tags, header_img, description, lang, type = 'article', gallery, camera, location } = Astro.props;
+
+// Generate structured data for the post
+const postUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const previewImage = header_img || (type === 'photography' && gallery?.[0]?.src);
+const structuredData = generateBlogPostStructuredData({
+  title,
+  description: description || subtitle,
+  author,
+  date,
+  image: previewImage,
+  url: postUrl,
+  tags,
+  type
+});
 ---
 
 {type === 'photography' ? (
@@ -50,8 +66,9 @@ const { title, subtitle, author, date, tags, header_img, description, lang, type
   <SpotlightLayout 
     title={`${title} | Joey's Notes`}
     description={description || subtitle || title}
-    image={header_img}
+    image={previewImage}
     lang={lang}
+    structuredData={structuredData}
   >
     <div class="sm:px-8 mt-16 lg:mt-32">
       <div class="mx-auto w-full max-w-7xl lg:px-8">

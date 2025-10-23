@@ -1,15 +1,24 @@
 ---
 import '../styles/global.css';
+import { generateWebsiteStructuredData } from '../utils/seo';
 
 export interface Props {
   title: string;
   description?: string;
   image?: string;
   lang?: 'zh' | 'en';
+  structuredData?: string;
 }
 
-const { title, description, image, lang = 'zh' } = Astro.props;
+const { title, description, image, lang = 'zh', structuredData } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// Default description for better SEO
+const defaultDescription = "黄药师的个人技术博客 - 分享软件开发经验、技术心得和摄影作品";
+const seoDescription = description || defaultDescription;
+
+// Generate website structured data for homepage
+const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStructuredData() : null;
 ---
 
 <!DOCTYPE html>
@@ -25,21 +34,35 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <link rel="canonical" href={canonicalURL} />
   
   <title>{title}</title>
-  <meta name="description" content={description} />
+  <meta name="description" content={seoDescription} />
   <meta name="generator" content={Astro.generator} />
+  <meta name="author" content="Joey" />
+  <meta name="robots" content="index, follow" />
   
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalURL} />
   <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
+  <meta property="og:description" content={seoDescription} />
+  <meta property="og:site_name" content="Joey's Notes" />
+  <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
   {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+  {image && <meta property="og:image:alt" content={title} />}
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
+  <meta name="twitter:description" content={seoDescription} />
+  <meta name="twitter:creator" content="@oiahoon" />
   {image && <meta name="twitter:image" content={new URL(image, Astro.site)} />}
+  
+  <!-- Structured Data -->
+  {websiteStructuredData && (
+    <script type="application/ld+json" set:html={websiteStructuredData}></script>
+  )}
+  {structuredData && (
+    <script type="application/ld+json" set:html={structuredData}></script>
+  )}
   
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />

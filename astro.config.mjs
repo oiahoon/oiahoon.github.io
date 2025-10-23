@@ -8,7 +8,15 @@ export default defineConfig({
   site: 'https://notes.miaowu.org',
   integrations: [
     mdx(),
-    sitemap(),
+    sitemap({
+      changefreq: 'weekly',
+      priority: 0.7,
+      lastmod: new Date(),
+      entryLimit: 10000,
+      customPages: [
+        'https://notes.miaowu.org/about'
+      ]
+    }),
     tailwind()
   ],
   markdown: {

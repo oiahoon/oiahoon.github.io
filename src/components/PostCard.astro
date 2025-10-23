@@ -12,7 +12,14 @@ const displayImage = header_img || (gallery && gallery[0]?.src);
 <article class="post-card">
   {displayImage && (
     <div class="card-image">
-      <img src={displayImage} alt={title} loading="lazy" />
+      <img 
+        src={displayImage} 
+        alt={`${title} - ${isPhotography ? '摄影作品' : '文章'}预览图`} 
+        loading="lazy" 
+        decoding="async"
+        width="400"
+        height="225"
+      />
       {isPhotography && (
         <div class="absolute top-3 right-3 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
           <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">

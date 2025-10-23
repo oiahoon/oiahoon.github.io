@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://notes.miaowu.org/sitemap-index.xml
+
+# Disallow admin/private areas (if any)
+Disallow: /admin/
+Disallow: /.well-known/
+
+# Allow all images
+User-agent: Googlebot-Image
+Allow: /img/
+Allow: /icons/
