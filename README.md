@@ -37,6 +37,42 @@ Joey's Notes是我的个人技术博客，主要分享软件开发经验、技�
 - Lighthouse评分都在95分以上
 - 没有安全漏洞，依赖都是最新的
 
+## 摄影作品发布流程
+
+### 自动化工作流
+
+1. **添加照片**
+   ```bash
+   # 将照片放入 public/photos/ 目录
+   cp your-photo.jpg public/photos/
+   ```
+
+2. **运行同步脚本**
+   ```bash
+   npm run photos:sync
+   ```
+
+   脚本会自动：
+   - ✅ 压缩图片到 5MB 以下（如果超过）
+   - ✅ 提取 EXIF 数据（相机、镜头、拍摄参数）
+   - ✅ 使用照片拍摄时间作为发布日期
+   - ✅ 自动生成摄影文章
+   - ✅ 如果没有 EXIF，使用文件创建时间
+
+3. **预览和发布**
+   ```bash
+   npm run build    # 构建预览
+   git add .
+   git commit -m "feat: add new photography"
+   git push         # 推送到 GitHub，Vercel 自动部署
+   ```
+
+### 照片要求
+
+- **格式**：JPG, JPEG, PNG
+- **大小**：任意（脚本会自动压缩到 5MB 以下）
+- **建议**：保留照片 EXIF 数据以获得最佳展示效果
+
 ## Environment Variables
 
 To fetch photography metadata from Unsplash, you need to set up an API key:

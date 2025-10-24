@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "photos:sync": "node scripts/sync-photos.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.7",
@@ -21,7 +22,9 @@
     "tailwindcss": "^3.4.18"
   },
   "devDependencies": {
+    "exifr": "^7.1.3",
     "prettier": "^3.6.2",
-    "prettier-plugin-astro": "^0.14.1"
+    "prettier-plugin-astro": "^0.14.1",
+    "sharp": "^0.34.4"
   }
 }
