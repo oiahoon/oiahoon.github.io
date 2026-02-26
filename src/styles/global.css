@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: "Avenir Next", "SF Pro Text", "PingFang SC", "Hiragino Sans GB",
-    "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
-  --font-serif: "Iowan Old Style", "Palatino Linotype", "Songti SC", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-serif: var(--font-sans);
 
   --bg: #f7f5f0;
   --surface: #ffffff;

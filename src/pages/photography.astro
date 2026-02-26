@@ -10,13 +10,13 @@ const sorted = photos.sort((a, b) => new Date(b.data.date).getTime() - new Date(
 <SpotlightLayout title="摄影作品 | Joey's Notes" description="摄影归档" lang="zh">
   <section class="section-gap">
     <div class="shell">
-      <div class="max-w-3xl">
+      <div class="mx-auto max-w-3xl text-center">
         <p class="eyebrow">Photography</p>
         <h1 class="mt-4 text-4xl font-semibold" style="font-family: var(--font-serif);">摄影作品</h1>
         <p class="mt-4 muted">更少元素、更大留白，让照片本身成为主角。</p>
       </div>
 
-      <div class="photo-grid mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2">
+      <div class="photo-grid mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2">
         {sorted.map((photo) => {
           const image = photo.data.gallery?.[0]?.src || getPreviewImage(photo);
           if (!image) return null;

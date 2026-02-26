@@ -9,13 +9,13 @@ const sorted = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a
 <SpotlightLayout title="文章 | Joey's Notes" description="技术文章与实践复盘" lang="zh">
   <section class="section-gap">
     <div class="shell">
-      <div class="max-w-3xl">
+      <div class="mx-auto max-w-3xl text-center">
         <p class="eyebrow">Articles</p>
         <h1 class="mt-4 text-4xl font-semibold" style="font-family: var(--font-serif);">技术文章</h1>
         <p class="mt-4 muted">按时间排序，保持信息结构稳定，减少装饰性干扰。</p>
       </div>
 
-      <div class="article-list mt-10 space-y-10">
+      <div class="article-list mx-auto mt-10 max-w-3xl space-y-10">
         {sorted.map((post) => (
           <article class="border-b pb-8" style="border-color: var(--line);">
             <time class="text-xs muted" datetime={post.data.date.toISOString()}>
