@@ -16,56 +16,73 @@ export interface Props {
   publishedDate?: string;
 }
 
-const { title, subtitle, date, tags, header_img, description, lang, gallery, camera, location } = Astro.props;
+const { title, subtitle, date, tags, header_img, description, lang, gallery, camera, location, publishedDate } = Astro.props;
 const cover = header_img || gallery?.[0]?.src;
 ---
 
 <SpotlightLayout title={`${title} | Joey's Notes`} description={description || subtitle || title} image={cover} lang={lang}>
   <article class="section-gap">
     <div class="shell">
-      <div class="mx-auto max-w-4xl">
-        <a href="/photography/" class="text-sm muted hover:text-[var(--text)]">← 返回摄影列表</a>
+      <a href="/photography/" class="text-sm muted hover:text-[var(--text)]">← 返回摄影列表</a>
+    </div>
 
-        <header class="mt-6 border-b pb-8" style="border-color: var(--line);">
-          <p class="text-xs muted">
-            {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
-            {location ? ` · ${location}` : ''}
-          </p>
-          {title && <h1 class="mt-4 text-4xl font-semibold sm:text-5xl" style="font-family: var(--font-serif);">{title}</h1>}
-          {subtitle && <p class="mt-3 text-lg muted">{subtitle}</p>}
+    <header class="shell mt-7">
+      <div class="max-w-3xl">
+        <p class="text-xs muted">
+          {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
+          {location ? ` · ${location}` : ''}
+          {publishedDate ? ` · 发布于 ${publishedDate}` : ''}
+        </p>
+        {title && <h1 class="mt-4 text-4xl font-semibold leading-tight sm:text-5xl" style="font-family: var(--font-serif);">{title}</h1>}
+        {subtitle && <p class="mt-4 text-lg leading-8 muted">{subtitle}</p>}
+      </div>
+    </header>
 
-          {(camera?.model || camera?.lens || camera?.settings) && (
-            <div class="mt-5 space-y-1 text-sm muted">
-              {camera?.model && <p>相机：{camera.model}</p>}
-              {camera?.lens && <p>镜头：{camera.lens}</p>}
-              {camera?.settings && <p>参数：{camera.settings}</p>}
-            </div>
-          )}
+    {gallery && gallery.length > 0 && (
+      <section class="mt-10 bg-[#0f1218] py-10 dark:bg-[#0c0f14]">
+        <div class="shell">
+          <div class="space-y-10">
+            {gallery.map((photo, index) => (
+              <figure class={`${index === 0 ? '' : 'mx-auto max-w-4xl'}`}>
+                <img
+                  src={photo.src}
+                  alt={photo.alt || `Photo ${index + 1}`}
+                  class="w-full rounded-lg object-cover"
+                  loading={index < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                {photo.caption && <figcaption class="mt-3 text-sm text-zinc-300">{photo.caption}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <section class="shell mt-12">
+      <div class="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[2fr_1fr]">
+        <div class="prose prose-lg">
+          <slot />
+        </div>
+
+        <aside class="soft-panel h-fit p-5 text-sm">
+          <p class="eyebrow">拍摄信息</p>
+          <div class="mt-3 space-y-2 muted">
+            {camera?.model && <p><span class="text-[var(--text)]">相机：</span>{camera.model}</p>}
+            {camera?.lens && <p><span class="text-[var(--text)]">镜头：</span>{camera.lens}</p>}
+            {camera?.settings && <p><span class="text-[var(--text)]">参数：</span>{camera.settings}</p>}
+            {!camera?.model && !camera?.lens && !camera?.settings && <p>暂无拍摄参数</p>}
+          </div>
 
           {tags.length > 0 && (
             <div class="mt-5 flex flex-wrap gap-2">
               {tags.map((tag) => (
-                <span class="rounded-full border px-2.5 py-1 text-xs muted" style="border-color: var(--line);">{tag}</span>
+                <span class="rounded-full border px-2 py-0.5 text-xs muted" style="border-color: var(--line);">{tag}</span>
               ))}
             </div>
           )}
-        </header>
-
-        {gallery && gallery.length > 0 && (
-          <section class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2">
-            {gallery.map((photo, index) => (
-              <figure>
-                <img src={photo.src} alt={photo.alt || `Photo ${index + 1}`} class="w-full rounded-xl object-cover" loading={index < 2 ? 'eager' : 'lazy'} decoding="async" />
-                {photo.caption && <figcaption class="mt-2 text-sm muted">{photo.caption}</figcaption>}
-              </figure>
-            ))}
-          </section>
-        )}
-
-        <div class="prose prose-lg mt-10">
-          <slot />
-        </div>
+        </aside>
       </div>
-    </div>
+    </section>
   </article>
 </SpotlightLayout>

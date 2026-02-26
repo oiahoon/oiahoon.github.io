@@ -56,36 +56,37 @@ const structuredData = generateBlogPostStructuredData({
   <SpotlightLayout title={`${title} | Joey's Notes`} description={description || subtitle || title} image={previewImage || undefined} lang={lang} structuredData={structuredData}>
     <article class="section-gap">
       <div class="shell">
-        <div class="mx-auto max-w-3xl">
+        <div class="mx-auto max-w-2xl">
           <a href="/articles/" class="text-sm muted hover:text-[var(--text)]">← 返回文章列表</a>
 
-          <header class="mt-6 border-b pb-8" style="border-color: var(--line);">
-            <time class="text-xs muted" datetime={date.toISOString()}>
+          <header class="mt-8 border-b pb-10" style="border-color: var(--line);">
+            <p class="text-xs muted">
               {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
               })}
               · {author}
-            </time>
+            </p>
+            <h1 class="mt-4 text-4xl font-semibold leading-[1.15] sm:text-5xl" style="font-family: var(--font-serif);">{title}</h1>
+            {subtitle && <p class="mt-5 text-lg leading-8 muted">{subtitle}</p>}
+          </header>
 
-            <h1 class="mt-4 text-4xl font-semibold leading-tight sm:text-5xl" style="font-family: var(--font-serif);">{title}</h1>
-            {subtitle && <p class="mt-4 text-lg muted">{subtitle}</p>}
+          <div class="prose prose-lg mt-12">
+            <slot />
+          </div>
 
-            {tags.length > 0 && (
-              <div class="mt-6 flex flex-wrap gap-2">
+          {tags.length > 0 && (
+            <footer class="mt-14 border-t pt-6" style="border-color: var(--line);">
+              <div class="flex flex-wrap gap-2">
                 {tags.map((tag) => (
                   <a href={`/tags/${tag}/`} class="rounded-full border px-2.5 py-1 text-xs muted hover:text-[var(--text)]" style="border-color: var(--line);">
                     {tag}
                   </a>
                 ))}
               </div>
-            )}
-          </header>
-
-          <div class="prose prose-lg mt-10">
-            <slot />
-          </div>
+            </footer>
+          )}
         </div>
       </div>
     </article>
