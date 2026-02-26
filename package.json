@@ -8,7 +8,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "photos:sync": "node scripts/sync-photos.js",
-    "check:docs-baseline": "node scripts/check-doc-baseline.js"
+    "check:docs-baseline": "node scripts/check-doc-baseline.js",
+    "check:content-health": "node scripts/check-content-health.js",
+    "report:content-health": "node scripts/check-content-health.js --write"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.7",

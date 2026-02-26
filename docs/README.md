@@ -12,7 +12,7 @@ This document is the single baseline entry for current project status. Metrics b
 
 | Metric | Current Value | Verified By | Date |
 |---|---:|---|---|
-| Build Time | 2.43s | `npm run build` | 2026-02-26 |
+| Build Time | 4.32s | `npm run build` | 2026-02-26 |
 | Pages Generated | 67 | `npm run build` | 2026-02-26 |
 | Build Result | Success | `npm run build` | 2026-02-26 |
 
@@ -37,6 +37,8 @@ npm run build
 - **[Photography Feature Implementation](photography-feature-implementation.md)**
 - **[Content Management Guide](content-management-guide.md)**
 - **[Build and Deployment Guide](build-and-deployment-guide.md)**
+- **[Tag Governance](tag-governance.md)**
+- **[Content Health Report](content-health-report.md)**
 
 ## Current Improvement Focus
 

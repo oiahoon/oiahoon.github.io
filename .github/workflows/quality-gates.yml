@@ -27,3 +27,6 @@ jobs:
 
       - name: Verify docs baseline
         run: npm run check:docs-baseline
+
+      - name: Check content health
+        run: npm run check:content-health

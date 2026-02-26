@@ -1,0 +1,10 @@
+{
+  "normalize": {
+    "docker": "Docker",
+    "mac": "Mac",
+    "elasticsearch": "Elasticsearch",
+    "kibana": "Kibana",
+    "logstash": "Logstash"
+  },
+  "notes": "All tags are trimmed and compared case-insensitively before applying normalization."
+}

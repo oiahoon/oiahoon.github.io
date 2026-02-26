@@ -61,6 +61,12 @@ npm run preview
 
 # Check for issues
 npm run astro check
+
+# Verify docs baseline against build output
+npm run check:docs-baseline
+
+# Run content health checks
+npm run check:content-health
 ```
 
 ## Project Structure

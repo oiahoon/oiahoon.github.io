@@ -7,10 +7,10 @@
 
 | 阶段 | 状态 | 负责人 | 最近更新 | 备注 |
 |---|---|---|---|---|
-| Phase 1 文档基线统一 | 进行中 | Codex + Joey | 2026-02-26 | 正在统一文档口径与指标来源 |
-| Phase 2 技术债务清理 | 进行中 | Codex + Joey | 2026-02-26 | 已加入 CI 与文档基线校验 |
-| Phase 3 UI/UX 第一轮重构 | 进行中 | Codex + Joey | 2026-02-26 | 首页/文章/摄影页统一视觉语言 |
-| Phase 4 内容治理与流程增强 | 进行中 | Codex + Joey | 2026-02-26 | `photos:sync` 支持 dry-run/force |
+| Phase 1 文档基线统一 | 已完成 | Codex + Joey | 2026-02-26 | 当前基线统一到 docs 入口 |
+| Phase 2 技术债务清理 | 已完成 | Codex + Joey | 2026-02-26 | 已加入 CI 与文档基线校验 |
+| Phase 3 UI/UX 第一轮重构 | 已完成 | Codex + Joey | 2026-02-26 | 首页/文章/摄影/详情页统一视觉语言 |
+| Phase 4 内容治理与流程增强 | 已完成 | Codex + Joey | 2026-02-26 | `photos:sync` + 标签治理 + 内容体检 |
 
 ## 执行日志
 
@@ -25,11 +25,13 @@
 - 完成：新增 `scripts/check-doc-baseline.js`，以构建结果校验文档页面基线。
 - 完成：新增 GitHub Actions 质量门禁（build + docs baseline check）。
 - 完成：增强 `photos:sync`，支持 `--dry-run`、`--force`、重复检测和摘要统计。
-- 进行中：标签治理与内容健康检查自动化。
+- 完成：新增标签治理规则 `docs/tag-governance.md` 与 `scripts/tag-governance.json`。
+- 完成：新增内容健康检查脚本并生成报告 `docs/content-health-report.md`。
 
 ## 验证基线
 
 - 验证命令：`npm run build`
 - 质量校验命令：`npm run check:docs-baseline`
-- 最近结果：`67 page(s) built in 2.43s`
+- 内容治理命令：`npm run check:content-health`
+- 最近结果：`67 page(s) built in 4.32s`，`content health: invalid dates = 0`
 - 最近验证日期：2026-02-26
