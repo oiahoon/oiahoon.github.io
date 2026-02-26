@@ -3,98 +3,35 @@ import { getCollection } from 'astro:content';
 import SpotlightLayout from '../../layouts/SpotlightLayout.astro';
 
 const posts = await getCollection('posts', ({ data }) => !data.draft);
-
-// Get all tags and their counts
 const tagCounts = new Map();
-posts.forEach(post => {
-  post.data.tags.forEach(tag => {
+posts.forEach((post) => {
+  post.data.tags.forEach((tag) => {
     tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
   });
 });
 
-// Sort tags by count (descending)
-const sortedTags = Array.from(tagCounts.entries())
-  .sort(([,a], [,b]) => b - a);
+const sortedTags = Array.from(tagCounts.entries()).sort(([, a], [, b]) => b - a);
 ---
 
-<SpotlightLayout 
-  title="标签 | Joey's Notes"
-  description="按标签浏览文章，快速找到感兴趣的技术主题和内容分类。"
-  lang="zh"
->
-  <div class="sm:px-8 mt-16 lg:mt-32">
-    <div class="mx-auto w-full max-w-7xl lg:px-8">
-      <div class="relative px-4 sm:px-8 lg:px-12">
-        <div class="mx-auto max-w-2xl lg:max-w-5xl">
-          
-          <!-- Header -->
-          <header class="max-w-2xl">
-            <h1 class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-              文章标签
-            </h1>
-            <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-              共 {sortedTags.length} 个标签，{posts.length} 篇文章。
-              点击标签查看相关文章。
-            </p>
-          </header>
-          
-          <!-- Tags Cloud -->
-          <div class="mt-16 sm:mt-20">
-            <div class="flex flex-wrap gap-4">
-              {sortedTags.map(([tag, count]) => (
-                <a 
-                  href={`/tags/${tag}/`}
-                  class="group relative rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                  style={`font-size: ${Math.min(1.25, 0.875 + count * 0.1)}rem;`}
-                >
-                  <span class="relative z-10 text-zinc-800 dark:text-zinc-200">
-                    #{tag}
-                  </span>
-                  <span class="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
-                    ({count})
-                  </span>
-                  <span class="absolute inset-0 scale-95 rounded-full bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 dark:bg-zinc-800/50"></span>
-                </a>
-              ))}
-            </div>
-          </div>
-          
-          <!-- All Tags List -->
-          <div class="mt-16 sm:mt-20">
-            <h2 class="text-xl font-semibold text-zinc-800 dark:text-zinc-100 mb-8">
-              所有标签
-            </h2>
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {sortedTags.map(([tag, count]) => (
-                <a 
-                  href={`/tags/${tag}/`}
-                  class="group flex items-center justify-between rounded-lg border border-zinc-200 p-4 transition-colors hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/50"
-                >
-                  <div class="flex items-center">
-                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">
-                      #{tag}
-                    </span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="text-xs text-zinc-500 dark:text-zinc-400">
-                      {count} 篇文章
-                    </span>
-                    <svg 
-                      viewBox="0 0 16 16" 
-                      fill="none" 
-                      aria-hidden="true" 
-                      class="h-4 w-4 stroke-zinc-400 transition group-hover:stroke-zinc-600 dark:stroke-zinc-500 dark:group-hover:stroke-zinc-400"
-                    >
-                      <path d="M6.75 5.75 9.25 8l-2.5 2.25" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-          
+<SpotlightLayout title="标签 | Joey's Notes" description="按标签浏览文章，快速找到感兴趣的技术主题和内容分类。" lang="zh">
+  <section class="section-gap">
+    <div class="shell">
+      <div class="mx-auto max-w-4xl text-center">
+        <p class="eyebrow">Tags</p>
+        <h1 class="mt-4 text-4xl font-semibold">文章标签</h1>
+        <p class="mt-4 muted">共 {sortedTags.length} 个标签，{posts.length} 篇文章。选择一个标签继续阅读。</p>
+      </div>
+
+      <div class="mx-auto mt-10 max-w-5xl">
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {sortedTags.map(([tag, count]) => (
+            <a href={`/tags/${tag}/`} class="soft-panel group flex items-center justify-between px-4 py-3 transition hover:border-[var(--accent)]">
+              <span class="text-sm font-medium">#{tag}</span>
+              <span class="text-xs muted">{count} 篇</span>
+            </a>
+          ))}
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </SpotlightLayout>

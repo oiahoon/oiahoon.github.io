@@ -4,21 +4,19 @@ import SpotlightLayout from '../../layouts/SpotlightLayout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
-  const sortedPosts = posts.sort((a, b) => 
-    new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-  );
-  
+  const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
   const POSTS_PER_PAGE = 6;
   const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE);
-  
+
   return Array.from({ length: totalPages }, (_, i) => ({
     params: { page: String(i + 1) },
-    props: { 
+    props: {
       posts: sortedPosts,
       currentPage: i + 1,
       totalPages,
-      POSTS_PER_PAGE
-    }
+      POSTS_PER_PAGE,
+    },
   }));
 }
 
@@ -26,115 +24,53 @@ const { posts, currentPage, totalPages, POSTS_PER_PAGE } = Astro.props;
 const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
 const endIndex = startIndex + POSTS_PER_PAGE;
 const currentPosts = posts.slice(startIndex, endIndex);
-
-const description = "积累一些知识和笔记在这里，以供自己和他人参考。摄影和爱猫一样重要，代码的灵性在于生活的感悟。";
 ---
 
-<SpotlightLayout 
-  title={`Joey's Notes | 第${currentPage}页`}
-  description={description}
->
-  <div class="sm:px-8 mt-9">
-    <div class="mx-auto w-full max-w-7xl lg:px-8">
-      <div class="relative px-4 sm:px-8 lg:px-12">
-        <div class="mx-auto max-w-2xl lg:max-w-5xl">
-          
-          <!-- Header -->
-          <header class="max-w-2xl">
-            <h1 class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-              软件工程师，摄影爱好者，猫奴
-            </h1>
-            <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-              {description}
-            </p>
-          </header>
-
-          <!-- Content Grid -->
-          <div class="mt-16 sm:mt-20">
-            <div class="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
-              
-              <!-- Articles List -->
-              <div class="flex flex-col gap-16">
-                {currentPosts.map((post) => (
-                  <article class="group relative flex flex-col items-start">
-                    <h2 class="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
-                      <div class="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl dark:bg-zinc-800/50"></div>
-                      <a href={`/posts/${post.slug}/`}>
-                        <span class="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl"></span>
-                        <span class="relative z-10">{post.data.title}</span>
-                      </a>
-                    </h2>
-                    <time 
-                      class="relative z-10 order-first mb-3 flex items-center text-sm text-zinc-400 dark:text-zinc-500 pl-3.5"
-                      datetime={post.data.date.toISOString()}
-                    >
-                      <span class="absolute inset-y-0 left-0 flex items-center" aria-hidden="true">
-                        <span class="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-500"></span>
-                      </span>
-                      {post.data.date.toLocaleDateString('zh-CN', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </time>
-                    <p class="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-                      {post.data.subtitle || post.data.description || ''}
-                    </p>
-                    <div class="relative z-10 mt-4 flex items-center text-sm font-medium text-orange-500">
-                      阅读文章
-                      <svg 
-                        viewBox="0 0 16 16" 
-                        fill="none" 
-                        aria-hidden="true" 
-                        class="ml-1 h-4 w-4 stroke-current"
-                      >
-                        <path d="M6.75 5.75 9.25 8l-2.5 2.25" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                      </svg>
-                    </div>
-                  </article>
-                ))}
-              </div>
-              
-              <!-- Pagination -->
-              <div class="mt-16 flex justify-center lg:col-span-2">
-                <nav class="flex items-center space-x-1">
-                  {currentPage > 1 && (
-                    <a 
-                      href={currentPage === 2 ? '/' : `/page/${currentPage - 1}/`}
-                      class="px-3 py-2 text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
-                    >
-                      上一页
-                    </a>
-                  )}
-                  
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <a 
-                      href={page === 1 ? '/' : `/page/${page}/`}
-                      class={`px-3 py-2 text-sm font-medium rounded-md ${
-                        page === currentPage 
-                          ? 'bg-orange-500 text-white' 
-                          : 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200'
-                      }`}
-                    >
-                      {page}
-                    </a>
-                  ))}
-                  
-                  {currentPage < totalPages && (
-                    <a 
-                      href={`/page/${currentPage + 1}/`}
-                      class="px-3 py-2 text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
-                    >
-                      下一页
-                    </a>
-                  )}
-                </nav>
-              </div>
-
-            </div>
-          </div>
-        </div>
+<SpotlightLayout title={`文章 | 第${currentPage}页`} description="技术文章分页浏览" lang="zh">
+  <section class="section-gap">
+    <div class="shell">
+      <div class="mx-auto max-w-4xl text-center">
+        <p class="eyebrow">Articles</p>
+        <h1 class="mt-4 text-4xl font-semibold">第 {currentPage} 页</h1>
       </div>
+
+      <div class="article-list mx-auto mt-10 max-w-4xl space-y-8">
+        {currentPosts.map((post) => (
+          <article class="border-b pb-6" style="border-color: var(--line);">
+            <time class="text-xs muted" datetime={post.data.date.toISOString()}>
+              {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+            <h2 class="mt-2 text-2xl font-semibold">
+              <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
+            </h2>
+            <p class="mt-2 muted">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
+          </article>
+        ))}
+      </div>
+
+      <nav class="mx-auto mt-10 flex max-w-4xl items-center gap-2 text-sm">
+        {currentPage > 1 && (
+          <a href={currentPage === 2 ? '/' : `/page/${currentPage - 1}/`} class="rounded-full border px-3 py-1.5 muted hover:text-[var(--text)]" style="border-color: var(--line);">
+            上一页
+          </a>
+        )}
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <a
+            href={page === 1 ? '/' : `/page/${page}/`}
+            class={`rounded-full border px-3 py-1.5 ${page === currentPage ? 'text-[var(--text)] font-semibold' : 'muted hover:text-[var(--text)]'}`}
+            style="border-color: var(--line);"
+          >
+            {page}
+          </a>
+        ))}
+
+        {currentPage < totalPages && (
+          <a href={`/page/${currentPage + 1}/`} class="rounded-full border px-3 py-1.5 muted hover:text-[var(--text)]" style="border-color: var(--line);">
+            下一页
+          </a>
+        )}
+      </nav>
     </div>
-  </div>
+  </section>
 </SpotlightLayout>

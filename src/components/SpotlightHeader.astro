@@ -12,32 +12,36 @@ const navigation = [
 <header class="pt-8 sm:pt-10">
   <div class="shell">
     <div class="flex items-center justify-between gap-4 border-b pb-5" style="border-color: var(--line);">
-      <a href="/" class="text-lg font-semibold tracking-tight">Joey's Notes</a>
+      <a href="/" class="text-lg font-semibold tracking-tight text-[var(--text)]">Joey's Notes</a>
 
-      <nav class="hidden items-center gap-6 text-sm md:flex">
-        {navigation.map((item) => (
-          <a href={item.href} class={`transition ${currentPath === item.href ? 'font-semibold' : 'muted hover:text-[var(--text)]'}`}>
-            {item.name}
-          </a>
-        ))}
+      <nav class="hidden items-center gap-7 text-sm md:flex">
+        {navigation.map((item) => {
+          const active = currentPath === item.href;
+          return (
+            <a href={item.href} class={`relative transition ${active ? 'font-semibold text-[var(--text)]' : 'muted hover:text-[var(--text)]'}`}>
+              {item.name}
+              {active && <span class="absolute -bottom-1 left-0 right-0 h-px bg-[var(--accent)]" />}
+            </a>
+          );
+        })}
       </nav>
 
       <div class="flex items-center gap-2">
         <button
           type="button"
           id="theme-toggle"
-          class="rounded-full border px-3 py-1.5 text-xs transition"
-          style="border-color: var(--line);"
+          class="rounded-full border px-3 py-1.5 text-xs font-medium transition hover:bg-black/5 dark:hover:bg-white/10"
+          style="border-color: var(--line); color: var(--text);"
           aria-label="切换主题"
         >
           主题
         </button>
 
         <details class="md:hidden">
-          <summary class="cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs" style="border-color: var(--line);">菜单</summary>
-          <nav class="absolute right-5 mt-2 min-w-32 rounded-xl border bg-[var(--surface)] p-2 text-sm shadow-sm" style="border-color: var(--line);">
+          <summary class="cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium" style="border-color: var(--line); color: var(--text);">菜单</summary>
+          <nav class="absolute right-5 mt-2 min-w-36 rounded-xl border bg-[var(--surface)] p-2 text-sm shadow-sm" style="border-color: var(--line);">
             {navigation.map((item) => (
-              <a href={item.href} class="block rounded-lg px-3 py-2 muted hover:bg-black/5 dark:hover:bg-white/5 hover:text-[var(--text)]">{item.name}</a>
+              <a href={item.href} class="block rounded-lg px-3 py-2 muted hover:bg-black/5 hover:text-[var(--text)] dark:hover:bg-white/5">{item.name}</a>
             ))}
           </nav>
         </details>
