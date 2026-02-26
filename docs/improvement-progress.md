@@ -8,9 +8,9 @@
 | 阶段 | 状态 | 负责人 | 最近更新 | 备注 |
 |---|---|---|---|---|
 | Phase 1 文档基线统一 | 进行中 | Codex + Joey | 2026-02-26 | 正在统一文档口径与指标来源 |
-| Phase 2 技术债务清理 | 进行中 | Codex + Joey | 2026-02-26 | 首页结构与样式开始清理 |
-| Phase 3 UI/UX 第一轮重构 | 进行中 | Codex + Joey | 2026-02-26 | 首页先行，聚焦简洁与可读性 |
-| Phase 4 内容治理与流程增强 | 待开始 | Codex + Joey | - | `photos:sync` 与标签治理待排期 |
+| Phase 2 技术债务清理 | 进行中 | Codex + Joey | 2026-02-26 | 已加入 CI 与文档基线校验 |
+| Phase 3 UI/UX 第一轮重构 | 进行中 | Codex + Joey | 2026-02-26 | 首页/文章/摄影页统一视觉语言 |
+| Phase 4 内容治理与流程增强 | 进行中 | Codex + Joey | 2026-02-26 | `photos:sync` 支持 dry-run/force |
 
 ## 执行日志
 
@@ -21,10 +21,15 @@
 - 完成：首页第一轮重构，精简首屏信息架构，强化文章/摄影直达入口。
 - 完成：清理首页重复容器与遗留样式，移除外部字体请求，减少首屏阻塞资源。
 - 完成：构建验证通过（67 pages / 2.36s）。
-- 进行中：将同一 UI 语言扩展到文章页与摄影页，统一阅读体验。
+- 完成：将同一 UI 语言扩展到文章页与摄影页，统一阅读体验。
+- 完成：新增 `scripts/check-doc-baseline.js`，以构建结果校验文档页面基线。
+- 完成：新增 GitHub Actions 质量门禁（build + docs baseline check）。
+- 完成：增强 `photos:sync`，支持 `--dry-run`、`--force`、重复检测和摘要统计。
+- 进行中：标签治理与内容健康检查自动化。
 
 ## 验证基线
 
 - 验证命令：`npm run build`
-- 最近结果：`67 page(s) built in 2.36s`
+- 质量校验命令：`npm run check:docs-baseline`
+- 最近结果：`67 page(s) built in 2.43s`
 - 最近验证日期：2026-02-26

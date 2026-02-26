@@ -12,7 +12,7 @@ This document is the single baseline entry for current project status. Metrics b
 
 | Metric | Current Value | Verified By | Date |
 |---|---:|---|---|
-| Build Time | 2.36s | `npm run build` | 2026-02-26 |
+| Build Time | 2.43s | `npm run build` | 2026-02-26 |
 | Pages Generated | 67 | `npm run build` | 2026-02-26 |
 | Build Result | Success | `npm run build` | 2026-02-26 |
 
@@ -44,6 +44,13 @@ npm run build
 2. **Technical Debt Reduction**: clean legacy styles and redundant layout structure.
 3. **UI/UX Redesign**: modern, minimal, faster-to-read information architecture.
 4. **Workflow Hardening**: improve content automation and quality checks.
+
+## Quality Gates
+
+- CI workflow: `.github/workflows/quality-gates.yml`
+- Local check:
+  - `npm run build`
+  - `npm run check:docs-baseline`
 
 ## Note on Historical Numbers
 

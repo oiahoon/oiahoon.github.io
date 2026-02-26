@@ -7,7 +7,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "photos:sync": "node scripts/sync-photos.js"
+    "photos:sync": "node scripts/sync-photos.js",
+    "check:docs-baseline": "node scripts/check-doc-baseline.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.7",
