@@ -10,103 +10,62 @@ export interface Props {
   header_img?: string;
   description?: string;
   lang: 'zh' | 'en';
-  gallery?: Array<{
-    src: string;
-    alt?: string;
-    caption?: string;
-    width?: number;
-    height?: number;
-  }>;
-  camera?: {
-    model?: string;
-    lens?: string;
-    settings?: string;
-  };
+  gallery?: Array<{ src: string; alt?: string; caption?: string; width?: number; height?: number }>;
+  camera?: { model?: string; lens?: string; settings?: string };
   location?: string;
   publishedDate?: string;
 }
 
-const { title, subtitle, date, tags, header_img, description, lang, gallery, camera, location, publishedDate } = Astro.props;
+const { title, subtitle, date, tags, header_img, description, lang, gallery, camera, location } = Astro.props;
 const cover = header_img || gallery?.[0]?.src;
 ---
 
-<SpotlightLayout
-  title={`${title} | Joey's Notes`}
-  description={description || subtitle || title}
-  image={cover}
-  lang={lang}
->
-  <section class="sm:px-8 mt-12 sm:mt-16">
-    <div class="mx-auto w-full max-w-7xl lg:px-8">
-      <div class="relative px-4 sm:px-8 lg:px-12">
-        <div class="mx-auto max-w-5xl">
-          <a
-            href="/photography/"
-            class="inline-flex items-center rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
-          >
-            <span class="mr-1">←</span>
-            返回摄影列表
-          </a>
+<SpotlightLayout title={`${title} | Joey's Notes`} description={description || subtitle || title} image={cover} lang={lang}>
+  <article class="section-gap">
+    <div class="shell">
+      <div class="mx-auto max-w-4xl">
+        <a href="/photography/" class="text-sm muted hover:text-[var(--text)]">← 返回摄影列表</a>
 
-          <header class="mt-6 rounded-3xl border border-zinc-200/80 bg-white p-6 sm:p-8 dark:border-zinc-700 dark:bg-zinc-900">
-            <div class="flex flex-wrap items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
-              <time datetime={date.toISOString()}>{date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</time>
-              {location && (
-                <>
-                  <span>·</span>
-                  <span>{location}</span>
-                </>
-              )}
-              {publishedDate && (
-                <>
-                  <span>·</span>
-                  <span>发布于 {publishedDate}</span>
-                </>
-              )}
-            </div>
+        <header class="mt-6 border-b pb-8" style="border-color: var(--line);">
+          <p class="text-xs muted">
+            {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
+            {location ? ` · ${location}` : ''}
+          </p>
+          {title && <h1 class="mt-4 text-4xl font-semibold sm:text-5xl" style="font-family: var(--font-serif);">{title}</h1>}
+          {subtitle && <p class="mt-3 text-lg muted">{subtitle}</p>}
 
-            {title && <h1 class="mt-4 text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-100">{title}</h1>}
-            {subtitle && <p class="mt-3 text-base leading-7 text-zinc-600 dark:text-zinc-300">{subtitle}</p>}
-
-            {(camera?.model || camera?.lens || camera?.settings) && (
-              <div class="mt-5 grid grid-cols-1 gap-2 text-sm text-zinc-600 dark:text-zinc-300 sm:grid-cols-3">
-                {camera?.model && <p><span class="font-medium text-zinc-900 dark:text-zinc-100">相机：</span>{camera.model}</p>}
-                {camera?.lens && <p><span class="font-medium text-zinc-900 dark:text-zinc-100">镜头：</span>{camera.lens}</p>}
-                {camera?.settings && <p><span class="font-medium text-zinc-900 dark:text-zinc-100">参数：</span>{camera.settings}</p>}
-              </div>
-            )}
-
-            {tags.length > 0 && (
-              <div class="mt-5 flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <span class="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">{tag}</span>
-                ))}
-              </div>
-            )}
-          </header>
-
-          {gallery && gallery.length > 0 && (
-            <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
-              {gallery.map((photo, index) => (
-                <figure class="overflow-hidden rounded-2xl border border-zinc-200/80 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800">
-                  <img
-                    src={photo.src}
-                    alt={photo.alt || `Photo ${index + 1}`}
-                    class="w-full object-cover"
-                    loading={index < 2 ? 'eager' : 'lazy'}
-                    decoding="async"
-                  />
-                  {photo.caption && <figcaption class="border-t border-zinc-200/80 px-4 py-3 text-sm text-zinc-600 dark:border-zinc-700 dark:text-zinc-300">{photo.caption}</figcaption>}
-                </figure>
-              ))}
+          {(camera?.model || camera?.lens || camera?.settings) && (
+            <div class="mt-5 space-y-1 text-sm muted">
+              {camera?.model && <p>相机：{camera.model}</p>}
+              {camera?.lens && <p>镜头：{camera.lens}</p>}
+              {camera?.settings && <p>参数：{camera.settings}</p>}
             </div>
           )}
 
-          <div class="prose prose-lg prose-zinc mt-10 max-w-none leading-8 dark:prose-invert prose-pre:rounded-2xl prose-img:rounded-2xl">
-            <slot />
-          </div>
+          {tags.length > 0 && (
+            <div class="mt-5 flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <span class="rounded-full border px-2.5 py-1 text-xs muted" style="border-color: var(--line);">{tag}</span>
+              ))}
+            </div>
+          )}
+        </header>
+
+        {gallery && gallery.length > 0 && (
+          <section class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2">
+            {gallery.map((photo, index) => (
+              <figure>
+                <img src={photo.src} alt={photo.alt || `Photo ${index + 1}`} class="w-full rounded-xl object-cover" loading={index < 2 ? 'eager' : 'lazy'} decoding="async" />
+                {photo.caption && <figcaption class="mt-2 text-sm muted">{photo.caption}</figcaption>}
+              </figure>
+            ))}
+          </section>
+        )}
+
+        <div class="prose prose-lg mt-10">
+          <slot />
         </div>
       </div>
     </div>
-  </section>
+  </article>
 </SpotlightLayout>

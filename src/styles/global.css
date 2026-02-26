@@ -5,67 +5,121 @@
 :root {
   --font-sans: "Avenir Next", "SF Pro Text", "PingFang SC", "Hiragino Sans GB",
     "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", "Songti SC", serif;
 
-  --zinc-50: #fafafa;
-  --zinc-100: #f4f4f5;
-  --zinc-200: #e4e4e7;
-  --zinc-300: #d4d4d8;
-  --zinc-400: #a1a1aa;
-  --zinc-500: #71717a;
-  --zinc-600: #52525b;
-  --zinc-700: #3f3f46;
-  --zinc-800: #27272a;
-  --zinc-900: #18181b;
-  --zinc-950: #09090b;
-
-  --orange-400: #fb923c;
-  --orange-500: #f97316;
-  --orange-600: #ea580c;
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --text: #1f2933;
+  --muted: #637084;
+  --line: #e6e1d8;
+  --accent: #b85f28;
 }
 
 .dark {
-  --zinc-50: #09090b;
-  --zinc-100: #18181b;
-  --zinc-200: #27272a;
-  --zinc-300: #3f3f46;
-  --zinc-400: #52525b;
-  --zinc-500: #71717a;
-  --zinc-600: #a1a1aa;
-  --zinc-700: #d4d4d8;
-  --zinc-800: #e4e4e7;
-  --zinc-900: #f4f4f5;
-  --zinc-950: #fafafa;
+  --bg: #111318;
+  --surface: #171b22;
+  --text: #edf1f5;
+  --muted: #aab5c4;
+  --line: #2a3240;
+  --accent: #f59a63;
 }
 
 @layer base {
   html {
     font-family: var(--font-sans);
-    line-height: 1.6;
+    line-height: 1.7;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
 
   body {
-    @apply bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100;
+    margin: 0;
+    color: var(--text);
+    background: radial-gradient(1200px 400px at 10% -10%, rgba(184, 95, 40, 0.08), transparent 70%),
+      var(--bg);
     font-family: var(--font-sans);
   }
 
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    color: inherit;
+  }
+
   ::selection {
-    background: rgba(249, 115, 22, 0.2);
+    background: rgba(184, 95, 40, 0.25);
   }
 }
 
 @layer components {
-  .prose-custom {
-    @apply prose prose-lg max-w-none prose-gray;
-    @apply prose-headings:text-gray-900 prose-headings:font-semibold;
-    @apply prose-a:text-blue-600 prose-a:no-underline hover:prose-a:text-blue-800;
-    @apply prose-code:bg-gray-100 prose-code:text-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm;
-    @apply prose-pre:bg-gray-900 prose-pre:text-gray-100;
-    @apply prose-blockquote:border-l-blue-200 prose-blockquote:text-gray-600;
+  .shell {
+    @apply mx-auto w-full max-w-5xl px-5 sm:px-8;
+  }
+
+  .section-gap {
+    @apply mt-14 sm:mt-20;
+  }
+
+  .soft-panel {
+    @apply rounded-2xl border;
+    border-color: var(--line);
+    background: color-mix(in srgb, var(--surface) 90%, transparent);
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em];
+    color: var(--muted);
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  .article-list a:hover,
+  .photo-grid a:hover {
+    color: var(--accent);
   }
 
   .prose {
-    @apply text-zinc-600 dark:text-zinc-400;
+    @apply max-w-none;
+    color: var(--text);
+  }
+
+  .prose p,
+  .prose li {
+    color: color-mix(in srgb, var(--text) 88%, white);
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3 {
+    color: var(--text);
+    font-family: var(--font-serif);
+  }
+
+  .prose a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .prose a:hover {
+    text-decoration: underline;
+  }
+
+  .prose pre {
+    @apply overflow-x-auto rounded-xl p-4;
+    background: #0f1720;
+    color: #e7edf5;
+  }
+
+  .prose code {
+    @apply rounded px-1 py-0.5;
+    background: color-mix(in srgb, var(--line) 80%, transparent);
   }
 }
