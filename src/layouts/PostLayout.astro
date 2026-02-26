@@ -2,7 +2,6 @@
 import SpotlightLayout from './SpotlightLayout.astro';
 import PhotographyLayout from './PhotographyLayout.astro';
 import { generateBlogPostStructuredData } from '../utils/seo';
-import { getPreviewImage } from '../utils/extractFirstImage';
 
 export interface Props {
   title: string;
@@ -27,11 +26,25 @@ export interface Props {
     settings?: string;
   };
   location?: string;
+  publishedDate?: string;
 }
 
-const { title, subtitle, author, date, tags, header_img, description, lang, type = 'article', gallery, camera, location } = Astro.props;
+const {
+  title,
+  subtitle,
+  author,
+  date,
+  tags,
+  header_img,
+  description,
+  lang,
+  type = 'article',
+  gallery,
+  camera,
+  location,
+  publishedDate,
+} = Astro.props;
 
-// Generate structured data for the post
 const postUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const previewImage = header_img || (type === 'photography' && gallery?.[0]?.src);
 const structuredData = generateBlogPostStructuredData({
@@ -42,12 +55,12 @@ const structuredData = generateBlogPostStructuredData({
   image: previewImage,
   url: postUrl,
   tags,
-  type
+  type,
 });
 ---
 
 {type === 'photography' ? (
-  <PhotographyLayout 
+  <PhotographyLayout
     title={title}
     subtitle={subtitle}
     author={author}
@@ -59,122 +72,66 @@ const structuredData = generateBlogPostStructuredData({
     gallery={gallery}
     camera={camera}
     location={location}
+    publishedDate={publishedDate}
   >
     <slot />
   </PhotographyLayout>
 ) : (
-  <SpotlightLayout 
+  <SpotlightLayout
     title={`${title} | Joey's Notes`}
     description={description || subtitle || title}
-    image={previewImage}
+    image={previewImage || undefined}
     lang={lang}
     structuredData={structuredData}
   >
-    <div class="sm:px-8 mt-16 lg:mt-32">
+    <article class="sm:px-8 mt-14 sm:mt-20">
       <div class="mx-auto w-full max-w-7xl lg:px-8">
         <div class="relative px-4 sm:px-8 lg:px-12">
-          <div class="mx-auto max-w-2xl lg:max-w-5xl">
-            
-            <!-- Back Navigation -->
-            <div class="xl:relative">
-              <div class="mx-auto max-w-2xl">
-                <button 
-                  onclick="history.back()" 
-                  type="button" 
-                  class="group mb-8 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 transition lg:absolute lg:-left-5 lg:-mt-2 lg:mb-0 xl:-top-1.5 xl:left-0 xl:mt-0 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0 dark:ring-white/10 dark:hover:border-zinc-700 dark:hover:ring-white/20"
-                  aria-label="Go back to articles"
-                >
-                  <svg 
-                    viewBox="0 0 16 16" 
-                    fill="none" 
-                    aria-hidden="true" 
-                    class="h-4 w-4 stroke-zinc-500 transition group-hover:stroke-zinc-700 dark:stroke-zinc-500 dark:group-hover:stroke-zinc-400"
-                  >
-                    <path d="M7.25 11.25 3.75 8m0 0 3.5-3.25M3.75 8h8.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                  </svg>
-                </button>
-                
-                <!-- Article Header -->
-                <article>
-                  <header class="flex flex-col">
-                    <h1 class="mt-6 text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-                      {title}
-                    </h1>
-                    {subtitle && (
-                      <p class="mt-6 text-xl text-zinc-600 dark:text-zinc-400">
-                        {subtitle}
-                      </p>
-                    )}
-                    <time 
-                      datetime={date.toISOString()} 
-                      class="order-first flex items-center text-base text-zinc-400 dark:text-zinc-500"
-                    >
-                      <span class="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-500"></span>
-                      <span class="ml-3">
-                        {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
-                      </span>
-                    </time>
-                  </header>
-                  
-                  <!-- Content -->
-                  <div class="mt-8 prose prose-lg max-w-none prose-zinc dark:prose-invert">
-                    <slot />
-                  </div>
-                  
-                  <!-- Tags -->
-                  {tags.length > 0 && (
-                    <div class="mt-16 flex flex-wrap gap-2">
-                      {tags.map(tag => (
-                        <a 
-                          href={`/tags/${tag}/`}
-                          class="rounded-full bg-zinc-100 px-3 py-1 text-sm font-medium text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
-                        >
-                          {tag}
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </article>
+          <div class="mx-auto max-w-3xl">
+            <a
+              href="/articles/"
+              class="inline-flex items-center rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
+            >
+              <span class="mr-1">←</span>
+              返回文章列表
+            </a>
+
+            <header class="mt-8 rounded-3xl border border-zinc-200/80 bg-white p-6 sm:p-8 dark:border-zinc-700 dark:bg-zinc-900">
+              <div class="flex flex-wrap items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+                <time datetime={date.toISOString()}>
+                  {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </time>
+                <span>·</span>
+                <span>{author}</span>
               </div>
+
+              <h1 class="mt-4 text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-100">{title}</h1>
+              {subtitle && <p class="mt-4 text-base leading-7 text-zinc-600 dark:text-zinc-300">{subtitle}</p>}
+
+              {tags.length > 0 && (
+                <div class="mt-5 flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <a
+                      href={`/tags/${tag}/`}
+                      class="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                    >
+                      {tag}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </header>
+
+            <div class="prose prose-lg prose-zinc mt-8 max-w-none leading-8 dark:prose-invert prose-pre:rounded-2xl prose-img:rounded-2xl">
+              <slot />
             </div>
-            
           </div>
         </div>
       </div>
-    </div>
+    </article>
   </SpotlightLayout>
 )}
-
-<style>
-  .prose h1, .prose h2, .prose h3 {
-    @apply text-zinc-900 dark:text-zinc-100;
-  }
-  
-  .prose p {
-    @apply text-zinc-600 dark:text-zinc-400 leading-7;
-  }
-  
-  .prose a {
-    @apply text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-300;
-  }
-  
-  .prose code {
-    @apply bg-zinc-100 text-zinc-800 px-1 py-0.5 rounded text-sm dark:bg-zinc-800 dark:text-zinc-200;
-  }
-  
-  .prose pre {
-    @apply bg-zinc-900 text-zinc-100 p-4 rounded-lg overflow-x-auto dark:bg-zinc-950;
-  }
-  
-  .prose pre code {
-    @apply bg-transparent p-0 text-zinc-100 dark:text-zinc-300;
-  }
-  
-  .prose img {
-    @apply rounded-lg my-6;
-  }
-</style>

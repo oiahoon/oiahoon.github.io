@@ -71,10 +71,6 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Joey's Notes" />
   
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="flex h-full bg-zinc-50 dark:bg-black">
   <div class="flex w-full">
@@ -86,11 +82,8 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
-          .then((registration) => {
-            console.log('SW registered: ', registration);
-          })
-          .catch((registrationError) => {
-            console.log('SW registration failed: ', registrationError);
+          .catch(() => {
+            // Service worker registration failure should not block page usage.
           });
       });
     }

@@ -26,145 +26,87 @@ export interface Props {
   publishedDate?: string;
 }
 
-const { title, subtitle, author, date, tags, header_img, description, lang, gallery, camera, location, publishedDate } = Astro.props;
+const { title, subtitle, date, tags, header_img, description, lang, gallery, camera, location, publishedDate } = Astro.props;
+const cover = header_img || gallery?.[0]?.src;
 ---
 
-<SpotlightLayout 
+<SpotlightLayout
   title={`${title} | Joey's Notes`}
   description={description || subtitle || title}
-  image={header_img || (gallery && gallery[0]?.src)}
+  image={cover}
   lang={lang}
 >
-  <!-- Full-screen photo gallery with floating text -->
-  <div class="relative pt-16">
-    
-    <!-- Back Navigation - Fixed -->
-    <button 
-      onclick="history.back()" 
-      type="button" 
-      class="fixed top-6 left-6 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/20 backdrop-blur-sm text-white hover:bg-black/40 transition"
-      aria-label="返回"
-    >
-      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-    </button>
+  <section class="sm:px-8 mt-12 sm:mt-16">
+    <div class="mx-auto w-full max-w-7xl lg:px-8">
+      <div class="relative px-4 sm:px-8 lg:px-12">
+        <div class="mx-auto max-w-5xl">
+          <a
+            href="/photography/"
+            class="inline-flex items-center rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
+          >
+            <span class="mr-1">←</span>
+            返回摄影列表
+          </a>
 
-    <!-- Gallery -->
-    {gallery && gallery.length > 0 && (
-      <div class="space-y-0">
-        {gallery.map((photo, index) => (
-          <div class="relative min-h-screen flex items-center justify-center bg-black">
-            <img 
-              src={photo.src}
-              alt={photo.alt || `Photo ${index + 1}`}
-              class="max-w-full max-h-screen object-contain"
-              loading={index < 2 ? 'eager' : 'lazy'}
-            />
-            
-            <!-- Floating text overlay for first image -->
-            {index === 0 && (
-              <div class="absolute inset-0 flex items-end">
-                <div class="w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent p-8 sm:p-12">
-                  <div class="max-w-4xl mx-auto text-white">
-                    {title && (
-                      <h1 class="text-4xl sm:text-6xl font-bold mb-4 drop-shadow-lg">{title}</h1>
-                    )}
-                    {subtitle && (
-                      <p class="text-xl sm:text-2xl mb-6 text-white/95 drop-shadow-md">{subtitle}</p>
-                    )}
-                    
-                    <!-- Meta info -->
-                    <div class="flex flex-wrap items-center gap-6 text-sm text-white/90 mb-6 drop-shadow-md">
-                      {publishedDate && (
-                        <div class="flex items-center gap-1">
-                          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                          <span>Published on {publishedDate}</span>
-                        </div>
-                      )}
-                      
-                      {camera?.model && (
-                        <div class="flex items-center gap-1">
-                          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                          </svg>
-                          <span>{camera.model}</span>
-                        </div>
-                      )}
-                      
-                      <div class="flex items-center gap-1 text-white/70">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                        <span>© All rights reserved. Commercial use requires authorization.</span>
-                      </div>
-                    </div>
-
-                    <!-- Tags -->
-                    {tags.length > 0 && (
-                      <div class="flex flex-wrap gap-2">
-                        {tags.map(tag => (
-                          <span class="px-3 py-1 bg-white/25 backdrop-blur-sm rounded-full text-sm text-white drop-shadow-md">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            <!-- Photo caption -->
-            {photo.caption && (
-              <div class="absolute bottom-4 left-4 right-4 text-center">
-                <p class="text-white/90 text-sm bg-black/40 backdrop-blur-sm px-4 py-2 rounded-lg inline-block">
-                  {photo.caption}
-                </p>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    )}
-    
-    <!-- Article content (if any) -->
-    <div class="bg-white dark:bg-zinc-900 py-16">
-      <div class="max-w-4xl mx-auto px-6 sm:px-8">
-        <div class="prose prose-lg max-w-none prose-zinc dark:prose-invert">
-          <slot />
-        </div>
-        
-        <!-- Camera details -->
-        {camera && (camera.lens || camera.settings) && (
-          <div class="mt-12 p-6 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl">
-            <h3 class="text-lg font-semibold mb-4 text-zinc-900 dark:text-zinc-100">拍摄信息</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-zinc-600 dark:text-zinc-400">
-              {camera.model && (
-                <div><span class="font-medium">相机:</span> {camera.model}</div>
+          <header class="mt-6 rounded-3xl border border-zinc-200/80 bg-white p-6 sm:p-8 dark:border-zinc-700 dark:bg-zinc-900">
+            <div class="flex flex-wrap items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+              <time datetime={date.toISOString()}>{date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</time>
+              {location && (
+                <>
+                  <span>·</span>
+                  <span>{location}</span>
+                </>
               )}
-              {camera.lens && (
-                <div><span class="font-medium">镜头:</span> {camera.lens}</div>
-              )}
-              {camera.settings && (
-                <div><span class="font-medium">参数:</span> {camera.settings}</div>
+              {publishedDate && (
+                <>
+                  <span>·</span>
+                  <span>发布于 {publishedDate}</span>
+                </>
               )}
             </div>
+
+            {title && <h1 class="mt-4 text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-100">{title}</h1>}
+            {subtitle && <p class="mt-3 text-base leading-7 text-zinc-600 dark:text-zinc-300">{subtitle}</p>}
+
+            {(camera?.model || camera?.lens || camera?.settings) && (
+              <div class="mt-5 grid grid-cols-1 gap-2 text-sm text-zinc-600 dark:text-zinc-300 sm:grid-cols-3">
+                {camera?.model && <p><span class="font-medium text-zinc-900 dark:text-zinc-100">相机：</span>{camera.model}</p>}
+                {camera?.lens && <p><span class="font-medium text-zinc-900 dark:text-zinc-100">镜头：</span>{camera.lens}</p>}
+                {camera?.settings && <p><span class="font-medium text-zinc-900 dark:text-zinc-100">参数：</span>{camera.settings}</p>}
+              </div>
+            )}
+
+            {tags.length > 0 && (
+              <div class="mt-5 flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <span class="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">{tag}</span>
+                ))}
+              </div>
+            )}
+          </header>
+
+          {gallery && gallery.length > 0 && (
+            <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
+              {gallery.map((photo, index) => (
+                <figure class="overflow-hidden rounded-2xl border border-zinc-200/80 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800">
+                  <img
+                    src={photo.src}
+                    alt={photo.alt || `Photo ${index + 1}`}
+                    class="w-full object-cover"
+                    loading={index < 2 ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
+                  {photo.caption && <figcaption class="border-t border-zinc-200/80 px-4 py-3 text-sm text-zinc-600 dark:border-zinc-700 dark:text-zinc-300">{photo.caption}</figcaption>}
+                </figure>
+              ))}
+            </div>
+          )}
+
+          <div class="prose prose-lg prose-zinc mt-10 max-w-none leading-8 dark:prose-invert prose-pre:rounded-2xl prose-img:rounded-2xl">
+            <slot />
           </div>
-        )}
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 </SpotlightLayout>
-
-<style>
-  .prose p {
-    @apply text-zinc-600 dark:text-zinc-400 leading-7;
-  }
-  
-  .prose a {
-    @apply text-orange-500 hover:text-orange-600;
-  }
-</style>

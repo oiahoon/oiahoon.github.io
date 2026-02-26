@@ -3,80 +3,69 @@ import { getCollection } from 'astro:content';
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
 import { getPreviewImage } from '../utils/extractFirstImage';
 
-const photos = await getCollection('posts', ({ data }) => {
-  return !data.draft && data.type === 'photography';
-});
+const photos = await getCollection('posts', ({ data }) => !data.draft && data.type === 'photography');
 
-const sortedPhotos = photos.sort((a, b) => 
-  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+const sortedPhotos = photos.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
 );
 ---
 
-<SpotlightLayout 
+<SpotlightLayout
   title="摄影作品 | Joey's Notes"
-  description="我的摄影作品集，记录生活中的美好瞬间。"
+  description="摄影作品与拍摄记录，强调简洁浏览和快速进入单篇。"
   lang="zh"
 >
-  <div class="sm:px-8 mt-16 sm:mt-32">
+  <section class="sm:px-8 mt-12 sm:mt-16">
     <div class="mx-auto w-full max-w-7xl lg:px-8">
       <div class="relative px-4 sm:px-8 lg:px-12">
         <div class="mx-auto max-w-2xl lg:max-w-5xl">
-          
-          <!-- Header -->
-          <header class="max-w-2xl">
-            <h1 class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-              摄影作品
-            </h1>
-            <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-              用镜头记录生活中的美好瞬间，分享我眼中的世界。
-            </p>
-          </header>
-
-          <!-- Masonry Grid -->
-          <div class="mt-16 sm:mt-20">
-            <div class="columns-1 gap-4 sm:columns-2 lg:columns-3 space-y-4">
-              {sortedPhotos.map((photo) => {
-                const photoUrl = photo.data.gallery?.[0]?.src || getPreviewImage(photo);
-                return photoUrl && (
-                  <div class="break-inside-avoid">
-                    <a 
-                      href={`/posts/${photo.slug}/`}
-                      class="group relative block overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800"
-                    >
-                      <img 
-                        src={photoUrl}
-                        alt={photo.data.title || '摄影作品'}
-                        class="w-full h-auto object-cover transition duration-300 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                      
-                      <!-- Hover overlay with metadata -->
-                      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                        <div class="absolute bottom-0 left-0 right-0 p-4">
-                          {photo.data.camera?.model && (
-                            <div class="flex items-center gap-2 text-sm text-white/90">
-                              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                              </svg>
-                              <span>{photo.data.camera.model}</span>
-                            </div>
-                          )}
-                          {photo.data.publishedDate && (
-                            <div class="mt-2 text-xs text-white/70">
-                              {photo.data.publishedDate}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                );
-              })}
-            </div>
+          <div class="rounded-3xl border border-zinc-200/80 bg-gradient-to-br from-white via-zinc-50 to-orange-50/50 p-7 sm:p-10 dark:border-zinc-700/50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800">
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">Photography</p>
+            <h1 class="mt-4 text-3xl font-bold tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-100">摄影作品</h1>
+            <p class="mt-4 max-w-2xl text-base leading-7 text-zinc-600 dark:text-zinc-300">以更轻量的画廊结构呈现近期作品，减少视觉噪声，优先让浏览和跳转更顺畅。</p>
+            <span class="mt-6 inline-flex rounded-full bg-zinc-100 px-3 py-1 text-sm font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">{sortedPhotos.length} 组摄影记录</span>
           </div>
-          
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <section class="sm:px-8 mt-12 sm:mt-14">
+    <div class="mx-auto w-full max-w-7xl lg:px-8">
+      <div class="relative px-4 sm:px-8 lg:px-12">
+        <div class="mx-auto max-w-2xl lg:max-w-5xl">
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {sortedPhotos.map((photo, index) => {
+              const photoUrl = photo.data.gallery?.[0]?.src || getPreviewImage(photo);
+              if (!photoUrl) return null;
+
+              return (
+                <article class="group overflow-hidden rounded-2xl border border-zinc-200/80 bg-white transition hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-sm dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-500">
+                  <a href={`/posts/${photo.slug}/`} class="block">
+                    <img
+                      src={photoUrl}
+                      alt={photo.data.title || '摄影作品'}
+                      class="aspect-[4/5] w-full object-cover"
+                      loading={index < 3 ? 'eager' : 'lazy'}
+                      decoding="async"
+                    />
+                  </a>
+
+                  <div class="p-4">
+                    <h2 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+                      <a href={`/posts/${photo.slug}/`} class="transition group-hover:text-orange-600 dark:group-hover:text-orange-300">{photo.data.title || '未命名摄影作品'}</a>
+                    </h2>
+                    <div class="mt-2 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+                      <time datetime={photo.data.date.toISOString()}>{photo.data.date.toLocaleDateString('zh-CN')}</time>
+                      {photo.data.camera?.model && <span class="truncate max-w-[60%]">{photo.data.camera.model}</span>}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </SpotlightLayout>

@@ -2,9 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Spotlight inspired design system */
 :root {
-  /* Colors */
+  --font-sans: "Avenir Next", "SF Pro Text", "PingFang SC", "Hiragino Sans GB",
+    "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+
   --zinc-50: #fafafa;
   --zinc-100: #f4f4f5;
   --zinc-200: #e4e4e7;
@@ -16,14 +17,12 @@
   --zinc-800: #27272a;
   --zinc-900: #18181b;
   --zinc-950: #09090b;
-  
-  /* Orange accent */
+
   --orange-400: #fb923c;
   --orange-500: #f97316;
   --orange-600: #ea580c;
 }
 
-/* Dark mode */
 .dark {
   --zinc-50: #09090b;
   --zinc-100: #18181b;
@@ -40,24 +39,23 @@
 
 @layer base {
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
-  
+
   body {
     @apply bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background: rgba(249, 115, 22, 0.2);
   }
 }
 
 @layer components {
-  .btn-primary {
-    @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors;
-  }
-  
-  .card {
-    @apply bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden;
-  }
-  
   .prose-custom {
     @apply prose prose-lg max-w-none prose-gray;
     @apply prose-headings:text-gray-900 prose-headings:font-semibold;
@@ -67,7 +65,6 @@
     @apply prose-blockquote:border-l-blue-200 prose-blockquote:text-gray-600;
   }
 
-  /* Typography */
   .prose {
     @apply text-zinc-600 dark:text-zinc-400;
   }
