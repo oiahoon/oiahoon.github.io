@@ -13,6 +13,7 @@ tags:
   - slow query
 lang: zh
 draft: false
+description: 公司需要搭建ELK系统的可以参考一下。
 ---
 
 本文主要介绍自己搭建一套ELK的大概流程，和遇到的一些问题。

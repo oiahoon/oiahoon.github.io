@@ -16,6 +16,7 @@ tags:
   - Alfred
 lang: zh
 draft: false
+description: 初闻道系列之一，磨刀不误砍柴工。
 ---
 拿到一台mac以后怎么初始化开发环境.  
 本文主要以rails为例子，介绍拿到新的rmbp以后如何迅速搭建开发环境，并推荐一些基础软件。

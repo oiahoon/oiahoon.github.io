@@ -5,13 +5,14 @@ author: 黄药师
 date: 2018-05-05T00:00:00.000Z
 tags:
   - Notes
-  - docker
+  - Docker
   - docker-compose
   - linux
   - macos
   - command
 lang: zh
 draft: false
+description: 整理了一下最近用到的 docker 镜像清理的命令
 ---
 
 工欲善其事必先利其器，docker 镜像太多会占用很多磁盘空间，垃圾回收一下是必须的工作。

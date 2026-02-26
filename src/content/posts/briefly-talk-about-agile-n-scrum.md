@@ -11,6 +11,7 @@ tags:
   - 精益创业
 lang: zh
 draft: false
+description: 根据前两天的一次presentation总结而述
 ---
 
 行业内有太多人吐槽敏捷开发，原因各不相同，有觉得 Agile 就是一坨翔的，有觉得 Agile 太低效的，也有觉得团队小暂时不需要敏捷的，etc。

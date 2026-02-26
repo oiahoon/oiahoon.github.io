@@ -10,6 +10,7 @@ tags:
   - error
 lang: zh
 draft: false
+description: '解决MacOS升级后出现xcrun: error: invalid active developer path, missing xcrun的问题'
 ---
 
 本文解决MacOS升级后出现`xcrun: error: invalid active developer path, missing xcrun`的问题。

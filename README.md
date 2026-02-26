@@ -89,7 +89,7 @@ To fetch photography metadata from Unsplash, you need to set up an API key:
 ## 本地开发
 
 ### 环境准备
-需要Node.js 18以上版本，npm 9以上版本。
+建议使用 Node.js 20.19.0 及以上版本（仓库提供 `.nvmrc`），npm 10 及以上版本。
 
 ### 开始开发
 
@@ -209,7 +209,7 @@ tags: ["摄影", "风光"]
 | 项目 | 数值 |
 |------|------|
 | 构建时间 | 约2-4秒（以本地构建为准） |
-| 生成页面 | 67个（2026-02-26 基线） |
+| 生成页面 | 66个（2026-02-26 基线） |
 | 文件大小 | 50-100KB |
 | Lighthouse评分 | 95+ |
 | Core Web Vitals | 全部良好 |

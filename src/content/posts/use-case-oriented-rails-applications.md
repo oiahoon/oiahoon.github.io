@@ -11,6 +11,7 @@ tags:
   - cleancode
 lang: zh
 draft: false
+description: 面向use_case的rails项目
 ---
 
 我一直以为，在写rails的时候使用**use_case**是一种很常见的意识。但是我发现还是有一部分人从来没用过或者没听说过**use_case**，出于让自己也更仔细的思考这种用法的目的，记录一下。

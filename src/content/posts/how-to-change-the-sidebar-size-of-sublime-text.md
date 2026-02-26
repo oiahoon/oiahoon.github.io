@@ -9,6 +9,7 @@ tags:
   - Mac
 lang: zh
 draft: false
+description: Sublime Text 3 how to change the font size of the file sidebar?
 ---
 
 使用ST3的过程中，想对ST做一些个性化调整，比如sidebar里文件列表的字体大小。

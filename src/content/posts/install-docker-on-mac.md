@@ -11,6 +11,7 @@ tags:
   - Notes
 lang: zh
 draft: false
+description: 初闻道系列之二，装好docker好搞事。
 ---
 现在流行用docker作容器来开发部署。  
 本文主要解决在mac上安装docker[-compose]，以及启动一个nginx实例。

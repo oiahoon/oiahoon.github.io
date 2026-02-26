@@ -10,7 +10,9 @@
     "photos:sync": "node scripts/sync-photos.js",
     "check:docs-baseline": "node scripts/check-doc-baseline.js",
     "check:content-health": "node scripts/check-content-health.js",
-    "report:content-health": "node scripts/check-content-health.js --write"
+    "fix:content-health": "node scripts/fix-content-health.js",
+    "report:content-health": "node scripts/check-content-health.js --write",
+    "check:security": "npm audit --audit-level=high"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.7",
@@ -19,12 +21,13 @@
     "@astrojs/tailwind": "^6.0.2",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^24.9.1",
-    "astro": "^5.14.8",
+    "astro": "^5.18.0",
     "gray-matter": "^4.0.3",
     "reading-time": "^1.5.0",
     "tailwindcss": "^3.4.18"
   },
   "devDependencies": {
+    "baseline-browser-mapping": "^2.10.0",
     "exifr": "^7.1.3",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",

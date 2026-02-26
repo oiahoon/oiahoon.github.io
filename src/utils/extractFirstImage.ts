@@ -25,7 +25,16 @@ export function extractFirstImage(content: string): string | null {
  * Get preview image for a post
  * Priority: header_img > gallery[0] > first image in content
  */
-export function getPreviewImage(post: any): string | null {
+interface PreviewPost {
+  body?: string;
+  data: {
+    header_img?: string;
+    type?: string;
+    gallery?: Array<{ src: string }>;
+  };
+}
+
+export function getPreviewImage(post: PreviewPost): string | null {
   const { header_img, gallery, type } = post.data;
   
   // 1. Custom header image (highest priority)

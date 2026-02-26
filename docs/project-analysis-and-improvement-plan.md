@@ -20,7 +20,7 @@
 - 响应式设计，含暗色模式。
 - 有 PWA 相关能力（manifest、offline 页面、service worker）。
 - Vercel 静态部署，自动构建发布。
-- 当前本地构建成功，最近一次构建结果：**67 pages built in 4.32s**。
+- 当前本地构建成功，最近一次构建结果：**66 pages built in 2.97s**。
 
 ## 2. 项目优点
 

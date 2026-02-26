@@ -12,8 +12,8 @@ This document is the single baseline entry for current project status. Metrics b
 
 | Metric | Current Value | Verified By | Date |
 |---|---:|---|---|
-| Build Time | 4.32s | `npm run build` | 2026-02-26 |
-| Pages Generated | 67 | `npm run build` | 2026-02-26 |
+| Build Time | 2.97s | `npm run build` | 2026-02-26 |
+| Pages Generated | 66 | `npm run build` | 2026-02-26 |
 | Build Result | Success | `npm run build` | 2026-02-26 |
 
 ### Verification Command
@@ -53,6 +53,8 @@ npm run build
 - Local check:
   - `npm run build`
   - `npm run check:docs-baseline`
+  - `npm run check:content-health`
+  - `npm run check:security`
 
 ## Note on Historical Numbers
 

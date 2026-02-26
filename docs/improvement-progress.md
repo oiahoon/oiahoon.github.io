@@ -27,11 +27,14 @@
 - 完成：增强 `photos:sync`，支持 `--dry-run`、`--force`、重复检测和摘要统计。
 - 完成：新增标签治理规则 `docs/tag-governance.md` 与 `scripts/tag-governance.json`。
 - 完成：新增内容健康检查脚本并生成报告 `docs/content-health-report.md`。
+- 完成：修复依赖安全漏洞（`npm audit` 高危阈值为 0），并将安全审计加入 CI。
+- 完成：补齐全部文章 `description` 与标签归一，内容健康检查归零。
 
 ## 验证基线
 
 - 验证命令：`npm run build`
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
-- 最近结果：`67 page(s) built in 4.32s`，`content health: invalid dates = 0`
+- 安全校验命令：`npm run check:security`
+- 最近结果：`66 page(s) built in 2.97s`，`content health: invalid dates = 0`，`audit vulnerabilities = 0`
 - 最近验证日期：2026-02-26

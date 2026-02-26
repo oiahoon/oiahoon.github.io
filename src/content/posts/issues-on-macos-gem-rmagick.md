@@ -14,6 +14,7 @@ tags:
   - High Sierra
 lang: zh
 draft: false
+description: 新版macOS和新版的imagemagick呈现出一种互不相容的态势。
 ---
 
 在 `High Sierra` macOS 上安装 `rmagick` 然后用来合成图片的时候遇到的一些问题和解决方案。
