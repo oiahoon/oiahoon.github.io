@@ -14,11 +14,13 @@ const props = Astro.props;
 ---
 
 <BaseLayout {...props}>
-  <SpotlightHeader />
-  <main class="main-content">
-    <slot />
-  </main>
-  <SpotlightFooter />
+  <div class="w-full">
+    <SpotlightHeader />
+    <main class="main-content">
+      <slot />
+    </main>
+    <SpotlightFooter />
+  </div>
 </BaseLayout>
 
 <style>
