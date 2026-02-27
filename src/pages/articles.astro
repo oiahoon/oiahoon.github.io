@@ -9,22 +9,22 @@ const sorted = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a
 <SpotlightLayout title="文章 | Joey's Notes" description="技术文章与实践复盘" lang="zh">
   <section class="section-gap">
     <div class="shell">
-      <div class="mx-auto max-w-3xl text-center">
+      <div class="hero-intro">
         <p class="eyebrow">Articles</p>
-        <h1 class="mt-4 text-4xl font-semibold" style="font-family: var(--font-serif);">技术文章</h1>
+        <h1 class="mt-4 text-4xl font-semibold">技术文章</h1>
         <p class="mt-4 muted">按时间排序，保持信息结构稳定，减少装饰性干扰。</p>
       </div>
 
-      <div class="article-list mx-auto mt-10 max-w-3xl space-y-10">
+      <div class="entry-stream mt-10">
         {sorted.map((post) => (
-          <article class="border-b pb-8" style="border-color: var(--line);">
-            <time class="text-xs muted" datetime={post.data.date.toISOString()}>
+          <article class="entry-item">
+            <time class="entry-meta" datetime={post.data.date.toISOString()}>
               {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
             </time>
-            <h2 class="mt-2 text-2xl font-semibold" style="font-family: var(--font-serif);">
+            <h2 class="entry-title">
               <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
             </h2>
-            <p class="mt-3 muted">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
+            <p class="entry-desc">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
           </article>
         ))}
       </div>

@@ -56,11 +56,11 @@ const structuredData = generateBlogPostStructuredData({
   <SpotlightLayout title={`${title} | Joey's Notes`} description={description || subtitle || title} image={previewImage || undefined} lang={lang} structuredData={structuredData}>
     <article class="section-gap">
       <div class="shell">
-        <div class="mx-auto max-w-2xl">
+        <div class="reading-narrow">
           <a href="/articles/" class="text-sm muted hover:text-[var(--text)]">← 返回文章列表</a>
 
           <header class="mt-8 border-b pb-10" style="border-color: var(--line);">
-            <p class="text-xs muted">
+            <p class="entry-meta">
               {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
                 year: 'numeric',
                 month: 'long',
@@ -68,7 +68,7 @@ const structuredData = generateBlogPostStructuredData({
               })}
               · {author}
             </p>
-            <h1 class="mt-4 text-4xl font-semibold leading-[1.15] sm:text-5xl" style="font-family: var(--font-serif);">{title}</h1>
+            <h1 class="mt-4 text-4xl font-semibold leading-[1.15] sm:text-5xl">{title}</h1>
             {subtitle && <p class="mt-5 text-lg leading-8 muted">{subtitle}</p>}
           </header>
 
@@ -87,6 +87,11 @@ const structuredData = generateBlogPostStructuredData({
               </div>
             </footer>
           )}
+
+          <div class="mt-8 flex items-center justify-between border-t pt-6 text-sm" style="border-color: var(--line);">
+            <a href="/articles/" class="muted hover:text-[var(--text)]">返回文章列表</a>
+            <a href="/tags/" class="muted hover:text-[var(--text)]">浏览全部标签</a>
+          </div>
         </div>
       </div>
     </article>

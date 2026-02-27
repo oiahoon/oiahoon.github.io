@@ -29,28 +29,28 @@ const currentPosts = posts.slice(startIndex, endIndex);
 <SpotlightLayout title={`文章 | 第${currentPage}页`} description="技术文章分页浏览" lang="zh">
   <section class="section-gap">
     <div class="shell">
-      <div class="mx-auto max-w-4xl text-center">
+      <div class="hero-intro">
         <p class="eyebrow">Articles</p>
         <h1 class="mt-4 text-4xl font-semibold">第 {currentPage} 页</h1>
       </div>
 
-      <div class="article-list mx-auto mt-10 max-w-4xl space-y-8">
+      <div class="entry-stream mt-10">
         {currentPosts.map((post) => (
-          <article class="border-b pb-6" style="border-color: var(--line);">
-            <time class="text-xs muted" datetime={post.data.date.toISOString()}>
+          <article class="entry-item">
+            <time class="entry-meta" datetime={post.data.date.toISOString()}>
               {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
             </time>
-            <h2 class="mt-2 text-2xl font-semibold">
+            <h2 class="entry-title">
               <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
             </h2>
-            <p class="mt-2 muted">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
+            <p class="entry-desc">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
           </article>
         ))}
       </div>
 
-      <nav class="mx-auto mt-10 flex max-w-4xl items-center gap-2 text-sm">
+      <nav class="pager">
         {currentPage > 1 && (
-          <a href={currentPage === 2 ? '/' : `/page/${currentPage - 1}/`} class="rounded-full border px-3 py-1.5 muted hover:text-[var(--text)]" style="border-color: var(--line);">
+          <a href={currentPage === 2 ? '/' : `/page/${currentPage - 1}/`} class="pager-link">
             上一页
           </a>
         )}
@@ -58,15 +58,14 @@ const currentPosts = posts.slice(startIndex, endIndex);
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <a
             href={page === 1 ? '/' : `/page/${page}/`}
-            class={`rounded-full border px-3 py-1.5 ${page === currentPage ? 'text-[var(--text)] font-semibold' : 'muted hover:text-[var(--text)]'}`}
-            style="border-color: var(--line);"
+            class={`pager-link ${page === currentPage ? 'current' : ''}`}
           >
             {page}
           </a>
         ))}
 
         {currentPage < totalPages && (
-          <a href={`/page/${currentPage + 1}/`} class="rounded-full border px-3 py-1.5 muted hover:text-[var(--text)]" style="border-color: var(--line);">
+          <a href={`/page/${currentPage + 1}/`} class="pager-link">
             下一页
           </a>
         )}

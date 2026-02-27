@@ -16,6 +16,7 @@
   --accent: #b85f28;
   --shell-max: 72rem;
   --content-max: 52rem;
+  --reading-max: 46rem;
   --section-gap: clamp(3.5rem, 7vw, 6rem);
   --radius-panel: 1rem;
 }
@@ -75,8 +76,102 @@
     margin-inline: auto;
   }
 
+  .reading-narrow {
+    width: min(var(--reading-max), 100%);
+    margin-inline: auto;
+  }
+
   .section-gap {
     margin-top: var(--section-gap);
+  }
+
+  .hero-intro {
+    width: min(46rem, 100%);
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .section-head {
+    width: min(var(--content-max), 100%);
+    margin-inline: auto;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .entry-stream {
+    width: min(var(--content-max), 100%);
+    margin-inline: auto;
+    margin-top: 2rem;
+  }
+
+  .entry-item {
+    border-bottom: 1px solid var(--line);
+    padding-block: 1.5rem;
+  }
+
+  .entry-item:first-child {
+    padding-top: 0;
+  }
+
+  .entry-item:last-child {
+    padding-bottom: 0.5rem;
+  }
+
+  .entry-meta {
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+  }
+
+  .entry-title {
+    margin-top: 0.55rem;
+    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+    line-height: 1.25;
+    font-weight: 600;
+  }
+
+  .entry-title a {
+    transition: color 0.2s ease;
+  }
+
+  .entry-title a:hover {
+    color: var(--accent);
+  }
+
+  .entry-desc {
+    margin-top: 0.7rem;
+    color: var(--muted);
+  }
+
+  .pager {
+    width: min(var(--content-max), 100%);
+    margin-inline: auto;
+    margin-top: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pager-link {
+    border: 1px solid var(--line);
+    border-radius: 9999px;
+    padding: 0.36rem 0.85rem;
+    font-size: 0.86rem;
+    color: var(--muted);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .pager-link:hover {
+    color: var(--text);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  }
+
+  .pager-link.current {
+    color: var(--text);
+    font-weight: 600;
   }
 
   .soft-panel {
@@ -110,6 +205,28 @@
     color: color-mix(in srgb, var(--text) 88%, white);
   }
 
+  .prose p {
+    margin-block: 1rem 1.15rem;
+  }
+
+  .prose h2 {
+    margin-top: 2.3em;
+    margin-bottom: 0.7em;
+    line-height: 1.3;
+  }
+
+  .prose h3 {
+    margin-top: 1.8em;
+    margin-bottom: 0.55em;
+    line-height: 1.35;
+  }
+
+  .prose ul,
+  .prose ol {
+    margin-block: 1.15rem;
+    padding-left: 1.3rem;
+  }
+
   .prose h1,
   .prose h2,
   .prose h3 {
@@ -135,5 +252,22 @@
   .prose code {
     @apply rounded px-1 py-0.5;
     background: color-mix(in srgb, var(--line) 80%, transparent);
+  }
+
+  .prose blockquote {
+    border-left: 2px solid var(--line);
+    margin-inline: 0;
+    padding-left: 1rem;
+    color: var(--muted);
+  }
+
+  .prose hr {
+    margin-block: 2rem;
+    border-color: var(--line);
+  }
+
+  .prose img {
+    border-radius: 0.85rem;
+    margin-block: 1.5rem;
   }
 }

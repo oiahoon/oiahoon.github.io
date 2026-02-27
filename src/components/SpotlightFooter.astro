@@ -4,11 +4,35 @@ const year = new Date().getFullYear();
 
 <footer class="mt-24 pb-12">
   <div class="shell">
-    <div class="flex flex-col gap-3 border-t pt-6 text-sm sm:flex-row sm:items-center sm:justify-between" style="border-color: var(--line);">
-      <p class="muted">© {year} Joey's Notes</p>
-      <div class="flex gap-4 muted">
-        <a href="/rss.xml" class="hover:text-[var(--text)]">RSS</a>
-        <a href="https://github.com/oiahoon" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--text)]">GitHub</a>
+    <div class="border-t pt-8" style="border-color: var(--line);">
+      <div class="grid gap-8 text-sm md:grid-cols-3">
+        <section>
+          <p class="text-base font-semibold">Joey's Notes</p>
+          <p class="mt-3 max-w-xs muted">记录软件工程实践与摄影观察，保持长期、可复用、可查阅的写作习惯。</p>
+        </section>
+
+        <section>
+          <p class="font-semibold">导航</p>
+          <div class="mt-3 flex flex-col gap-2 muted">
+            <a href="/articles/" class="hover:text-[var(--text)]">文章</a>
+            <a href="/photography/" class="hover:text-[var(--text)]">摄影</a>
+            <a href="/tags/" class="hover:text-[var(--text)]">标签</a>
+            <a href="/about/" class="hover:text-[var(--text)]">关于</a>
+          </div>
+        </section>
+
+        <section>
+          <p class="font-semibold">订阅与链接</p>
+          <div class="mt-3 flex flex-col gap-2 muted">
+            <a href="/rss.xml" class="hover:text-[var(--text)]">RSS 订阅</a>
+            <a href="https://github.com/oiahoon" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--text)]">GitHub</a>
+            <a href="https://weibo.com/desiver" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--text)]">微博</a>
+          </div>
+        </section>
+      </div>
+
+      <div class="mt-8 border-t pt-4 text-xs muted" style="border-color: var(--line);">
+        <p>© {year} Joey's Notes</p>
       </div>
     </div>
   </div>

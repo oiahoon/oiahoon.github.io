@@ -16,7 +16,7 @@ const sortedTags = Array.from(tagCounts.entries()).sort(([, a], [, b]) => b - a)
 <SpotlightLayout title="标签 | Joey's Notes" description="按标签浏览文章，快速找到感兴趣的技术主题和内容分类。" lang="zh">
   <section class="section-gap">
     <div class="shell">
-      <div class="mx-auto max-w-4xl text-center">
+      <div class="hero-intro">
         <p class="eyebrow">Tags</p>
         <h1 class="mt-4 text-4xl font-semibold">文章标签</h1>
         <p class="mt-4 muted">共 {sortedTags.length} 个标签，{posts.length} 篇文章。选择一个标签继续阅读。</p>

@@ -13,9 +13,9 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
 <SpotlightLayout title="Joey's Notes | 黄药师的笔记本" description={description}>
   <section class="section-gap">
     <div class="shell">
-      <div class="mx-auto max-w-3xl text-center">
+      <div class="hero-intro">
         <p class="eyebrow">Notebook</p>
-        <h1 class="mt-4 text-4xl font-semibold tracking-tight sm:text-6xl" style="font-family: var(--font-serif);">
+        <h1 class="mt-4 text-4xl font-semibold tracking-tight sm:text-6xl">
           技术写作与摄影归档
         </h1>
         <p class="mt-6 text-lg muted">
@@ -27,21 +27,21 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
 
   <section class="section-gap">
     <div class="shell">
-      <div class="mx-auto flex max-w-3xl items-end justify-between">
-        <h2 class="text-2xl font-semibold" style="font-family: var(--font-serif);">最新文章</h2>
+      <div class="section-head">
+        <h2 class="text-2xl font-semibold">最新文章</h2>
         <a href="/articles/" class="text-sm muted hover:text-[var(--text)]">查看全部</a>
       </div>
 
-      <div class="article-list mx-auto mt-6 max-w-3xl space-y-8">
+      <div class="entry-stream">
         {latestArticles.map((post) => (
-          <article class="border-b pb-6" style="border-color: var(--line);">
-            <time class="text-xs muted" datetime={post.data.date.toISOString()}>
+          <article class="entry-item">
+            <time class="entry-meta" datetime={post.data.date.toISOString()}>
               {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
             </time>
-            <h3 class="mt-2 text-xl font-semibold">
+            <h3 class="entry-title">
               <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
             </h3>
-            <p class="mt-2 muted">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
+            <p class="entry-desc">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
           </article>
         ))}
       </div>
@@ -50,12 +50,12 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
 
   <section class="section-gap">
     <div class="shell">
-      <div class="mx-auto flex max-w-3xl items-end justify-between">
-        <h2 class="text-2xl font-semibold" style="font-family: var(--font-serif);">近期摄影</h2>
+      <div class="section-head">
+        <h2 class="text-2xl font-semibold">近期摄影</h2>
         <a href="/photography/" class="text-sm muted hover:text-[var(--text)]">浏览归档</a>
       </div>
 
-      <div class="photo-grid mx-auto mt-6 grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4">
+      <div class="photo-grid mx-auto mt-6 grid max-w-[52rem] grid-cols-2 gap-4 sm:grid-cols-4">
         {latestPhotos.map((photo) => {
           const image = photo.data.gallery?.[0]?.src;
           if (!image) return null;
