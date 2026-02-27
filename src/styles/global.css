@@ -263,9 +263,15 @@
     color: #e7edf5;
   }
 
-  .prose code {
+  .prose :not(pre) > code {
     @apply rounded px-1 py-0.5;
     background: color-mix(in srgb, var(--line) 80%, transparent);
+  }
+
+  .prose pre code {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
   }
 
   .prose blockquote {
