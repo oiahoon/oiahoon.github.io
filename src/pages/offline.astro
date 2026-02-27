@@ -6,44 +6,42 @@ import BlogLayout from '../layouts/BlogLayout.astro';
   title="离线模式 | Joey's Notes"
   description="您当前处于离线状态"
 >
-  <div class="max-w-2xl mx-auto text-center py-16">
-    <div class="mb-8">
-      <svg class="w-24 h-24 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 109.75 9.75A9.75 9.75 0 0012 2.25z" />
-      </svg>
-      <h1 class="text-4xl font-bold text-gray-900 mb-4">您当前处于离线状态</h1>
-      <p class="text-xl text-gray-600 mb-8">
-        无法连接到网络，但您仍可以浏览已缓存的内容
-      </p>
-    </div>
+  <section class="section-gap">
+    <div class="shell">
+      <div class="content-narrow text-center">
+        <p class="eyebrow">Offline</p>
+        <h1 class="mt-4 text-4xl font-semibold sm:text-5xl">您当前处于离线状态</h1>
+        <p class="muted mx-auto mt-5 max-w-xl text-lg">
+          当前无法连接网络，但你仍可以浏览此前访问并缓存过的内容。
+        </p>
 
-    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-      <h2 class="text-lg font-semibold text-blue-900 mb-2">离线功能</h2>
-      <ul class="text-blue-800 text-left space-y-2">
-        <li>• 浏览已访问过的文章</li>
-        <li>• 查看缓存的页面内容</li>
-        <li>• 使用基本导航功能</li>
-      </ul>
-    </div>
+        <div class="soft-panel mt-10 p-8">
+          <svg class="mx-auto mb-5 h-16 w-16 muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 109.75 9.75A9.75 9.75 0 0012 2.25z" />
+          </svg>
+          <h2 class="text-xl font-semibold">离线可用功能</h2>
+          <ul class="mx-auto mt-4 max-w-sm space-y-2 text-left muted">
+            <li>浏览已访问过的文章</li>
+            <li>查看缓存的页面内容</li>
+            <li>使用基础导航继续阅读</li>
+          </ul>
+        </div>
 
-    <div class="space-y-4">
-      <button 
-        onclick="window.location.reload()" 
-        class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-      >
-        重新连接
-      </button>
-      
-      <div>
-        <a 
-          href="/" 
-          class="text-blue-600 hover:text-blue-800 transition-colors"
-        >
-          返回首页
-        </a>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <button
+            onclick="window.location.reload()"
+            class="rounded-full px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90"
+            style="background: var(--accent);"
+          >
+            重新连接
+          </button>
+          <a href="/" class="rounded-full border px-5 py-2.5 text-sm font-medium muted transition hover:text-[var(--text)]" style="border-color: var(--line);">
+            返回首页
+          </a>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 </BlogLayout>
 
 <script>
