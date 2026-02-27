@@ -1,5 +1,6 @@
 ---
 import SpotlightLayout from './SpotlightLayout.astro';
+import ProgressiveImage from '../components/ProgressiveImage.astro';
 
 export interface Props {
   title?: string;
@@ -44,10 +45,10 @@ const cover = header_img || gallery?.[0]?.src;
           <div class="space-y-10">
             {gallery.map((photo, index) => (
               <figure class={`${index === 0 ? '' : 'mx-auto max-w-4xl'}`}>
-                <img
+                <ProgressiveImage
                   src={photo.src}
                   alt={photo.alt || `Photo ${index + 1}`}
-                  class="w-full rounded-lg object-cover"
+                  class="w-full rounded-lg"
                   loading={index < 2 ? 'eager' : 'lazy'}
                   decoding="async"
                 />

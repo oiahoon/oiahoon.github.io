@@ -1,0 +1,103 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  lowSrc?: string;
+  loading?: 'eager' | 'lazy';
+  decoding?: 'sync' | 'async' | 'auto';
+  sizes?: string;
+}
+
+const {
+  src,
+  alt,
+  class: className = '',
+  lowSrc,
+  loading = 'lazy',
+  decoding = 'async',
+  sizes,
+} = Astro.props;
+
+function resolveLowResSource(imageSrc: string) {
+  if (!imageSrc) return '/img/photo-placeholder.svg';
+
+  try {
+    const parsed = new URL(imageSrc, 'https://placeholder.local');
+    const isRemote = /^https?:\/\//.test(imageSrc);
+
+    if (parsed.hostname.includes('images.unsplash.com')) {
+      parsed.searchParams.set('w', '64');
+      parsed.searchParams.set('q', '20');
+      parsed.searchParams.set('auto', 'format');
+      parsed.searchParams.set('fit', 'max');
+      return parsed.toString();
+    }
+
+    if (parsed.hostname.includes('res.cloudinary.com')) {
+      return imageSrc.replace('/upload/', '/upload/f_auto,q_20,w_80/');
+    }
+
+    if (!isRemote) {
+      return '/img/photo-placeholder.svg';
+    }
+  } catch {
+    // Fallback handled below.
+  }
+
+  return '/img/photo-placeholder.svg';
+}
+
+const placeholderSrc = lowSrc || resolveLowResSource(src);
+---
+
+<span class={`progressive-image ${className}`} data-progressive-image>
+  <img src={placeholderSrc} alt="" aria-hidden="true" class="progressive-image__low" loading="eager" decoding="async" />
+  <img
+    src={src}
+    alt={alt}
+    class="progressive-image__high"
+    loading={loading}
+    decoding={decoding}
+    sizes={sizes}
+    onload="this.closest('[data-progressive-image]')?.classList.add('is-loaded')"
+  />
+</span>
+
+<style>
+  .progressive-image {
+    position: relative;
+    display: block;
+    overflow: hidden;
+  }
+
+  .progressive-image__low,
+  .progressive-image__high {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .progressive-image__low {
+    position: absolute;
+    inset: 0;
+    filter: blur(16px);
+    transform: scale(1.05);
+    opacity: 1;
+    transition: opacity 420ms ease;
+  }
+
+  .progressive-image__high {
+    opacity: 0;
+    transition: opacity 420ms ease;
+  }
+
+  .progressive-image.is-loaded .progressive-image__high {
+    opacity: 1;
+  }
+
+  .progressive-image.is-loaded .progressive-image__low {
+    opacity: 0;
+  }
+</style>

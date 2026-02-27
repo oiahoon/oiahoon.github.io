@@ -60,7 +60,7 @@ const structuredData = generateBlogPostStructuredData({
           <a href="/articles/" class="text-sm muted hover:text-[var(--text)]">← 返回文章列表</a>
 
           <header class="mt-8 border-b pb-10" style="border-color: var(--line);">
-            <p class="entry-meta">
+            <p class="entry-meta skeleton-text">
               {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
                 year: 'numeric',
                 month: 'long',
@@ -68,11 +68,22 @@ const structuredData = generateBlogPostStructuredData({
               })}
               · {author}
             </p>
-            <h1 class="mt-4 text-4xl font-semibold leading-[1.15] sm:text-5xl">{title}</h1>
-            {subtitle && <p class="mt-5 text-lg leading-8 muted">{subtitle}</p>}
+            <h1 class="mt-4 text-4xl font-semibold leading-[1.15] sm:text-5xl skeleton-text">{title}</h1>
+            {subtitle && <p class="mt-5 text-lg leading-8 muted skeleton-text">{subtitle}</p>}
           </header>
 
-          <div class="prose prose-lg mt-12">
+          <div class="text-skeleton-stack" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+
+          <div class="prose prose-lg mt-12 text-content-block">
             <slot />
           </div>
 

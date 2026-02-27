@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 :root {
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
@@ -274,5 +283,47 @@
   .prose img {
     border-radius: 0.85rem;
     margin-block: 1.5rem;
+  }
+
+  .text-skeleton-stack {
+    display: none;
+  }
+
+  .slow-network.content-pending .skeleton-text {
+    color: transparent !important;
+    border-radius: 0.35rem;
+    background: linear-gradient(90deg, rgba(148, 163, 184, 0.2) 25%, rgba(148, 163, 184, 0.34) 50%, rgba(148, 163, 184, 0.2) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  }
+
+  .slow-network.content-pending .skeleton-text > * {
+    visibility: hidden;
+  }
+
+  .slow-network.content-pending .text-content-block {
+    display: none;
+  }
+
+  .slow-network.content-pending .text-skeleton-stack {
+    display: grid;
+    gap: 0.7rem;
+    margin-top: 3rem;
+  }
+
+  .slow-network.content-pending .text-skeleton-stack span {
+    height: 0.95rem;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, rgba(148, 163, 184, 0.22) 25%, rgba(148, 163, 184, 0.36) 50%, rgba(148, 163, 184, 0.22) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  }
+
+  .slow-network.content-pending .text-skeleton-stack span:nth-child(3n) {
+    width: 88%;
+  }
+
+  .slow-network.content-pending .text-skeleton-stack span:nth-child(4n) {
+    width: 74%;
   }
 }

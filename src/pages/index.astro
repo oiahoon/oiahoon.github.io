@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
+import ProgressiveImage from '../components/ProgressiveImage.astro';
 
 const posts = await getCollection('posts', ({ data }) => !data.draft);
 const sorted = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
@@ -35,13 +36,13 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
       <div class="entry-stream">
         {latestArticles.map((post) => (
           <article class="entry-item">
-            <time class="entry-meta" datetime={post.data.date.toISOString()}>
+            <time class="entry-meta skeleton-text" datetime={post.data.date.toISOString()}>
               {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
             </time>
-            <h3 class="entry-title">
+            <h3 class="entry-title skeleton-text">
               <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
             </h3>
-            <p class="entry-desc">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
+            <p class="entry-desc skeleton-text">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
           </article>
         ))}
       </div>
@@ -61,7 +62,7 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
           if (!image) return null;
           return (
             <a href={`/posts/${photo.slug}/`} class="block overflow-hidden rounded-xl">
-              <img src={image} alt={photo.data.title || '摄影作品'} class="aspect-[4/5] w-full object-cover" loading="lazy" decoding="async" />
+              <ProgressiveImage src={image} alt={photo.data.title || '摄影作品'} class="aspect-[4/5] w-full" loading="lazy" decoding="async" />
             </a>
           );
         })}

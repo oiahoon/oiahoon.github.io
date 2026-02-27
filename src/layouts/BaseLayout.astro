@@ -70,6 +70,22 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Joey's Notes" />
+  <script is:inline>
+    (function () {
+      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      if (!connection) return;
+
+      const slowNetwork =
+        connection.saveData === true ||
+        connection.effectiveType === 'slow-2g' ||
+        connection.effectiveType === '2g' ||
+        (typeof connection.downlink === 'number' && connection.downlink > 0 && connection.downlink < 1.2);
+
+      if (slowNetwork) {
+        document.documentElement.classList.add('slow-network', 'content-pending');
+      }
+    })();
+  </script>
   
 </head>
 <body class="h-full">
@@ -83,6 +99,8 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
       let refreshing = false;
 
       window.addEventListener('load', () => {
+        document.documentElement.classList.remove('content-pending');
+
         navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
           .then((registration) => {
             // Periodically check for new service worker after deployments.
@@ -112,6 +130,10 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
           .catch(() => {
             // Service worker registration failure should not block page usage.
           });
+      });
+    } else {
+      window.addEventListener('load', () => {
+        document.documentElement.classList.remove('content-pending');
       });
     }
   </script>
