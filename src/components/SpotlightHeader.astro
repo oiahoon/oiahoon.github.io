@@ -30,16 +30,22 @@ const navigation = [
       <div class="flex items-center gap-2">
         <button
           type="button"
-          id="theme-toggle"
+          data-theme-toggle
           class="rounded-full border px-3 py-1.5 text-xs font-medium transition spotlight-header__button hover:bg-black/5 dark:hover:bg-white/10"
           style="border-color: var(--line); color: var(--text);"
           aria-label="切换主题"
         >
-          主题
+          <span data-theme-toggle-label>深色</span>
         </button>
 
         <details class="relative md:hidden">
-          <summary class="cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium spotlight-header__button" style="border-color: var(--line); color: var(--text);">菜单</summary>
+          <summary class="cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium spotlight-header__button spotlight-header__menu-toggle" style="border-color: var(--line); color: var(--text);" aria-label="导航">
+            <span class="spotlight-header__burger" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </summary>
           <nav class="absolute right-5 mt-2 min-w-36 rounded-xl border bg-[var(--surface)] p-2 text-sm shadow-sm spotlight-header__menu" style="border-color: var(--line);">
             {navigation.map((item) => (
               <a href={item.href} class="block rounded-lg px-3 py-2 muted hover:bg-black/5 hover:text-[var(--text)] dark:hover:bg-white/5 spotlight-header__menu-link" data-astro-prefetch>{item.name}</a>
@@ -84,23 +90,25 @@ const navigation = [
   .spotlight-header--inverse .spotlight-header__menu-link:hover {
     background: rgba(255, 255, 255, 0.05);
   }
+
+  .spotlight-header__menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+  }
+
+  .spotlight-header__burger {
+    display: inline-grid;
+    gap: 0.22rem;
+  }
+
+  .spotlight-header__burger span {
+    display: block;
+    width: 0.95rem;
+    height: 1.5px;
+    border-radius: 9999px;
+    background: currentColor;
+  }
 </style>
-
-<script is:inline>
-  (function () {
-    if (
-      localStorage.getItem('theme') === 'dark' ||
-      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      document.documentElement.classList.add('dark');
-    }
-  })();
-</script>
-
-<script>
-  const toggle = document.getElementById('theme-toggle');
-  toggle?.addEventListener('click', () => {
-    document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-  });
-</script>

@@ -74,6 +74,13 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
   <ClientRouter />
   <script is:inline>
     (function () {
+      const storageKey = 'theme';
+      const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const savedTheme = localStorage.getItem(storageKey);
+      const theme = savedTheme || (darkQuery.matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+
       const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
       if (!connection) return;
 
@@ -97,6 +104,42 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
   
   <!-- Service Worker Registration -->
   <script>
+    (() => {
+      const storageKey = 'theme';
+      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+      function updateThemeUi(theme) {
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+        localStorage.setItem(storageKey, theme);
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute('content', theme === 'dark' ? '#080c12' : '#f97316');
+        }
+        document.querySelectorAll('[data-theme-toggle-label]').forEach((node) => {
+          node.textContent = theme === 'dark' ? '浅色' : '深色';
+        });
+      }
+
+      function currentTheme() {
+        return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      }
+
+      function bindThemeToggles() {
+        document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+          if (button.dataset.themeBound === 'true') return;
+          button.dataset.themeBound = 'true';
+          button.addEventListener('click', () => {
+            updateThemeUi(currentTheme() === 'dark' ? 'light' : 'dark');
+          });
+        });
+
+        updateThemeUi(currentTheme());
+      }
+
+      bindThemeToggles();
+      document.addEventListener('astro:page-load', bindThemeToggles);
+    })();
+
     if ('serviceWorker' in navigator) {
       let refreshing = false;
 
