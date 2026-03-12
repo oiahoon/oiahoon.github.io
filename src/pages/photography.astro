@@ -12,6 +12,10 @@ const years = [...new Set(sorted.map((photo) => photo.data.date.getFullYear()))]
 const latestYear = years[0];
 const earliestYear = years[years.length - 1];
 const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.length || 1), 0);
+const groupedArchive = years.map((year) => ({
+  year,
+  photos: remaining.filter((photo) => photo.data.date.getFullYear() === year),
+})).filter((group) => group.photos.length > 0);
 ---
 
 <SpotlightLayout title="摄影作品 | Joey's Notes" description="摄影归档" lang="zh">
@@ -80,37 +84,46 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
             <a href="/tags/%E6%91%84%E5%BD%B1/" class="photo-archive__link">浏览摄影标签</a>
           </div>
 
-          <div class="photo-grid mt-8">
-            {remaining.map((photo, index) => {
-              const image = photo.data.gallery?.[0]?.src || getPreviewImage(photo);
-              if (!image) return null;
-              const tall = index % 5 === 0 || index % 5 === 3;
-              return (
-                <article class={`photo-card ${tall ? 'photo-card--tall' : 'photo-card--wide'}`}>
-                  <a href={`/posts/${photo.slug}/`} class="photo-card__media">
-                    <ProgressiveImage
-                      src={image}
-                      alt={photo.data.title || '摄影作品'}
-                      class="photo-card__image"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <div class="photo-card__body">
-                    <p class="photo-card__meta">
-                      {photo.data.date.toLocaleDateString('zh-CN')}
-                      {photo.data.location ? ` · ${photo.data.location}` : ''}
-                    </p>
-                    <h2 class="photo-card__title"><a href={`/posts/${photo.slug}/`}>{photo.data.title || '未命名作品'}</a></h2>
-                    <div class="photo-card__footer">
-                      {photo.data.gallery && photo.data.gallery.length > 1 && <span>{photo.data.gallery.length} 张</span>}
-                      {photo.data.camera?.model && <span>{photo.data.camera.model}</span>}
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+          {groupedArchive.map((group) => (
+            <section class="photo-year-group mt-10">
+              <div class="photo-year-group__head">
+                <h2 class="photo-year-group__title">{group.year}</h2>
+                <p class="photo-year-group__count">{group.photos.length} 组作品</p>
+              </div>
+
+              <div class="photo-grid mt-6">
+                {group.photos.map((photo, index) => {
+                  const image = photo.data.gallery?.[0]?.src || getPreviewImage(photo);
+                  if (!image) return null;
+                  const tall = index % 5 === 0 || index % 5 === 3;
+                  return (
+                    <article class={`photo-card ${tall ? 'photo-card--tall' : 'photo-card--wide'}`}>
+                      <a href={`/posts/${photo.slug}/`} class="photo-card__media">
+                        <ProgressiveImage
+                          src={image}
+                          alt={photo.data.title || '摄影作品'}
+                          class="photo-card__image"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </a>
+                      <div class="photo-card__body">
+                        <p class="photo-card__meta">
+                          {photo.data.date.toLocaleDateString('zh-CN')}
+                          {photo.data.location ? ` · ${photo.data.location}` : ''}
+                        </p>
+                        <h2 class="photo-card__title"><a href={`/posts/${photo.slug}/`}>{photo.data.title || '未命名作品'}</a></h2>
+                        <div class="photo-card__footer">
+                          {photo.data.gallery && photo.data.gallery.length > 1 && <span>{photo.data.gallery.length} 张</span>}
+                          {photo.data.camera?.model && <span>{photo.data.camera.model}</span>}
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
         </div>
       </div>
     </div>
@@ -279,6 +292,28 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
     gap: 1.5rem;
   }
 
+  .photo-year-group__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.25rem;
+  }
+
+  .photo-year-group__title {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    color: rgba(248, 250, 252, 0.96);
+  }
+
+  .photo-year-group__count {
+    margin: 0;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(195, 203, 214, 0.58);
+  }
+
   .photo-card {
     display: grid;
     gap: 0.9rem;
@@ -358,6 +393,11 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
     }
 
     .photo-archive__head {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .photo-year-group__head {
       align-items: flex-start;
       flex-direction: column;
     }
