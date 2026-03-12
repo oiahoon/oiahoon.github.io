@@ -12,6 +12,14 @@ posts.forEach((post) => {
 
 const sortedTags = Array.from(tagCounts.entries()).sort(([, a], [, b]) => b - a);
 const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
+
+function getWeight(count: number) {
+  const ratio = count / maxCount;
+  if (ratio >= 0.75) return 'xl';
+  if (ratio >= 0.45) return 'lg';
+  if (ratio >= 0.2) return 'md';
+  return 'sm';
+}
 ---
 
 <SpotlightLayout title="标签 | Joey's Notes" description="按标签浏览文章，快速找到感兴趣的技术主题和内容分类。" lang="zh">
@@ -23,282 +31,117 @@ const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
         <p class="mt-4 muted">共 {sortedTags.length} 个标签，{posts.length} 篇文章。</p>
       </div>
 
-      <div class="tag-cloud-stage full-bleed mt-12">
-        <div class="tag-cloud-field" data-tag-cloud-field>
-          {sortedTags.map(([tag, count], index) => {
-            const weight = count / maxCount;
-            const size = 0.92 + weight * 0.42;
-            return (
-              <a
-                href={`/tags/${tag}/`}
-                class="tag-cloud-pill"
-                data-tag-pill
-                data-weight={weight.toFixed(3)}
-                data-index={index}
-                style={`--tag-scale:${size.toFixed(3)};`}
-              >
-                <span class="tag-cloud-name">#{tag}</span>
-                <span class="tag-cloud-count">{count}</span>
-              </a>
-            );
-          })}
-        </div>
+      <div class="tag-cloud mt-12">
+        {sortedTags.map(([tag, count]) => (
+          <a
+            href={`/tags/${tag}/`}
+            class={`tag-cloud__pill tag-cloud__pill--${getWeight(count)}`}
+          >
+            <span class="tag-cloud__name">#{tag}</span>
+            <span class="tag-cloud__count">{count}</span>
+          </a>
+        ))}
+      </div>
 
-        <noscript>
-          <div class="tag-fallback-grid">
-            {sortedTags.map(([tag, count]) => (
-              <a href={`/tags/${tag}/`} class="soft-panel group flex items-center justify-between px-4 py-3 transition hover:border-[var(--accent)]">
-                <span class="text-sm font-medium">#{tag}</span>
-                <span class="text-xs muted">{count} 篇</span>
-              </a>
-            ))}
-          </div>
-        </noscript>
+      <div class="tag-directory mt-14">
+        {sortedTags.map(([tag, count]) => (
+          <a href={`/tags/${tag}/`} class="soft-panel group flex items-center justify-between px-4 py-3 transition hover:border-[var(--accent)]">
+            <span class="text-sm font-medium">#{tag}</span>
+            <span class="text-xs muted">{count} 篇</span>
+          </a>
+        ))}
       </div>
     </div>
   </section>
 </SpotlightLayout>
 
 <style>
-  .tag-cloud-stage {
-    position: relative;
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem 1.1rem;
+    width: min(72rem, 100%);
+    margin-inline: auto;
   }
 
-  .tag-cloud-field {
-    position: relative;
-    min-height: calc(100vh - 18rem);
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    overflow: hidden;
-    background:
-      radial-gradient(circle at 20% 20%, rgba(184, 95, 40, 0.06), transparent 24%),
-      radial-gradient(circle at 80% 30%, rgba(99, 112, 132, 0.06), transparent 22%),
-      radial-gradient(circle at 60% 80%, rgba(184, 95, 40, 0.05), transparent 18%);
-  }
-
-  .tag-cloud-pill {
-    position: absolute;
-    left: 0;
-    top: 0;
+  .tag-cloud__pill {
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
-    white-space: nowrap;
-    border: 1px solid color-mix(in srgb, var(--line) 88%, rgba(184, 95, 40, 0.14));
+    border: 1px solid color-mix(in srgb, var(--line) 84%, rgba(184, 95, 40, 0.16));
     border-radius: 9999px;
-    padding: 0.8rem 1.1rem;
     background:
-      radial-gradient(circle at top left, rgba(184, 95, 40, 0.1), transparent 55%),
-      color-mix(in srgb, var(--surface) 97%, transparent);
-    box-shadow: 0 12px 28px rgba(15, 23, 32, 0.08);
-    transform: translate3d(0, 0, 0) scale(var(--tag-scale, 1));
-    transform-origin: center;
-    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
-    will-change: transform;
+      radial-gradient(circle at top left, rgba(184, 95, 40, 0.08), transparent 55%),
+      color-mix(in srgb, var(--surface) 96%, transparent);
+    box-shadow: 0 10px 28px rgba(15, 23, 32, 0.06);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .tag-cloud-pill:hover {
-    border-color: color-mix(in srgb, var(--accent) 65%, var(--line));
-    box-shadow: 0 16px 34px rgba(15, 23, 32, 0.12);
+  .tag-cloud__pill:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+    box-shadow: 0 14px 34px rgba(15, 23, 32, 0.1);
   }
 
-  .tag-cloud-pill.is-paused {
-    box-shadow: 0 18px 36px rgba(15, 23, 32, 0.14);
+  .tag-cloud__pill--xl {
+    padding: 1rem 1.4rem;
+    font-size: 1.55rem;
   }
 
-  .tag-cloud-name {
-    font-size: clamp(0.95rem, 1rem + (var(--tag-scale, 1) - 1) * 0.35rem, 1.22rem);
+  .tag-cloud__pill--lg {
+    padding: 0.9rem 1.25rem;
+    font-size: 1.28rem;
+  }
+
+  .tag-cloud__pill--md {
+    padding: 0.8rem 1.1rem;
+    font-size: 1.06rem;
+  }
+
+  .tag-cloud__pill--sm {
+    padding: 0.72rem 0.95rem;
+    font-size: 0.94rem;
+    opacity: 0.88;
+  }
+
+  .tag-cloud__name {
     font-weight: 600;
+    line-height: 1;
     color: var(--text);
   }
 
-  .tag-cloud-count {
+  .tag-cloud__count {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 1.9rem;
-    height: 1.9rem;
-    padding-inline: 0.45rem;
+    min-width: 2rem;
+    height: 2rem;
+    padding-inline: 0.5rem;
     border-radius: 9999px;
     background: color-mix(in srgb, var(--line) 72%, transparent);
     color: var(--muted);
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     font-weight: 700;
   }
 
-  .tag-fallback-grid {
-    display: none;
+  .tag-directory {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 0.75rem;
+    width: min(72rem, 100%);
+    margin-inline: auto;
   }
 
-  @media (max-width: 640px) {
-    .tag-cloud-field {
-      min-height: calc(100vh - 15rem);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .tag-cloud-field {
-      display: none;
-    }
-
-    .tag-fallback-grid {
-      display: grid;
-      grid-template-columns: repeat(1, minmax(0, 1fr));
-      gap: 0.75rem;
-      margin-top: 1.25rem;
-    }
-  }
-
-  @media (min-width: 640px) and (prefers-reduced-motion: reduce) {
-    .tag-fallback-grid {
+  @media (min-width: 640px) {
+    .tag-directory {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
-    .tag-fallback-grid {
+  @media (min-width: 1024px) {
+    .tag-directory {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 </style>
-
-<script is:inline>
-  (() => {
-    const field = document.querySelector('[data-tag-cloud-field]');
-    if (!field || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const pills = Array.from(field.querySelectorAll('[data-tag-pill]'));
-    if (!pills.length) return;
-
-    const states = [];
-    let frameId = 0;
-    let lastTick = 0;
-    let isVisible = document.visibilityState === 'visible';
-    const frameStep = 1000 / 30;
-
-    function clamp(value, min, max) {
-      return Math.min(Math.max(value, min), max);
-    }
-
-    function overlaps(candidate, placed) {
-      return placed.some((item) => {
-        return !(
-          candidate.x + candidate.width + 18 < item.x ||
-          candidate.x > item.x + item.width + 18 ||
-          candidate.y + candidate.height + 18 < item.y ||
-          candidate.y > item.y + item.height + 18
-        );
-      });
-    }
-
-    function layout() {
-      const width = field.clientWidth;
-      const height = field.clientHeight;
-      const placed = [];
-
-      states.length = 0;
-
-      pills.forEach((pill, index) => {
-        pill.style.transform = `translate3d(0px, 0px, 0) scale(${getComputedStyle(pill).getPropertyValue('--tag-scale') || 1})`;
-        const rect = pill.getBoundingClientRect();
-        const pillWidth = rect.width;
-        const pillHeight = rect.height;
-        const weight = Number(pill.dataset.weight || '0.5');
-        const speedBase = 0.16 + weight * 0.58;
-        let x = ((index * 97) % Math.max(width - pillWidth, 1));
-        let y = ((index * 71) % Math.max(height - pillHeight, 1));
-        let tries = 0;
-
-        while (overlaps({ x, y, width: pillWidth, height: pillHeight }, placed) && tries < 160) {
-          x = Math.random() * Math.max(width - pillWidth, 1);
-          y = Math.random() * Math.max(height - pillHeight, 1);
-          tries += 1;
-        }
-
-        placed.push({ x, y, width: pillWidth, height: pillHeight });
-        states.push({
-          pill,
-          x,
-          y,
-          width: pillWidth,
-          height: pillHeight,
-          scale: Number(getComputedStyle(pill).getPropertyValue('--tag-scale')) || 1,
-          vx: (Math.random() > 0.5 ? 1 : -1) * speedBase * (0.8 + Math.random() * 0.7),
-          vy: (Math.random() > 0.5 ? 1 : -1) * speedBase * (0.8 + Math.random() * 0.7),
-          paused: false,
-        });
-      });
-    }
-
-    function animate(timestamp) {
-      if (!isVisible) {
-        frameId = window.requestAnimationFrame(animate);
-        return;
-      }
-
-      if (timestamp - lastTick < frameStep) {
-        frameId = window.requestAnimationFrame(animate);
-        return;
-      }
-
-      lastTick = timestamp;
-      const width = field.clientWidth;
-      const height = field.clientHeight;
-
-      states.forEach((state) => {
-        if (!state.paused) {
-          state.vx = clamp(state.vx, -0.72, 0.72);
-          state.vy = clamp(state.vy, -0.72, 0.72);
-          state.x += state.vx;
-          state.y += state.vy;
-
-          if (state.x <= 0 || state.x >= width - state.width) {
-            state.vx *= -1;
-            state.x = clamp(state.x, 0, width - state.width);
-          }
-
-          if (state.y <= 0 || state.y >= height - state.height) {
-            state.vy *= -1;
-            state.y = clamp(state.y, 0, height - state.height);
-          }
-        }
-
-        state.pill.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(${state.scale})`;
-      });
-
-      frameId = window.requestAnimationFrame(animate);
-    }
-
-    pills.forEach((pill) => {
-      pill.addEventListener('mouseenter', () => {
-        const state = states.find((item) => item.pill === pill);
-        if (!state) return;
-        state.paused = true;
-        pill.classList.add('is-paused');
-      });
-
-      pill.addEventListener('mouseleave', () => {
-        const state = states.find((item) => item.pill === pill);
-        if (!state) return;
-        state.paused = false;
-        pill.classList.remove('is-paused');
-      });
-    });
-
-    layout();
-    frameId = window.requestAnimationFrame(animate);
-
-    document.addEventListener('visibilitychange', () => {
-      isVisible = document.visibilityState === 'visible';
-    });
-
-    const observer = new ResizeObserver(() => {
-      window.cancelAnimationFrame(frameId);
-      lastTick = 0;
-      layout();
-      frameId = window.requestAnimationFrame(animate);
-    });
-
-    observer.observe(field);
-  })();
-</script>

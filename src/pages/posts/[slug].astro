@@ -11,9 +11,29 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+const photographyPosts = (await getCollection('posts', ({ data }) => !data.draft && data.type === 'photography'))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+const currentPhotoIndex = photographyPosts.findIndex((item) => item.slug === post.slug);
+const previousPhoto = currentPhotoIndex > 0 ? photographyPosts[currentPhotoIndex - 1] : null;
+const nextPhoto = currentPhotoIndex >= 0 && currentPhotoIndex < photographyPosts.length - 1
+  ? photographyPosts[currentPhotoIndex + 1]
+  : null;
 const { Content } = await post.render();
 ---
 
-<PostLayout {...post.data}>
+<PostLayout
+  {...post.data}
+  slug={post.slug}
+  previousPhoto={previousPhoto ? {
+    slug: previousPhoto.slug,
+    title: previousPhoto.data.title,
+    date: previousPhoto.data.date,
+  } : undefined}
+  nextPhoto={nextPhoto ? {
+    slug: nextPhoto.slug,
+    title: nextPhoto.data.title,
+    date: nextPhoto.data.date,
+  } : undefined}
+>
   <Content />
 </PostLayout>

@@ -8,6 +8,7 @@ export interface Props {
   subtitle?: string;
   author: string;
   date: Date;
+  slug?: string;
   tags: string[];
   header_img?: string;
   description?: string;
@@ -17,9 +18,11 @@ export interface Props {
   camera?: { model?: string; lens?: string; settings?: string };
   location?: string;
   publishedDate?: string;
+  previousPhoto?: { slug: string; title?: string; date: Date };
+  nextPhoto?: { slug: string; title?: string; date: Date };
 }
 
-const { title, subtitle, author, date, tags, header_img, description, lang, type = 'article', gallery, camera, location, publishedDate } = Astro.props;
+const { title, subtitle, author, date, tags, header_img, description, lang, type = 'article', gallery, camera, location, publishedDate, previousPhoto, nextPhoto } = Astro.props;
 
 const postUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const previewImage = header_img || (type === 'photography' && gallery?.[0]?.src);
@@ -49,6 +52,8 @@ const structuredData = generateBlogPostStructuredData({
     camera={camera}
     location={location}
     publishedDate={publishedDate}
+    previousPhoto={previousPhoto}
+    nextPhoto={nextPhoto}
   >
     <slot />
   </PhotographyLayout>
