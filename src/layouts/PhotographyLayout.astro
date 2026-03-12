@@ -103,7 +103,7 @@ const navigation = [
             <div class="photo-hero__veil"></div>
           </div>
 
-          <div class="photo-hero__overlay photo-hero__overlay--top">
+          <div class="photo-hero__overlay photo-hero__overlay--top" data-photo-overlay-top>
             <div class="photo-hero__topbar">
               <a href="/photography/" class="photo-hero__back">← 返回摄影列表</a>
               <div class="photo-hero__controls">
@@ -120,7 +120,7 @@ const navigation = [
             </div>
           </div>
 
-          <div class="photo-hero__overlay photo-hero__overlay--bottom">
+          <div class="photo-hero__overlay photo-hero__overlay--bottom" data-photo-overlay-bottom>
             <div class="photo-hero__caption">
               <p class="photo-hero__date">
                 {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
@@ -427,10 +427,16 @@ const navigation = [
     width: min(100%, 100rem);
     margin-inline: auto;
     padding-inline: clamp(1rem, 3vw, 2rem);
+    transition: opacity 0.25s ease, transform 0.25s ease;
   }
 
   .photo-hero__overlay--top {
     top: 1.35rem;
+  }
+
+  .photo-hero__overlay--top.is-quiet {
+    opacity: 0.62;
+    transform: translateY(-4px);
   }
 
   .photo-hero__topbar {
@@ -454,6 +460,11 @@ const navigation = [
     padding-bottom: clamp(1.25rem, 3vw, 2rem);
   }
 
+  .photo-hero__overlay--bottom.is-quiet {
+    opacity: 0.72;
+    transform: translateY(8px);
+  }
+
   .photo-hero__back {
     display: inline-flex;
     align-items: center;
@@ -461,6 +472,7 @@ const navigation = [
     font-size: 0.94rem;
     letter-spacing: 0.01em;
     text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+    transition: color 0.2s ease, opacity 0.2s ease;
   }
 
   .photo-hero__index {
@@ -488,6 +500,7 @@ const navigation = [
     letter-spacing: 0.12em;
     text-transform: uppercase;
     text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+    transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
   }
 
   .photo-hero__caption,
@@ -495,6 +508,7 @@ const navigation = [
     max-width: 100%;
     color: rgba(248, 250, 252, 0.94);
     text-shadow: 0 2px 22px rgba(0, 0, 0, 0.6);
+    transition: opacity 0.22s ease, transform 0.22s ease;
   }
 
   .photo-hero__date {
@@ -517,6 +531,15 @@ const navigation = [
     font-size: 1rem;
     line-height: 1.7;
     color: rgba(230, 236, 242, 0.82);
+  }
+
+  .photo-hero__overlay--bottom.is-quiet .photo-hero__caption,
+  .photo-hero__overlay--bottom.is-quiet .photo-hero__info {
+    opacity: 0.78;
+  }
+
+  .photo-hero__overlay--bottom.is-quiet .photo-hero__info {
+    transform: translateY(6px);
   }
 
   .photo-hero__eyebrow {
@@ -1101,6 +1124,8 @@ const navigation = [
   const galleryData = galleryRoot?.getAttribute('data-photo-gallery');
   const photos = galleryData ? JSON.parse(galleryData) : [];
   const topbar = document.querySelector('.photo-topbar');
+  const heroTopOverlay = document.querySelector('[data-photo-overlay-top]');
+  const heroBottomOverlay = document.querySelector('[data-photo-overlay-bottom]');
   let activePhoto = 1;
   let lightboxIndex = 0;
   let touchStartX = 0;
@@ -1274,7 +1299,10 @@ const navigation = [
 
   function syncTopbarState() {
     if (!topbar) return;
-    topbar.classList.toggle('is-quiet', window.scrollY > 120);
+    const quiet = window.scrollY > 120;
+    topbar.classList.toggle('is-quiet', quiet);
+    heroTopOverlay?.classList.toggle('is-quiet', quiet);
+    heroBottomOverlay?.classList.toggle('is-quiet', quiet);
   }
 
   syncTopbarState();

@@ -20,6 +20,10 @@ function getWeight(count: number) {
   if (ratio >= 0.2) return 'md';
   return 'sm';
 }
+
+function getTagTransitionName(tag: string) {
+  return `tag-label-${encodeURIComponent(tag)}`;
+}
 ---
 
 <SpotlightLayout title="标签 | Joey's Notes" description="按标签浏览文章，快速找到感兴趣的技术主题和内容分类。" lang="zh">
@@ -37,6 +41,7 @@ function getWeight(count: number) {
             href={`/tags/${tag}/`}
             class={`tag-cloud__pill tag-cloud__pill--${getWeight(count)}`}
             data-astro-prefetch
+            style={`view-transition-name: ${getTagTransitionName(tag)};`}
           >
             <span class="tag-cloud__name">#{tag}</span>
             <span class="tag-cloud__count">{count}</span>

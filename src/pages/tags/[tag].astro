@@ -18,6 +18,7 @@ export async function getStaticPaths() {
 }
 
 const { posts, tag } = Astro.props;
+const tagTransitionName = `tag-label-${encodeURIComponent(tag)}`;
 ---
 
 <SpotlightLayout title={`标签: ${tag} | Joey's Notes`} description={`查看所有标记为 "${tag}" 的文章`}>
@@ -25,7 +26,7 @@ const { posts, tag } = Astro.props;
     <div class="shell">
       <div class="hero-intro">
         <p class="eyebrow">Tag</p>
-        <h1 class="mt-4 text-4xl font-semibold">#{tag}</h1>
+        <h1 class="mt-4 text-4xl font-semibold" style={`view-transition-name: ${tagTransitionName};`}>#{tag}</h1>
         <p class="mt-4 muted">共 {posts.length} 篇相关文章</p>
       </div>
 
@@ -40,7 +41,9 @@ const { posts, tag } = Astro.props;
               })}
             </time>
             <h2 class="entry-title skeleton-text">
-              <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
+              <a href={`/posts/${post.slug}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.slug};`}>
+                {post.data.title}
+              </a>
             </h2>
             <p class="entry-desc skeleton-text">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
           </article>
@@ -48,7 +51,7 @@ const { posts, tag } = Astro.props;
       </div>
 
       <div class="content-narrow mt-10">
-        <a href="/tags/" class="text-sm muted hover:text-[var(--text)]">← 查看所有标签</a>
+        <a href="/tags/" class="text-sm muted hover:text-[var(--text)]" data-astro-prefetch>← 查看所有标签</a>
       </div>
     </div>
   </section>
