@@ -84,8 +84,14 @@ const groupedArchive = years.map((year) => ({
             <a href="/tags/%E6%91%84%E5%BD%B1/" class="photo-archive__link">浏览摄影标签</a>
           </div>
 
+          <nav class="photo-year-jump mt-6" aria-label="年份快速跳转">
+            {groupedArchive.map((group) => (
+              <a href={`#year-${group.year}`} class="photo-year-jump__link">{group.year}</a>
+            ))}
+          </nav>
+
           {groupedArchive.map((group) => (
-            <section class="photo-year-group mt-10">
+            <section class="photo-year-group mt-10" id={`year-${group.year}`}>
               <div class="photo-year-group__head">
                 <h2 class="photo-year-group__title">{group.year}</h2>
                 <p class="photo-year-group__count">{group.photos.length} 组作品</p>
@@ -290,6 +296,31 @@ const groupedArchive = years.map((year) => ({
   .photo-grid {
     display: grid;
     gap: 1.5rem;
+  }
+
+  .photo-year-jump {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.35rem;
+    scrollbar-width: none;
+  }
+
+  .photo-year-jump::-webkit-scrollbar {
+    display: none;
+  }
+
+  .photo-year-jump__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.3rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.02);
+    color: rgba(195, 203, 214, 0.76);
+    flex: 0 0 auto;
   }
 
   .photo-year-group__head {

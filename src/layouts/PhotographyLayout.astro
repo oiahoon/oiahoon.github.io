@@ -780,10 +780,16 @@ const navigation = [
 
   .photo-lightbox__thumbs {
     display: flex;
-    justify-content: center;
     gap: 0.7rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     margin-top: 1rem;
+    padding-bottom: 0.3rem;
+    scrollbar-width: none;
+  }
+
+  .photo-lightbox__thumbs::-webkit-scrollbar {
+    display: none;
   }
 
   .photo-lightbox__thumb {
@@ -796,6 +802,7 @@ const navigation = [
     background: rgba(255, 255, 255, 0.04);
     cursor: pointer;
     opacity: 0.72;
+    flex: 0 0 auto;
     transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
   }
 
@@ -1079,6 +1086,9 @@ const navigation = [
           renderLightbox();
         });
       });
+
+      const activeThumb = lightboxThumbs.querySelector('.photo-lightbox__thumb.is-active');
+      activeThumb?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
   }
 
