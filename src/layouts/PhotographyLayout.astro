@@ -37,7 +37,16 @@ const navigation = [
 ---
 
 <BaseLayout title={`${title} | Joey's Notes`} description={description || subtitle || title} image={cover} lang={lang}>
-  <article class="photo-page" id="top">
+  <article
+    class="photo-page"
+    id="top"
+    data-photo-gallery={JSON.stringify(allPhotos.map((photo, index) => ({
+      src: photo.src,
+      alt: photo.alt || `照片 ${index + 1}`,
+      caption: photo.caption || '',
+      index: index + 1,
+    })))}
+  >
     <section class="photo-stage">
       <header class="photo-topbar">
         <div class="photo-topbar__inner">
@@ -66,7 +75,7 @@ const navigation = [
       </header>
 
       {heroPhoto && (
-        <section class="photo-hero" id="photo-1">
+        <section class="photo-hero" id="photo-1" data-photo-panel data-photo-index="1">
           <div class="photo-hero__frame">
             <ProgressiveImage
               src={heroPhoto.src}
@@ -75,6 +84,13 @@ const navigation = [
               loading="eager"
               decoding="async"
             />
+            <button
+              type="button"
+              class="photo-hero__viewer-trigger"
+              data-open-lightbox
+              data-photo-index="1"
+              aria-label={`全屏查看第 1 张照片${title ? `：${title}` : ''}`}
+            ></button>
             <div class="photo-hero__veil"></div>
           </div>
 
@@ -131,7 +147,7 @@ const navigation = [
         <nav class="photo-rail" aria-label="作品内照片导航">
           <div class="photo-rail__inner">
             {allPhotos.map((photo, index) => (
-              <a href={`#photo-${index + 1}`} class="photo-rail__item">
+              <a href={`#photo-${index + 1}`} class="photo-rail__item" data-photo-link data-photo-target={String(index + 1)}>
                 <img
                   src={photo.src}
                   alt={photo.alt || `照片 ${index + 1}`}
@@ -150,7 +166,7 @@ const navigation = [
         <section class="photo-gallery" id="photo-gallery">
           <div class="photo-gallery__stack">
             {galleryPhotos.map((photo, index) => (
-              <figure class="photo-gallery__item" id={`photo-${index + 2}`}>
+              <figure class="photo-gallery__item" id={`photo-${index + 2}`} data-photo-panel data-photo-index={String(index + 2)}>
                 <div class="photo-gallery__frame">
                   <ProgressiveImage
                     src={photo.src}
@@ -159,6 +175,13 @@ const navigation = [
                     loading={index < 1 ? 'eager' : 'lazy'}
                     decoding="async"
                   />
+                  <button
+                    type="button"
+                    class="photo-gallery__viewer-trigger"
+                    data-open-lightbox
+                    data-photo-index={String(index + 2)}
+                    aria-label={`全屏查看第 ${index + 2} 张照片`}
+                  ></button>
                 </div>
                 {photo.caption && <figcaption class="photo-gallery__caption">{photo.caption}</figcaption>}
               </figure>
@@ -211,6 +234,19 @@ const navigation = [
           </div>
         </nav>
       )}
+
+      <div class="photo-lightbox" data-photo-lightbox hidden aria-hidden="true">
+        <button type="button" class="photo-lightbox__close" data-lightbox-close aria-label="关闭全屏查看">关闭</button>
+        <button type="button" class="photo-lightbox__nav photo-lightbox__nav--prev" data-lightbox-prev aria-label="查看上一张">←</button>
+        <div class="photo-lightbox__stage">
+          <img src="" alt="" class="photo-lightbox__image" data-lightbox-image />
+          <div class="photo-lightbox__meta">
+            <p class="photo-lightbox__counter" data-lightbox-counter></p>
+            <p class="photo-lightbox__caption" data-lightbox-caption></p>
+          </div>
+        </div>
+        <button type="button" class="photo-lightbox__nav photo-lightbox__nav--next" data-lightbox-next aria-label="查看下一张">→</button>
+      </div>
 
       <footer class="photo-footer">
         <div class="photo-footer__inner">
@@ -333,6 +369,20 @@ const navigation = [
   .photo-hero__frame {
     position: relative;
     min-height: calc(100vh - 4.4rem);
+  }
+
+  .photo-hero__viewer-trigger,
+  .photo-gallery__viewer-trigger {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: zoom-in;
+  }
+
+  .photo-hero__viewer-trigger {
+    z-index: 1;
   }
 
   .photo-hero__image {
@@ -521,6 +571,12 @@ const navigation = [
     gap: 0.5rem;
     min-width: 4.6rem;
     color: rgba(226, 232, 240, 0.68);
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .photo-rail__item.is-active {
+    color: rgba(248, 250, 252, 0.96);
+    transform: translateY(-1px);
   }
 
   .photo-rail__thumb {
@@ -530,6 +586,12 @@ const navigation = [
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.03);
+    transition: border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .photo-rail__item.is-active .photo-rail__thumb {
+    border-color: rgba(255, 255, 255, 0.36);
+    transform: scale(1.03);
   }
 
   .photo-rail__label {
@@ -552,6 +614,7 @@ const navigation = [
   }
 
   .photo-gallery__frame {
+    position: relative;
     display: flex;
     min-height: min(90vh, 62rem);
     align-items: center;
@@ -655,6 +718,81 @@ const navigation = [
   .photo-post-nav__date {
     font-size: 0.82rem;
     color: rgba(195, 203, 214, 0.62);
+  }
+
+  .photo-lightbox[hidden] {
+    display: none;
+  }
+
+  .photo-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.25rem;
+    background: rgba(2, 3, 6, 0.92);
+    backdrop-filter: blur(14px);
+  }
+
+  .photo-lightbox__stage {
+    display: grid;
+    gap: 1rem;
+    justify-items: center;
+  }
+
+  .photo-lightbox__image {
+    max-width: min(88vw, 110rem);
+    max-height: 78vh;
+    object-fit: contain;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+  }
+
+  .photo-lightbox__meta {
+    width: min(100%, 56rem);
+    text-align: center;
+  }
+
+  .photo-lightbox__counter {
+    margin: 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(195, 203, 214, 0.62);
+  }
+
+  .photo-lightbox__caption {
+    margin: 0.55rem 0 0;
+    color: rgba(236, 240, 244, 0.84);
+    line-height: 1.7;
+  }
+
+  .photo-lightbox__close,
+  .photo-lightbox__nav {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(248, 250, 252, 0.92);
+    cursor: pointer;
+  }
+
+  .photo-lightbox__close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    min-height: 2.6rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .photo-lightbox__nav {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.1rem;
   }
 
   .photo-footer {
@@ -801,6 +939,29 @@ const navigation = [
     .photo-gallery__frame {
       min-height: 56vh;
     }
+
+    .photo-lightbox {
+      grid-template-columns: 1fr;
+      padding: 1rem;
+      gap: 0.8rem;
+    }
+
+    .photo-lightbox__stage {
+      margin-top: 2.5rem;
+    }
+
+    .photo-lightbox__nav {
+      position: absolute;
+      bottom: 1rem;
+    }
+
+    .photo-lightbox__nav--prev {
+      left: 1rem;
+    }
+
+    .photo-lightbox__nav--next {
+      right: 1rem;
+    }
   }
 </style>
 
@@ -809,5 +970,96 @@ const navigation = [
   toggle?.addEventListener('click', () => {
     document.documentElement.classList.toggle('dark');
     localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  const galleryRoot = document.querySelector('.photo-page');
+  const photoRailLinks = Array.from(document.querySelectorAll('[data-photo-link]'));
+  const photoPanels = Array.from(document.querySelectorAll('[data-photo-panel]'));
+  const lightbox = document.querySelector('[data-photo-lightbox]');
+  const lightboxImage = lightbox?.querySelector('[data-lightbox-image]');
+  const lightboxCaption = lightbox?.querySelector('[data-lightbox-caption]');
+  const lightboxCounter = lightbox?.querySelector('[data-lightbox-counter]');
+  const lightboxClose = lightbox?.querySelector('[data-lightbox-close]');
+  const lightboxPrev = lightbox?.querySelector('[data-lightbox-prev]');
+  const lightboxNext = lightbox?.querySelector('[data-lightbox-next]');
+  const lightboxTriggers = Array.from(document.querySelectorAll('[data-open-lightbox]'));
+  const galleryData = galleryRoot?.getAttribute('data-photo-gallery');
+  const photos = galleryData ? JSON.parse(galleryData) : [];
+  let activePhoto = 1;
+  let lightboxIndex = 0;
+
+  function syncActiveRail(index) {
+    activePhoto = index;
+    photoRailLinks.forEach((link) => {
+      link.classList.toggle('is-active', Number(link.getAttribute('data-photo-target')) === index);
+    });
+  }
+
+  if (photoPanels.length && photoRailLinks.length) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (!visible) return;
+      const index = Number(visible.target.getAttribute('data-photo-index'));
+      if (index) syncActiveRail(index);
+    }, { threshold: [0.35, 0.6], rootMargin: '-12% 0px -20% 0px' });
+
+    photoPanels.forEach((panel) => observer.observe(panel));
+    syncActiveRail(1);
+  }
+
+  function renderLightbox() {
+    if (!photos[lightboxIndex] || !lightbox || !lightboxImage || !lightboxCaption || !lightboxCounter) return;
+    const current = photos[lightboxIndex];
+    lightboxImage.src = current.src;
+    lightboxImage.alt = current.alt || '';
+    lightboxCaption.textContent = current.caption || '';
+    lightboxCounter.textContent = `${String(lightboxIndex + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}`;
+  }
+
+  function openLightbox(index) {
+    if (!lightbox || !photos.length) return;
+    lightboxIndex = Math.min(Math.max(index, 0), photos.length - 1);
+    renderLightbox();
+    lightbox.hidden = false;
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.documentElement.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.hidden = true;
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.documentElement.style.overflow = '';
+  }
+
+  function stepLightbox(direction) {
+    if (!photos.length) return;
+    lightboxIndex = (lightboxIndex + direction + photos.length) % photos.length;
+    renderLightbox();
+  }
+
+  lightboxTriggers.forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const index = Number(trigger.getAttribute('data-photo-index') || '1') - 1;
+      openLightbox(index);
+    });
+  });
+
+  lightboxClose?.addEventListener('click', closeLightbox);
+  lightboxPrev?.addEventListener('click', () => stepLightbox(-1));
+  lightboxNext?.addEventListener('click', () => stepLightbox(1));
+  lightbox?.addEventListener('click', (event) => {
+    if (event.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    const isOpen = lightbox && !lightbox.hidden;
+    if (!isOpen) return;
+    if (event.key === 'Escape') closeLightbox();
+    if (event.key === 'ArrowLeft') stepLightbox(-1);
+    if (event.key === 'ArrowRight') stepLightbox(1);
   });
 </script>
