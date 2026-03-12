@@ -13,13 +13,13 @@ const navigation = [
 <header class={`pt-8 sm:pt-10 ${isPhotoArchive ? 'spotlight-header--inverse' : ''}`}>
   <div class="shell">
     <div class="flex items-center justify-between gap-4 border-b pb-5 spotlight-header__bar" style="border-color: var(--line);">
-      <a href="/" class="text-lg font-semibold tracking-tight spotlight-header__brand text-[var(--text)]">Joey's Notes</a>
+      <a href="/" class="text-lg font-semibold tracking-tight spotlight-header__brand text-[var(--text)]" data-astro-prefetch style="view-transition-name: site-brand;">Joey's Notes</a>
 
       <nav class="hidden items-center gap-7 text-sm md:flex">
         {navigation.map((item) => {
           const active = currentPath === item.href;
           return (
-            <a href={item.href} class={`relative transition spotlight-header__link ${active ? 'font-semibold text-[var(--text)]' : 'muted hover:text-[var(--text)]'}`}>
+            <a href={item.href} class={`relative transition spotlight-header__link ${active ? 'font-semibold text-[var(--text)]' : 'muted hover:text-[var(--text)]'}`} data-astro-prefetch>
               {item.name}
               {active && <span class="absolute -bottom-1 left-0 right-0 h-px bg-[var(--accent)]" />}
             </a>
@@ -42,7 +42,7 @@ const navigation = [
           <summary class="cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium spotlight-header__button" style="border-color: var(--line); color: var(--text);">菜单</summary>
           <nav class="absolute right-5 mt-2 min-w-36 rounded-xl border bg-[var(--surface)] p-2 text-sm shadow-sm spotlight-header__menu" style="border-color: var(--line);">
             {navigation.map((item) => (
-              <a href={item.href} class="block rounded-lg px-3 py-2 muted hover:bg-black/5 hover:text-[var(--text)] dark:hover:bg-white/5 spotlight-header__menu-link">{item.name}</a>
+              <a href={item.href} class="block rounded-lg px-3 py-2 muted hover:bg-black/5 hover:text-[var(--text)] dark:hover:bg-white/5 spotlight-header__menu-link" data-astro-prefetch>{item.name}</a>
             ))}
           </nav>
         </details>

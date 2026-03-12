@@ -58,13 +58,13 @@ const navigation = [
     <section class="photo-stage">
       <header class="photo-topbar">
         <div class="photo-topbar__inner">
-          <a href="/" class="photo-topbar__brand">Joey's Notes</a>
+          <a href="/" class="photo-topbar__brand" data-astro-prefetch style="view-transition-name: site-brand;">Joey's Notes</a>
 
           <nav class="photo-topbar__nav" aria-label="主导航">
             {navigation.map((item) => {
               const active = currentPath === item.href || (item.href === '/photography/' && currentPath.startsWith('/posts/'));
               return (
-                <a href={item.href} class={`photo-topbar__link ${active ? 'is-active' : ''}`}>
+                <a href={item.href} class={`photo-topbar__link ${active ? 'is-active' : ''}`} data-astro-prefetch>
                   {item.name}
                 </a>
               );
@@ -105,7 +105,7 @@ const navigation = [
 
           <div class="photo-hero__overlay photo-hero__overlay--top" data-photo-overlay-top>
             <div class="photo-hero__topbar">
-              <a href="/photography/" class="photo-hero__back">← 返回摄影列表</a>
+              <a href="/photography/" class="photo-hero__back" data-astro-prefetch>← 返回摄影列表</a>
               <div class="photo-hero__controls">
                 {totalPhotos > 1 && (
                   <span class="photo-hero__index">01 / {String(totalPhotos).padStart(2, '0')}</span>
@@ -221,8 +221,8 @@ const navigation = [
         <nav class="photo-post-nav" aria-label="摄影作品分页导航">
           <div class="photo-post-nav__inner">
             {previousPhoto ? (
-              <a href={`/posts/${previousPhoto.slug}/`} class="photo-post-nav__link">
-                {previousPhoto.image && <img src={previousPhoto.image} alt={previousPhoto.title || '较新作品预览'} class="photo-post-nav__thumb" loading="lazy" decoding="async" />}
+              <a href={`/posts/${previousPhoto.slug}/`} class="photo-post-nav__link" data-astro-prefetch>
+                {previousPhoto.image && <img src={previousPhoto.image} alt={previousPhoto.title || '较新作品预览'} class="photo-post-nav__thumb" loading="lazy" decoding="async" style={`view-transition-name: photo-cover-${previousPhoto.slug};`} />}
                 <span class="photo-post-nav__meta">← 较新作品</span>
                 <span class="photo-post-nav__title">{previousPhoto.title || previousPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
                 {previousPhoto.title && <span class="photo-post-nav__date">{previousPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>}
@@ -232,8 +232,8 @@ const navigation = [
             )}
 
             {nextPhoto ? (
-              <a href={`/posts/${nextPhoto.slug}/`} class="photo-post-nav__link photo-post-nav__link--align-end">
-                {nextPhoto.image && <img src={nextPhoto.image} alt={nextPhoto.title || '较早作品预览'} class="photo-post-nav__thumb" loading="lazy" decoding="async" />}
+              <a href={`/posts/${nextPhoto.slug}/`} class="photo-post-nav__link photo-post-nav__link--align-end" data-astro-prefetch>
+                {nextPhoto.image && <img src={nextPhoto.image} alt={nextPhoto.title || '较早作品预览'} class="photo-post-nav__thumb" loading="lazy" decoding="async" style={`view-transition-name: photo-cover-${nextPhoto.slug};`} />}
                 <span class="photo-post-nav__meta">较早作品 →</span>
                 <span class="photo-post-nav__title">{nextPhoto.title || nextPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
                 {nextPhoto.title && <span class="photo-post-nav__date">{nextPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>}
@@ -270,10 +270,10 @@ const navigation = [
             <section>
               <p class="photo-footer__title">导航</p>
               <div class="photo-footer__links">
-                <a href="/articles/">文章</a>
-                <a href="/photography/">摄影</a>
-                <a href="/tags/">标签</a>
-                <a href="/about/">关于</a>
+                <a href="/articles/" data-astro-prefetch>文章</a>
+                <a href="/photography/" data-astro-prefetch>摄影</a>
+                <a href="/tags/" data-astro-prefetch>标签</a>
+                <a href="/about/" data-astro-prefetch>关于</a>
               </div>
             </section>
 

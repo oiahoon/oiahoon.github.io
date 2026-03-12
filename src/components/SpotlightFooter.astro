@@ -14,10 +14,10 @@ const year = new Date().getFullYear();
         <section>
           <p class="font-semibold">导航</p>
           <div class="mt-3 flex flex-col gap-2 muted">
-            <a href="/articles/" class="hover:text-[var(--text)]">文章</a>
-            <a href="/photography/" class="hover:text-[var(--text)]">摄影</a>
-            <a href="/tags/" class="hover:text-[var(--text)]">标签</a>
-            <a href="/about/" class="hover:text-[var(--text)]">关于</a>
+            <a href="/articles/" class="hover:text-[var(--text)]" data-astro-prefetch>文章</a>
+            <a href="/photography/" class="hover:text-[var(--text)]" data-astro-prefetch>摄影</a>
+            <a href="/tags/" class="hover:text-[var(--text)]" data-astro-prefetch>标签</a>
+            <a href="/about/" class="hover:text-[var(--text)]" data-astro-prefetch>关于</a>
           </div>
         </section>
 
