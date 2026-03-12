@@ -28,15 +28,17 @@ const navigation = [
       </nav>
 
       <div class="flex items-center gap-2">
-        <button
-          type="button"
-          data-theme-toggle
-          class="rounded-full border px-3 py-1.5 text-xs font-medium transition spotlight-header__button hover:bg-black/5 dark:hover:bg-white/10"
-          style="border-color: var(--line); color: var(--text);"
-          aria-label="切换主题"
-        >
-          <span data-theme-toggle-label>深色</span>
-        </button>
+        {!isPhotoArchive && (
+          <button
+            type="button"
+            data-theme-toggle
+            class="rounded-full border px-3 py-1.5 text-xs font-medium transition spotlight-header__button hover:bg-black/5 dark:hover:bg-white/10"
+            style="border-color: var(--line); color: var(--text);"
+            aria-label="切换主题"
+          >
+            <span data-theme-toggle-label>深色</span>
+          </button>
+        )}
 
         <details class="relative md:hidden">
           <summary class="cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium spotlight-header__button spotlight-header__menu-toggle" style="border-color: var(--line); color: var(--text);" aria-label="导航">

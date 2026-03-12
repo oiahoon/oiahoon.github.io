@@ -44,7 +44,7 @@ const navigation = [
 ];
 ---
 
-<BaseLayout title={`${title} | Joey's Notes`} description={description || subtitle || title} image={cover} lang={lang}>
+<BaseLayout title={`${title} | Joey's Notes`} description={description || subtitle || title} image={cover} lang={lang} themeMode="locked-dark">
   <article
     class="photo-page"
     id="top"
@@ -72,15 +72,6 @@ const navigation = [
           </nav>
 
           <div class="photo-topbar__actions">
-            <button
-              type="button"
-              data-theme-toggle
-              class="photo-topbar__toggle"
-              aria-label="切换主题"
-            >
-              <span data-theme-toggle-label>浅色</span>
-            </button>
-
             <details class="photo-topbar__menu-shell">
               <summary class="photo-topbar__menu-toggle" aria-label="导航">
                 <span class="photo-topbar__burger" aria-hidden="true">

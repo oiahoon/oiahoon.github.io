@@ -9,9 +9,10 @@ export interface Props {
   image?: string;
   lang?: 'zh' | 'en';
   structuredData?: string;
+  themeMode?: 'system' | 'locked-dark';
 }
 
-const { title, description, image, lang = 'zh', structuredData } = Astro.props;
+const { title, description, image, lang = 'zh', structuredData, themeMode = 'system' } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 // Default description for better SEO
@@ -23,7 +24,7 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
 ---
 
 <!DOCTYPE html>
-<html lang={lang} class="h-full antialiased">
+<html lang={lang} class="h-full antialiased" data-theme-mode={themeMode}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -76,8 +77,11 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
     (function () {
       const storageKey = 'theme';
       const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const mode = document.documentElement.dataset.themeMode || 'system';
       const savedTheme = localStorage.getItem(storageKey);
-      const theme = savedTheme || (darkQuery.matches ? 'dark' : 'light');
+      const theme = mode === 'locked-dark'
+        ? 'dark'
+        : (savedTheme || (darkQuery.matches ? 'dark' : 'light'));
       document.documentElement.dataset.theme = theme;
       document.documentElement.classList.toggle('dark', theme === 'dark');
 
@@ -107,11 +111,20 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
     (() => {
       const storageKey = 'theme';
       const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+      const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+      function resolveTheme(mode = document.documentElement.dataset.themeMode || 'system') {
+        if (mode === 'locked-dark') return 'dark';
+        const savedTheme = localStorage.getItem(storageKey);
+        return savedTheme || (darkQuery.matches ? 'dark' : 'light');
+      }
 
       function updateThemeUi(theme) {
         document.documentElement.dataset.theme = theme;
         document.documentElement.classList.toggle('dark', theme === 'dark');
-        localStorage.setItem(storageKey, theme);
+        if ((document.documentElement.dataset.themeMode || 'system') !== 'locked-dark') {
+          localStorage.setItem(storageKey, theme);
+        }
         if (themeColorMeta) {
           themeColorMeta.setAttribute('content', theme === 'dark' ? '#080c12' : '#f97316');
         }
@@ -129,14 +142,16 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
           if (button.dataset.themeBound === 'true') return;
           button.dataset.themeBound = 'true';
           button.addEventListener('click', () => {
+            if ((document.documentElement.dataset.themeMode || 'system') === 'locked-dark') return;
             updateThemeUi(currentTheme() === 'dark' ? 'light' : 'dark');
           });
         });
 
-        updateThemeUi(currentTheme());
+        updateThemeUi(resolveTheme());
       }
 
       bindThemeToggles();
+      document.addEventListener('astro:after-swap', () => updateThemeUi(resolveTheme()));
       document.addEventListener('astro:page-load', bindThemeToggles);
     })();
 

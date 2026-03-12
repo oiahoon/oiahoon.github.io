@@ -15,7 +15,7 @@ const props = Astro.props;
 const isPhotoArchive = Astro.url.pathname === '/photography/';
 ---
 
-<BaseLayout {...props}>
+<BaseLayout {...props} themeMode={isPhotoArchive ? 'locked-dark' : 'system'}>
   <div class={`min-h-screen w-full ${isPhotoArchive ? 'spotlight-layout--photo' : ''}`}>
     <SpotlightHeader />
     <main class={isPhotoArchive ? 'pb-0' : 'pb-24'}>
