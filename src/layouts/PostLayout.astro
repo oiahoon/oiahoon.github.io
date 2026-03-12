@@ -63,7 +63,7 @@ const structuredData = generateBlogPostStructuredData({
     <article class="section-gap">
       <div class="shell">
         <div class="reading-narrow">
-          <a href="/articles/" class="text-sm muted hover:text-[var(--text)]">← 返回文章列表</a>
+          <a href="/articles/" class="text-sm muted hover:text-[var(--text)]" data-astro-prefetch>← 返回文章列表</a>
 
           <header class="mt-8 border-b pb-10" style="border-color: var(--line);">
             <p class="entry-meta skeleton-text">
@@ -74,7 +74,12 @@ const structuredData = generateBlogPostStructuredData({
               })}
               · {author}
             </p>
-            <h1 class="mt-4 text-4xl font-semibold leading-[1.15] sm:text-5xl skeleton-text">{title}</h1>
+            <h1
+              class="mt-4 text-4xl font-semibold leading-[1.15] sm:text-5xl skeleton-text"
+              style={slug ? `view-transition-name: article-title-${slug};` : undefined}
+            >
+              {title}
+            </h1>
             {subtitle && <p class="mt-5 text-lg leading-8 muted skeleton-text">{subtitle}</p>}
           </header>
 
@@ -97,7 +102,7 @@ const structuredData = generateBlogPostStructuredData({
             <footer class="mt-14 border-t pt-6" style="border-color: var(--line);">
               <div class="flex flex-wrap gap-2">
                 {tags.map((tag) => (
-                  <a href={`/tags/${tag}/`} class="rounded-full border px-2.5 py-1 text-xs muted hover:text-[var(--text)]" style="border-color: var(--line);">
+                  <a href={`/tags/${tag}/`} class="rounded-full border px-2.5 py-1 text-xs muted hover:text-[var(--text)]" style="border-color: var(--line);" data-astro-prefetch>
                     {tag}
                   </a>
                 ))}
@@ -106,8 +111,8 @@ const structuredData = generateBlogPostStructuredData({
           )}
 
           <div class="mt-8 flex items-center justify-between border-t pt-6 text-sm" style="border-color: var(--line);">
-            <a href="/articles/" class="muted hover:text-[var(--text)]">返回文章列表</a>
-            <a href="/tags/" class="muted hover:text-[var(--text)]">浏览全部标签</a>
+            <a href="/articles/" class="muted hover:text-[var(--text)]" data-astro-prefetch>返回文章列表</a>
+            <a href="/tags/" class="muted hover:text-[var(--text)]" data-astro-prefetch>浏览全部标签</a>
           </div>
         </div>
       </div>

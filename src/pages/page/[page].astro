@@ -41,7 +41,9 @@ const currentPosts = posts.slice(startIndex, endIndex);
               {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
             </time>
             <h2 class="entry-title skeleton-text">
-              <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
+              <a href={`/posts/${post.slug}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.slug};`}>
+                {post.data.title}
+              </a>
             </h2>
             <p class="entry-desc skeleton-text">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
           </article>
@@ -50,7 +52,7 @@ const currentPosts = posts.slice(startIndex, endIndex);
 
       <nav class="pager">
         {currentPage > 1 && (
-          <a href={currentPage === 2 ? '/' : `/page/${currentPage - 1}/`} class="pager-link">
+          <a href={currentPage === 2 ? '/' : `/page/${currentPage - 1}/`} class="pager-link" data-astro-prefetch>
             上一页
           </a>
         )}
@@ -59,13 +61,14 @@ const currentPosts = posts.slice(startIndex, endIndex);
           <a
             href={page === 1 ? '/' : `/page/${page}/`}
             class={`pager-link ${page === currentPage ? 'current' : ''}`}
+            data-astro-prefetch
           >
             {page}
           </a>
         ))}
 
         {currentPage < totalPages && (
-          <a href={`/page/${currentPage + 1}/`} class="pager-link">
+          <a href={`/page/${currentPage + 1}/`} class="pager-link" data-astro-prefetch>
             下一页
           </a>
         )}

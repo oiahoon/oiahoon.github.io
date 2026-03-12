@@ -27,7 +27,7 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
     <div class="shell">
       <div class="section-head">
         <h2 class="text-2xl font-semibold">最新文章</h2>
-        <a href="/articles/" class="text-sm muted hover:text-[var(--text)]">查看全部</a>
+        <a href="/articles/" class="text-sm muted hover:text-[var(--text)]" data-astro-prefetch>查看全部</a>
       </div>
 
       <div class="entry-stream">
@@ -37,7 +37,9 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
               {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
             </time>
             <h3 class="entry-title skeleton-text">
-              <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
+              <a href={`/posts/${post.slug}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.slug};`}>
+                {post.data.title}
+              </a>
             </h3>
             <p class="entry-desc skeleton-text">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
           </article>
@@ -50,7 +52,7 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
     <div class="shell">
       <div class="section-head">
         <h2 class="text-2xl font-semibold">近期摄影</h2>
-        <a href="/photography/" class="text-sm muted hover:text-[var(--text)]">浏览归档</a>
+        <a href="/photography/" class="text-sm muted hover:text-[var(--text)]" data-astro-prefetch>浏览归档</a>
       </div>
 
       <div class="photo-grid mx-auto mt-6 grid max-w-[52rem] grid-cols-2 gap-4 sm:grid-cols-4">
@@ -58,8 +60,15 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
           const image = photo.data.gallery?.[0]?.src;
           if (!image) return null;
           return (
-            <a href={`/posts/${photo.slug}/`} class="block overflow-hidden rounded-xl">
-              <ProgressiveImage src={image} alt={photo.data.title || '摄影作品'} class="aspect-[4/5] w-full" loading="lazy" decoding="async" />
+            <a href={`/posts/${photo.slug}/`} class="block overflow-hidden rounded-xl" data-astro-prefetch>
+              <ProgressiveImage
+                src={image}
+                alt={photo.data.title || '摄影作品'}
+                class="aspect-[4/5] w-full"
+                loading="lazy"
+                decoding="async"
+                style={`view-transition-name: photo-cover-${photo.slug};`}
+              />
             </a>
           );
         })}

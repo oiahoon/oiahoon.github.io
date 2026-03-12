@@ -21,7 +21,9 @@ const sorted = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a
               {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
             </time>
             <h2 class="entry-title skeleton-text">
-              <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
+              <a href={`/posts/${post.slug}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.slug};`}>
+                {post.data.title}
+              </a>
             </h2>
             <p class="entry-desc skeleton-text">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
           </article>
