@@ -283,36 +283,10 @@ const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
       const width = field.clientWidth;
       const height = field.clientHeight;
 
-      for (let i = 0; i < states.length; i += 1) {
-        for (let j = i + 1; j < states.length; j += 1) {
-          const a = states[i];
-          const b = states[j];
-          const dx = b.x + b.width / 2 - (a.x + a.width / 2);
-          const dy = b.y + b.height / 2 - (a.y + a.height / 2);
-          const minDistanceX = (a.width + b.width) / 2 + 12;
-          const minDistanceY = (a.height + b.height) / 2 + 12;
-
-          if (Math.abs(dx) < minDistanceX && Math.abs(dy) < minDistanceY) {
-            const pushX = (minDistanceX - Math.abs(dx)) * 0.012 * (dx === 0 ? (Math.random() > 0.5 ? 1 : -1) : Math.sign(dx));
-            const pushY = (minDistanceY - Math.abs(dy)) * 0.012 * (dy === 0 ? (Math.random() > 0.5 ? 1 : -1) : Math.sign(dy));
-
-            if (!a.paused) {
-              a.vx -= pushX;
-              a.vy -= pushY;
-            }
-
-            if (!b.paused) {
-              b.vx += pushX;
-              b.vy += pushY;
-            }
-          }
-        }
-      }
-
       states.forEach((state) => {
         if (!state.paused) {
-          state.vx = clamp(state.vx, -1.25, 1.25);
-          state.vy = clamp(state.vy, -1.25, 1.25);
+          state.vx = clamp(state.vx, -0.95, 0.95);
+          state.vy = clamp(state.vy, -0.95, 0.95);
           state.x += state.vx;
           state.y += state.vy;
 
