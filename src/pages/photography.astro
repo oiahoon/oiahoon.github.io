@@ -17,95 +17,100 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
 <SpotlightLayout title="摄影作品 | Joey's Notes" description="摄影归档" lang="zh">
   <section class="section-gap">
     <div class="shell">
-      <div class="photo-index-hero">
-        <div>
-          <p class="eyebrow">Photography</p>
-          <h1 class="mt-4 text-4xl font-semibold">摄影作品</h1>
-          <p class="photo-index-hero__lede mt-5">
-            按时间持续归档街景、旅途和日常观察，让画面本身承担叙事。
-          </p>
-        </div>
+      <div class="photo-index-shell">
+        <div class="photo-index-hero">
+          <div>
+            <p class="eyebrow">Photography</p>
+            <h1 class="mt-4 text-4xl font-semibold photo-index-shell__title">摄影作品</h1>
+            <p class="photo-index-hero__lede mt-5">
+              按时间持续归档街景、旅途和日常观察，让画面本身承担叙事。
+            </p>
+          </div>
 
-        <div class="photo-index-hero__stats">
-          <div>
-            <span>作品</span>
-            <strong>{sorted.length}</strong>
-          </div>
-          <div>
-            <span>照片</span>
-            <strong>{totalImages}</strong>
-          </div>
-          <div>
-            <span>时间</span>
-            <strong>{latestYear === earliestYear ? latestYear : `${earliestYear} - ${latestYear}`}</strong>
-          </div>
-        </div>
-      </div>
-
-      {featured && (() => {
-        const image = featured.data.gallery?.[0]?.src || getPreviewImage(featured);
-        if (!image) return null;
-        return (
-          <article class="photo-feature mt-12">
-            <a href={`/posts/${featured.slug}/`} class="photo-feature__media">
-              <ProgressiveImage src={image} alt={featured.data.title || '摄影作品'} class="photo-feature__image" loading="eager" decoding="async" />
-            </a>
-            <div class="photo-feature__content">
-              <p class="photo-feature__meta">
-                {featured.data.date.toLocaleDateString('zh-CN')}
-                {featured.data.location ? ` · ${featured.data.location}` : ''}
-              </p>
-              <h2 class="photo-feature__title">
-                <a href={`/posts/${featured.slug}/`}>{featured.data.title || '未命名作品'}</a>
-              </h2>
-              {featured.data.subtitle && <p class="photo-feature__desc">{featured.data.subtitle}</p>}
-              <div class="photo-feature__actions">
-                <a href={`/posts/${featured.slug}/`} class="photo-feature__link">进入作品</a>
-                {featured.data.gallery && featured.data.gallery.length > 1 && (
-                  <span class="photo-feature__count">{featured.data.gallery.length} 张照片</span>
-                )}
-              </div>
+          <div class="photo-index-hero__stats">
+            <div>
+              <span>作品</span>
+              <strong>{sorted.length}</strong>
             </div>
-          </article>
-        );
-      })()}
-
-      <div class="photo-archive mt-16">
-        <div class="photo-archive__head">
-          <p class="eyebrow">Archive</p>
-          <p class="muted">按拍摄时间浏览全部作品。</p>
+            <div>
+              <span>照片</span>
+              <strong>{totalImages}</strong>
+            </div>
+            <div>
+              <span>时间</span>
+              <strong>{latestYear === earliestYear ? latestYear : `${earliestYear} - ${latestYear}`}</strong>
+            </div>
+          </div>
         </div>
 
-        <div class="photo-grid mt-8">
-          {remaining.map((photo, index) => {
-            const image = photo.data.gallery?.[0]?.src || getPreviewImage(photo);
-            if (!image) return null;
-            const tall = index % 5 === 0 || index % 5 === 3;
-            return (
-              <article class={`photo-card ${tall ? 'photo-card--tall' : 'photo-card--wide'}`}>
-                <a href={`/posts/${photo.slug}/`} class="photo-card__media">
-                  <ProgressiveImage
-                    src={image}
-                    alt={photo.data.title || '摄影作品'}
-                    class="photo-card__image"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </a>
-                <div class="photo-card__body">
-                  <p class="photo-card__meta">
-                    {photo.data.date.toLocaleDateString('zh-CN')}
-                    {photo.data.location ? ` · ${photo.data.location}` : ''}
-                  </p>
-                  <h2 class="photo-card__title"><a href={`/posts/${photo.slug}/`}>{photo.data.title || '未命名作品'}</a></h2>
-                  <div class="photo-card__footer">
-                    {photo.data.gallery && photo.data.gallery.length > 1 && <span>{photo.data.gallery.length} 张</span>}
-                    {photo.data.camera?.model && <span>{photo.data.camera.model}</span>}
-                  </div>
+        {featured && (() => {
+          const image = featured.data.gallery?.[0]?.src || getPreviewImage(featured);
+          if (!image) return null;
+          return (
+            <article class="photo-feature mt-12">
+              <a href={`/posts/${featured.slug}/`} class="photo-feature__media">
+                <ProgressiveImage src={image} alt={featured.data.title || '摄影作品'} class="photo-feature__image" loading="eager" decoding="async" />
+              </a>
+              <div class="photo-feature__content">
+                <p class="photo-feature__meta">
+                  {featured.data.date.toLocaleDateString('zh-CN')}
+                  {featured.data.location ? ` · ${featured.data.location}` : ''}
+                </p>
+                <h2 class="photo-feature__title">
+                  <a href={`/posts/${featured.slug}/`}>{featured.data.title || '未命名作品'}</a>
+                </h2>
+                {featured.data.subtitle && <p class="photo-feature__desc">{featured.data.subtitle}</p>}
+                <div class="photo-feature__actions">
+                  <a href={`/posts/${featured.slug}/`} class="photo-feature__link">进入作品</a>
+                  {featured.data.gallery && featured.data.gallery.length > 1 && (
+                    <span class="photo-feature__count">{featured.data.gallery.length} 张照片</span>
+                  )}
                 </div>
-              </article>
-            );
-          })}
+              </div>
+            </article>
+          );
+        })()}
+
+        <div class="photo-archive mt-16">
+          <div class="photo-archive__head">
+            <div>
+              <p class="eyebrow">Archive</p>
+              <p class="photo-archive__desc">按拍摄时间浏览全部作品。</p>
+            </div>
+            <a href="/tags/%E6%91%84%E5%BD%B1/" class="photo-archive__link">浏览摄影标签</a>
+          </div>
+
+          <div class="photo-grid mt-8">
+            {remaining.map((photo, index) => {
+              const image = photo.data.gallery?.[0]?.src || getPreviewImage(photo);
+              if (!image) return null;
+              const tall = index % 5 === 0 || index % 5 === 3;
+              return (
+                <article class={`photo-card ${tall ? 'photo-card--tall' : 'photo-card--wide'}`}>
+                  <a href={`/posts/${photo.slug}/`} class="photo-card__media">
+                    <ProgressiveImage
+                      src={image}
+                      alt={photo.data.title || '摄影作品'}
+                      class="photo-card__image"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                  <div class="photo-card__body">
+                    <p class="photo-card__meta">
+                      {photo.data.date.toLocaleDateString('zh-CN')}
+                      {photo.data.location ? ` · ${photo.data.location}` : ''}
+                    </p>
+                    <h2 class="photo-card__title"><a href={`/posts/${photo.slug}/`}>{photo.data.title || '未命名作品'}</a></h2>
+                    <div class="photo-card__footer">
+                      {photo.data.gallery && photo.data.gallery.length > 1 && <span>{photo.data.gallery.length} 张</span>}
+                      {photo.data.camera?.model && <span>{photo.data.camera.model}</span>}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
@@ -113,6 +118,29 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
 </SpotlightLayout>
 
 <style>
+  .photo-index-shell {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 2rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    background:
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.04), transparent 24%),
+      linear-gradient(180deg, #070a10 0%, #0a0f16 100%);
+    box-shadow: 0 28px 70px rgba(15, 23, 32, 0.12);
+    color: rgba(238, 242, 247, 0.94);
+  }
+
+  .photo-index-shell :is(a, h1, h2, h3, strong) {
+    color: rgba(248, 250, 252, 0.96);
+  }
+
+  .photo-index-shell .eyebrow {
+    color: rgba(195, 203, 214, 0.64);
+  }
+
+  .photo-index-shell__title {
+    color: rgba(248, 250, 252, 0.98);
+  }
+
   .photo-index-hero {
     display: grid;
     gap: 2rem;
@@ -121,7 +149,7 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
 
   .photo-index-hero__lede {
     max-width: 34rem;
-    color: var(--muted);
+    color: rgba(195, 203, 214, 0.76);
     line-height: 1.9;
   }
 
@@ -132,8 +160,10 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
   }
 
   .photo-index-hero__stats div {
-    border-top: 1px solid var(--line);
-    padding-top: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    padding: 0.9rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
   }
 
   .photo-index-hero__stats span {
@@ -141,7 +171,7 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
     font-size: 0.78rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: rgba(195, 203, 214, 0.58);
   }
 
   .photo-index-hero__stats strong {
@@ -149,19 +179,19 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
     margin-top: 0.4rem;
     font-size: clamp(1.1rem, 2.5vw, 1.65rem);
     font-weight: 600;
-    color: var(--text);
   }
 
   .photo-feature {
     display: grid;
     gap: 1.5rem;
-    align-items: end;
+    align-items: stretch;
   }
 
   .photo-feature__media {
     display: block;
     overflow: hidden;
     border-radius: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
   }
 
   .photo-feature__image {
@@ -175,12 +205,22 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
     transform: scale(1.02);
   }
 
+  .photo-feature__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.4rem;
+    padding: 1.35rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
+  }
+
   .photo-feature__meta,
   .photo-card__meta {
     margin: 0;
     font-size: 0.8rem;
     letter-spacing: 0.04em;
-    color: var(--muted);
+    color: rgba(195, 203, 214, 0.62);
   }
 
   .photo-feature__title,
@@ -193,7 +233,7 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
   .photo-feature__desc {
     max-width: 34rem;
     margin: 1rem 0 0;
-    color: var(--muted);
+    color: rgba(195, 203, 214, 0.74);
     line-height: 1.85;
   }
 
@@ -205,20 +245,24 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
     margin-top: 1.25rem;
   }
 
-  .photo-feature__link {
+  .photo-feature__link,
+  .photo-archive__link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-height: 2.6rem;
     padding: 0.7rem 1rem;
-    border: 1px solid var(--line);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(248, 250, 252, 0.92);
   }
 
   .photo-feature__count,
-  .photo-card__footer span {
+  .photo-card__footer span,
+  .photo-archive__desc {
     font-size: 0.8rem;
-    color: var(--muted);
+    color: rgba(195, 203, 214, 0.68);
   }
 
   .photo-archive__head {
@@ -226,7 +270,7 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
     align-items: end;
     justify-content: space-between;
     gap: 1rem;
-    border-top: 1px solid var(--line);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     padding-top: 1.25rem;
   }
 
@@ -244,7 +288,7 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
     display: block;
     overflow: hidden;
     border-radius: 1.1rem;
-    background: color-mix(in srgb, var(--surface) 96%, transparent);
+    background: rgba(255, 255, 255, 0.03);
   }
 
   .photo-card__image {
@@ -264,6 +308,11 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
 
   .photo-card--wide .photo-card__media {
     aspect-ratio: 4 / 3;
+  }
+
+  .photo-card__body {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 0.85rem;
   }
 
   .photo-card__title {
@@ -299,6 +348,11 @@ const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.len
   }
 
   @media (max-width: 640px) {
+    .photo-index-shell {
+      border-radius: 1.4rem;
+      padding: 1rem;
+    }
+
     .photo-index-hero__stats {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
