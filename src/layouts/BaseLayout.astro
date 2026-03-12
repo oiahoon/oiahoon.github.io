@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import { generateWebsiteStructuredData } from '../utils/seo';
 
 export interface Props {
@@ -70,6 +71,7 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Joey's Notes" />
+  <ClientRouter />
   <script is:inline>
     (function () {
       const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;

@@ -1,5 +1,6 @@
 ---
 const currentPath = Astro.url.pathname;
+const isPhotoArchive = currentPath === '/photography/';
 
 const navigation = [
   { name: '文章', href: '/articles/' },
@@ -9,16 +10,16 @@ const navigation = [
 ];
 ---
 
-<header class="pt-8 sm:pt-10">
+<header class={`pt-8 sm:pt-10 ${isPhotoArchive ? 'spotlight-header--inverse' : ''}`}>
   <div class="shell">
-    <div class="flex items-center justify-between gap-4 border-b pb-5" style="border-color: var(--line);">
-      <a href="/" class="text-lg font-semibold tracking-tight text-[var(--text)]">Joey's Notes</a>
+    <div class="flex items-center justify-between gap-4 border-b pb-5 spotlight-header__bar" style="border-color: var(--line);">
+      <a href="/" class="text-lg font-semibold tracking-tight spotlight-header__brand text-[var(--text)]">Joey's Notes</a>
 
       <nav class="hidden items-center gap-7 text-sm md:flex">
         {navigation.map((item) => {
           const active = currentPath === item.href;
           return (
-            <a href={item.href} class={`relative transition ${active ? 'font-semibold text-[var(--text)]' : 'muted hover:text-[var(--text)]'}`}>
+            <a href={item.href} class={`relative transition spotlight-header__link ${active ? 'font-semibold text-[var(--text)]' : 'muted hover:text-[var(--text)]'}`}>
               {item.name}
               {active && <span class="absolute -bottom-1 left-0 right-0 h-px bg-[var(--accent)]" />}
             </a>
@@ -30,7 +31,7 @@ const navigation = [
         <button
           type="button"
           id="theme-toggle"
-          class="rounded-full border px-3 py-1.5 text-xs font-medium transition hover:bg-black/5 dark:hover:bg-white/10"
+          class="rounded-full border px-3 py-1.5 text-xs font-medium transition spotlight-header__button hover:bg-black/5 dark:hover:bg-white/10"
           style="border-color: var(--line); color: var(--text);"
           aria-label="切换主题"
         >
@@ -38,10 +39,10 @@ const navigation = [
         </button>
 
         <details class="relative md:hidden">
-          <summary class="cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium" style="border-color: var(--line); color: var(--text);">菜单</summary>
-          <nav class="absolute right-5 mt-2 min-w-36 rounded-xl border bg-[var(--surface)] p-2 text-sm shadow-sm" style="border-color: var(--line);">
+          <summary class="cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium spotlight-header__button" style="border-color: var(--line); color: var(--text);">菜单</summary>
+          <nav class="absolute right-5 mt-2 min-w-36 rounded-xl border bg-[var(--surface)] p-2 text-sm shadow-sm spotlight-header__menu" style="border-color: var(--line);">
             {navigation.map((item) => (
-              <a href={item.href} class="block rounded-lg px-3 py-2 muted hover:bg-black/5 hover:text-[var(--text)] dark:hover:bg-white/5">{item.name}</a>
+              <a href={item.href} class="block rounded-lg px-3 py-2 muted hover:bg-black/5 hover:text-[var(--text)] dark:hover:bg-white/5 spotlight-header__menu-link">{item.name}</a>
             ))}
           </nav>
         </details>
@@ -49,6 +50,41 @@ const navigation = [
     </div>
   </div>
 </header>
+
+<style>
+  .spotlight-header--inverse {
+    background:
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.04), transparent 22%),
+      linear-gradient(180deg, #05070b 0%, #070a10 100%);
+  }
+
+  .spotlight-header--inverse .spotlight-header__bar {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .spotlight-header--inverse .spotlight-header__brand,
+  .spotlight-header--inverse .spotlight-header__link,
+  .spotlight-header--inverse .spotlight-header__button {
+    color: rgba(248, 250, 252, 0.94) !important;
+  }
+
+  .spotlight-header--inverse .muted {
+    color: rgba(195, 203, 214, 0.72);
+  }
+
+  .spotlight-header--inverse .spotlight-header__button {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+  }
+
+  .spotlight-header--inverse .spotlight-header__menu {
+    background: #0c1118;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .spotlight-header--inverse .spotlight-header__menu-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+</style>
 
 <script is:inline>
   (function () {
