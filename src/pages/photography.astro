@@ -48,8 +48,15 @@ const groupedArchive = years.map((year) => ({
           if (!image) return null;
           return (
             <article class="photo-feature mt-12">
-              <a href={`/posts/${featured.slug}/`} class="photo-feature__media">
-                <ProgressiveImage src={image} alt={featured.data.title || '摄影作品'} class="photo-feature__image" loading="eager" decoding="async" />
+              <a href={`/posts/${featured.slug}/`} class="photo-feature__media" data-astro-prefetch>
+                <ProgressiveImage
+                  src={image}
+                  alt={featured.data.title || '摄影作品'}
+                  class="photo-feature__image"
+                  loading="eager"
+                  decoding="async"
+                  style={`view-transition-name: photo-cover-${featured.slug};`}
+                />
               </a>
               <div class="photo-feature__content">
                 <p class="photo-feature__meta">
@@ -63,7 +70,7 @@ const groupedArchive = years.map((year) => ({
                 )}
                 {featured.data.subtitle && <p class="photo-feature__desc">{featured.data.subtitle}</p>}
                 <div class="photo-feature__actions">
-                  <a href={`/posts/${featured.slug}/`} class="photo-feature__link">进入作品</a>
+                    <a href={`/posts/${featured.slug}/`} class="photo-feature__link" data-astro-prefetch>进入作品</a>
                   {featured.data.gallery && featured.data.gallery.length > 1 && (
                     <span class="photo-feature__count">{featured.data.gallery.length} 张照片</span>
                   )}
@@ -102,13 +109,14 @@ const groupedArchive = years.map((year) => ({
                   const tall = index % 5 === 0 || index % 5 === 3;
                   return (
                     <article class={`photo-card ${tall ? 'photo-card--tall' : 'photo-card--wide'}`}>
-                      <a href={`/posts/${photo.slug}/`} class="photo-card__media">
+                      <a href={`/posts/${photo.slug}/`} class="photo-card__media" data-astro-prefetch>
                         <ProgressiveImage
                           src={image}
                           alt={photo.data.title || '摄影作品'}
                           class="photo-card__image"
                           loading="lazy"
                           decoding="async"
+                          style={`view-transition-name: photo-cover-${photo.slug};`}
                         />
                       </a>
                       <div class="photo-card__body">
@@ -117,7 +125,7 @@ const groupedArchive = years.map((year) => ({
                           {photo.data.location ? ` · ${photo.data.location}` : ''}
                         </p>
                         {photo.data.title && (
-                          <h2 class="photo-card__title"><a href={`/posts/${photo.slug}/`}>{photo.data.title}</a></h2>
+                          <h2 class="photo-card__title"><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h2>
                         )}
                         <div class="photo-card__footer">
                           {photo.data.gallery && photo.data.gallery.length > 1 && <span>{photo.data.gallery.length} 张</span>}

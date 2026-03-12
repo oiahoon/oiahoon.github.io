@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import ProgressiveImage from '../components/ProgressiveImage.astro';
 
 export interface Props {
+  slug?: string;
   title?: string;
   subtitle?: string;
   author: string;
@@ -19,7 +20,7 @@ export interface Props {
   nextPhoto?: { slug: string; title?: string; date: Date; image?: string };
 }
 
-const { title, subtitle, date, tags, header_img, description, lang, gallery, camera, location, publishedDate, previousPhoto, nextPhoto } = Astro.props;
+const { slug, title, subtitle, date, tags, header_img, description, lang, gallery, camera, location, publishedDate, previousPhoto, nextPhoto } = Astro.props;
 const cover = header_img || gallery?.[0]?.src;
 const heroPhoto = gallery?.[0];
 const galleryPhotos = heroPhoto ? gallery.slice(1) : gallery ?? [];
@@ -33,6 +34,7 @@ const exifEntries = [
   camera?.lens,
   camera?.settings,
 ].filter(Boolean);
+const photoTransitionName = slug ? `photo-cover-${slug}` : undefined;
 
 const navigation = [
   { name: '文章', href: '/articles/' },
@@ -89,6 +91,7 @@ const navigation = [
               class="photo-hero__image"
               loading="eager"
               decoding="async"
+              style={photoTransitionName ? `view-transition-name: ${photoTransitionName};` : undefined}
             />
             <button
               type="button"
