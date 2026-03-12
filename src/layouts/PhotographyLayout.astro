@@ -22,6 +22,7 @@ const cover = header_img || gallery?.[0]?.src;
 const heroPhoto = gallery?.[0];
 const galleryPhotos = heroPhoto ? gallery.slice(1) : gallery ?? [];
 const currentPath = Astro.url.pathname;
+const year = new Date().getFullYear();
 
 const navigation = [
   { name: '文章', href: '/articles/' },
@@ -70,13 +71,14 @@ const navigation = [
               loading="eager"
               decoding="async"
             />
+            <div class="photo-hero__veil"></div>
           </div>
 
-          <div class="photo-hero__floating photo-hero__floating--top">
+          <div class="photo-hero__overlay photo-hero__overlay--top">
             <a href="/photography/" class="photo-hero__back">← 返回摄影列表</a>
           </div>
 
-          <div class="photo-hero__floating photo-hero__floating--bottom">
+          <div class="photo-hero__overlay photo-hero__overlay--bottom">
             <div class="photo-hero__caption">
               <p class="photo-hero__date">
                 {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
@@ -87,7 +89,7 @@ const navigation = [
               {subtitle && <p class="photo-hero__subtitle">{subtitle}</p>}
             </div>
 
-            <aside class="photo-hero__info">
+            <div class="photo-hero__info" aria-label="拍摄信息">
               <p class="photo-hero__eyebrow">拍摄信息</p>
               <div class="photo-hero__specs">
                 {camera?.model && <p><span>相机</span>{camera.model}</p>}
@@ -103,7 +105,7 @@ const navigation = [
                   ))}
                 </div>
               )}
-            </aside>
+            </div>
           </div>
         </section>
       )}
@@ -134,6 +136,38 @@ const navigation = [
           <slot />
         </div>
       </section>
+
+      <footer class="photo-footer">
+        <div class="photo-footer__inner">
+          <div class="photo-footer__grid">
+            <section>
+              <p class="photo-footer__title">Joey's Notes</p>
+              <p class="photo-footer__copy">记录软件工程实践与摄影观察，保持长期、可复用、可查阅的写作习惯。</p>
+            </section>
+
+            <section>
+              <p class="photo-footer__title">导航</p>
+              <div class="photo-footer__links">
+                <a href="/articles/">文章</a>
+                <a href="/photography/">摄影</a>
+                <a href="/tags/">标签</a>
+                <a href="/about/">关于</a>
+              </div>
+            </section>
+
+            <section>
+              <p class="photo-footer__title">订阅与链接</p>
+              <div class="photo-footer__links">
+                <a href="/rss.xml">RSS 订阅</a>
+                <a href="https://github.com/oiahoon" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://weibo.com/desiver" target="_blank" rel="noopener noreferrer">微博</a>
+              </div>
+            </section>
+          </div>
+
+          <div class="photo-footer__meta">© {year} Joey's Notes</div>
+        </div>
+      </footer>
     </section>
   </article>
 </BaseLayout>
@@ -148,17 +182,17 @@ const navigation = [
   .photo-stage {
     width: 100%;
     background:
-      radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 24%),
-      linear-gradient(180deg, #090c11, #05070b 24%, #070a10 72%, #0b1017 100%);
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent 22%),
+      linear-gradient(180deg, #05070b 0%, #070a10 58%, #080c12 100%);
   }
 
   .photo-topbar {
     position: sticky;
     top: 0;
-    z-index: 30;
+    z-index: 40;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(4, 6, 10, 0.9);
-    backdrop-filter: blur(12px);
+    background: rgba(4, 6, 10, 0.78);
+    backdrop-filter: blur(10px);
   }
 
   .photo-topbar__inner {
@@ -166,7 +200,7 @@ const navigation = [
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    width: min(100%, 96rem);
+    width: min(100%, 100rem);
     margin-inline: auto;
     padding: 1rem clamp(1rem, 3vw, 2rem);
   }
@@ -174,7 +208,7 @@ const navigation = [
   .photo-topbar__brand {
     font-size: 1.05rem;
     font-weight: 600;
-    color: #f8fafc;
+    color: rgba(248, 250, 252, 0.96);
   }
 
   .photo-topbar__nav {
@@ -185,7 +219,7 @@ const navigation = [
 
   .photo-topbar__link {
     position: relative;
-    color: rgba(226, 232, 240, 0.66);
+    color: rgba(226, 232, 240, 0.7);
     font-size: 0.94rem;
     transition: color 0.2s ease;
   }
@@ -206,7 +240,7 @@ const navigation = [
   }
 
   .photo-topbar__toggle {
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 9999px;
     padding: 0.5rem 0.95rem;
     background: transparent;
@@ -218,122 +252,117 @@ const navigation = [
   .photo-hero {
     position: relative;
     min-height: calc(100vh - 4.4rem);
-    padding: 0;
+    background: #05070b;
   }
 
   .photo-hero__frame {
-    display: flex;
+    position: relative;
     min-height: calc(100vh - 4.4rem);
-    align-items: center;
-    justify-content: center;
-    padding: 0;
   }
 
   .photo-hero__image {
     width: 100%;
     height: calc(100vh - 4.4rem);
-    object-fit: contain;
+    object-fit: cover;
+    object-position: center;
   }
 
-  .photo-hero__floating {
+  .photo-hero__veil {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(5, 7, 11, 0.52) 0%, rgba(5, 7, 11, 0.14) 22%, rgba(5, 7, 11, 0.06) 48%, rgba(5, 7, 11, 0.58) 100%),
+      linear-gradient(90deg, rgba(5, 7, 11, 0.2) 0%, transparent 20%, transparent 78%, rgba(5, 7, 11, 0.18) 100%);
+    pointer-events: none;
+  }
+
+  .photo-hero__overlay {
     position: absolute;
     left: 0;
     right: 0;
-    width: min(100%, 96rem);
+    z-index: 2;
+    width: min(100%, 100rem);
     margin-inline: auto;
     padding-inline: clamp(1rem, 3vw, 2rem);
   }
 
-  .photo-hero__floating--top {
-    top: 1.25rem;
+  .photo-hero__overlay--top {
+    top: 1.35rem;
   }
 
-  .photo-hero__floating--bottom {
+  .photo-hero__overlay--bottom {
     bottom: 0;
     display: grid;
     gap: 1rem;
-    padding-bottom: 1.25rem;
     align-items: end;
-  }
-
-  .photo-hero__back,
-  .photo-hero__caption,
-  .photo-hero__info {
-    backdrop-filter: blur(10px);
-    background: rgba(5, 7, 11, 0.56);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+    padding-bottom: clamp(1.25rem, 3vw, 2rem);
   }
 
   .photo-hero__back {
     display: inline-flex;
     align-items: center;
-    border-radius: 9999px;
-    padding: 0.7rem 1rem;
-    color: rgba(248, 250, 252, 0.92);
-    font-size: 0.92rem;
+    color: rgba(245, 247, 250, 0.92);
+    font-size: 0.94rem;
+    letter-spacing: 0.01em;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
   }
 
-  .photo-hero__caption {
-    border-radius: 1.2rem;
-    padding: 1rem 1.15rem;
-    color: rgba(255, 255, 255, 0.94);
+  .photo-hero__caption,
+  .photo-hero__info {
+    max-width: 100%;
+    color: rgba(248, 250, 252, 0.94);
+    text-shadow: 0 2px 22px rgba(0, 0, 0, 0.6);
   }
 
   .photo-hero__date {
     margin: 0;
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     letter-spacing: 0.04em;
-    color: rgba(255, 255, 255, 0.66);
+    color: rgba(226, 232, 240, 0.78);
   }
 
   .photo-hero__title {
-    margin: 0.7rem 0 0;
-    font-size: clamp(2.2rem, 4vw, 4.6rem);
-    line-height: 1.02;
+    margin: 0.65rem 0 0;
+    font-size: clamp(2.3rem, 4.8vw, 5rem);
+    line-height: 0.98;
     color: #f8fafc;
   }
 
   .photo-hero__subtitle {
-    margin: 0.85rem 0 0;
-    max-width: 40rem;
+    margin: 0.8rem 0 0;
+    max-width: 38rem;
     font-size: 1rem;
-    line-height: 1.75;
-    color: rgba(255, 255, 255, 0.76);
-  }
-
-  .photo-hero__info {
-    border-radius: 1.2rem;
-    padding: 1rem 1.15rem;
-    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.7;
+    color: rgba(230, 236, 242, 0.82);
   }
 
   .photo-hero__eyebrow {
     margin: 0;
     font-size: 0.78rem;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.58);
+    color: rgba(226, 232, 240, 0.66);
   }
 
   .photo-hero__specs {
-    margin-top: 0.8rem;
+    margin-top: 0.7rem;
     display: grid;
-    gap: 0.4rem;
-    font-size: 0.92rem;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: rgba(245, 247, 250, 0.92);
   }
 
   .photo-hero__specs p {
     margin: 0;
     display: grid;
-    gap: 0.2rem;
+    gap: 0.16rem;
   }
 
   .photo-hero__specs span {
     font-size: 0.72rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.52);
+    color: rgba(226, 232, 240, 0.62);
   }
 
   .photo-hero__tags {
@@ -344,15 +373,12 @@ const navigation = [
   }
 
   .photo-hero__tags span {
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 9999px;
-    padding: 0.35rem 0.7rem;
     font-size: 0.74rem;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(232, 238, 243, 0.78);
   }
 
   .photo-gallery {
-    padding: 0 0 5rem;
+    padding: 2.5rem 0 5rem;
   }
 
   .photo-gallery__stack {
@@ -383,7 +409,7 @@ const navigation = [
   .photo-gallery__caption {
     width: min(46rem, calc(100% - 2rem));
     margin: 0.9rem auto 0;
-    color: rgba(255, 255, 255, 0.64);
+    color: rgba(226, 232, 240, 0.62);
     text-align: center;
     font-size: 0.92rem;
     line-height: 1.8;
@@ -404,13 +430,73 @@ const navigation = [
     color: rgba(236, 240, 244, 0.78);
   }
 
+  .photo-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: #070a10;
+  }
+
+  .photo-footer__inner {
+    width: min(100%, 96rem);
+    margin-inline: auto;
+    padding: 3rem clamp(1rem, 3vw, 2rem) 2rem;
+  }
+
+  .photo-footer__grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .photo-footer__title {
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: rgba(248, 250, 252, 0.96);
+  }
+
+  .photo-footer__copy {
+    max-width: 18rem;
+    margin: 0.8rem 0 0;
+    font-size: 0.92rem;
+    line-height: 1.8;
+    color: rgba(195, 203, 214, 0.72);
+  }
+
+  .photo-footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-top: 0.8rem;
+  }
+
+  .photo-footer__links a {
+    color: rgba(195, 203, 214, 0.72);
+    transition: color 0.2s ease;
+  }
+
+  .photo-footer__links a:hover {
+    color: rgba(248, 250, 252, 0.94);
+  }
+
+  .photo-footer__meta {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.78rem;
+    color: rgba(195, 203, 214, 0.58);
+  }
+
   @media (min-width: 900px) {
     .photo-topbar__nav {
       display: flex;
     }
 
-    .photo-hero__floating--bottom {
-      grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.8fr);
+    .photo-hero__overlay--bottom {
+      grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.72fr);
+      gap: 2rem;
+    }
+
+    .photo-footer__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
@@ -419,28 +505,35 @@ const navigation = [
       gap: 0.75rem;
     }
 
-    .photo-hero {
-      min-height: auto;
-    }
-
+    .photo-hero,
     .photo-hero__frame {
-      min-height: auto;
-      padding-top: 0;
+      min-height: calc(100svh - 4.4rem);
     }
 
     .photo-hero__image {
-      height: auto;
-      min-height: 56vh;
+      height: calc(100svh - 4.4rem);
     }
 
-    .photo-hero__floating--bottom {
-      position: static;
-      width: 100%;
-      padding: 0.9rem 0.9rem 0;
+    .photo-hero__overlay--top {
+      top: 0.9rem;
     }
 
-    .photo-hero__floating--top {
-      top: 0.85rem;
+    .photo-hero__overlay--bottom {
+      gap: 0.9rem;
+      padding-bottom: 1rem;
+    }
+
+    .photo-hero__title {
+      font-size: clamp(2rem, 10vw, 3rem);
+    }
+
+    .photo-hero__subtitle {
+      font-size: 0.95rem;
+      max-width: 26rem;
+    }
+
+    .photo-gallery {
+      padding-top: 1.5rem;
     }
 
     .photo-gallery__frame {
