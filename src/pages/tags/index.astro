@@ -23,32 +23,25 @@ const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
         <p class="mt-4 muted">共 {sortedTags.length} 个标签，{posts.length} 篇文章。</p>
       </div>
 
-      <div class="tag-cloud-stage mx-auto mt-12 max-w-5xl">
-        <div class="tag-cloud-panel soft-panel">
-          <div class="tag-cloud-header">
-            <p class="tag-cloud-kicker">Floating Tags</p>
-            <p class="tag-cloud-note">标签会在区域内缓慢漂浮，触边反弹。悬停可暂停。</p>
-          </div>
-
-          <div class="tag-cloud-field" data-tag-cloud-field>
-            {sortedTags.map(([tag, count], index) => {
-              const weight = count / maxCount;
-              const size = 0.92 + weight * 0.42;
-              return (
-                <a
-                  href={`/tags/${tag}/`}
-                  class="tag-cloud-pill"
-                  data-tag-pill
-                  data-weight={weight.toFixed(3)}
-                  data-index={index}
-                  style={`--tag-scale:${size.toFixed(3)};`}
-                >
-                  <span class="tag-cloud-name">#{tag}</span>
-                  <span class="tag-cloud-count">{count}</span>
-                </a>
-              );
-            })}
-          </div>
+      <div class="tag-cloud-stage full-bleed mt-12">
+        <div class="tag-cloud-field" data-tag-cloud-field>
+          {sortedTags.map(([tag, count], index) => {
+            const weight = count / maxCount;
+            const size = 0.92 + weight * 0.42;
+            return (
+              <a
+                href={`/tags/${tag}/`}
+                class="tag-cloud-pill"
+                data-tag-pill
+                data-weight={weight.toFixed(3)}
+                data-index={index}
+                style={`--tag-scale:${size.toFixed(3)};`}
+              >
+                <span class="tag-cloud-name">#{tag}</span>
+                <span class="tag-cloud-count">{count}</span>
+              </a>
+            );
+          })}
         </div>
 
         <noscript>
@@ -71,49 +64,16 @@ const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
     position: relative;
   }
 
-  .tag-cloud-panel {
-    position: relative;
-    min-height: 30rem;
-    padding: 1.4rem;
-    overflow: hidden;
-    background:
-      radial-gradient(circle at top, rgba(184, 95, 40, 0.08), transparent 38%),
-      linear-gradient(180deg, color-mix(in srgb, var(--surface) 96%, transparent), color-mix(in srgb, var(--surface) 92%, transparent));
-  }
-
-  .tag-cloud-header {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    padding-inline: 0.25rem;
-  }
-
-  .tag-cloud-kicker {
-    margin: 0;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .tag-cloud-note {
-    margin: 0;
-    font-size: 0.92rem;
-    color: var(--muted);
-  }
-
   .tag-cloud-field {
     position: relative;
-    min-height: 25rem;
-    margin-top: 1.25rem;
-    border-radius: calc(var(--radius-panel) * 0.9);
+    min-height: calc(100vh - 18rem);
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
     background:
-      radial-gradient(circle at 20% 20%, rgba(184, 95, 40, 0.08), transparent 24%),
-      radial-gradient(circle at 80% 30%, rgba(99, 112, 132, 0.08), transparent 22%),
-      radial-gradient(circle at 60% 80%, rgba(184, 95, 40, 0.06), transparent 18%);
+      radial-gradient(circle at 20% 20%, rgba(184, 95, 40, 0.06), transparent 24%),
+      radial-gradient(circle at 80% 30%, rgba(99, 112, 132, 0.06), transparent 22%),
+      radial-gradient(circle at 60% 80%, rgba(184, 95, 40, 0.05), transparent 18%);
   }
 
   .tag-cloud-pill {
@@ -171,25 +131,12 @@ const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
   }
 
   @media (max-width: 640px) {
-    .tag-cloud-panel {
-      min-height: 24rem;
-      padding: 1rem;
-    }
-
     .tag-cloud-field {
-      min-height: 19rem;
-    }
-
-    .tag-cloud-note {
-      font-size: 0.86rem;
+      min-height: calc(100vh - 15rem);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .tag-cloud-panel {
-      min-height: auto;
-    }
-
     .tag-cloud-field {
       display: none;
     }
@@ -225,6 +172,9 @@ const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
 
     const states = [];
     let frameId = 0;
+    let lastTick = 0;
+    let isVisible = document.visibilityState === 'visible';
+    const frameStep = 1000 / 30;
 
     function clamp(value, min, max) {
       return Math.min(Math.max(value, min), max);
@@ -272,6 +222,7 @@ const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
           y,
           width: pillWidth,
           height: pillHeight,
+          scale: Number(getComputedStyle(pill).getPropertyValue('--tag-scale')) || 1,
           vx: (Math.random() > 0.5 ? 1 : -1) * speedBase * (0.8 + Math.random() * 0.7),
           vy: (Math.random() > 0.5 ? 1 : -1) * speedBase * (0.8 + Math.random() * 0.7),
           paused: false,
@@ -279,14 +230,25 @@ const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
       });
     }
 
-    function animate() {
+    function animate(timestamp) {
+      if (!isVisible) {
+        frameId = window.requestAnimationFrame(animate);
+        return;
+      }
+
+      if (timestamp - lastTick < frameStep) {
+        frameId = window.requestAnimationFrame(animate);
+        return;
+      }
+
+      lastTick = timestamp;
       const width = field.clientWidth;
       const height = field.clientHeight;
 
       states.forEach((state) => {
         if (!state.paused) {
-          state.vx = clamp(state.vx, -0.95, 0.95);
-          state.vy = clamp(state.vy, -0.95, 0.95);
+          state.vx = clamp(state.vx, -0.72, 0.72);
+          state.vy = clamp(state.vy, -0.72, 0.72);
           state.x += state.vx;
           state.y += state.vy;
 
@@ -301,8 +263,7 @@ const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
           }
         }
 
-        const scale = getComputedStyle(state.pill).getPropertyValue('--tag-scale') || 1;
-        state.pill.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(${scale})`;
+        state.pill.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(${state.scale})`;
       });
 
       frameId = window.requestAnimationFrame(animate);
@@ -325,12 +286,17 @@ const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
     });
 
     layout();
-    animate();
+    frameId = window.requestAnimationFrame(animate);
+
+    document.addEventListener('visibilitychange', () => {
+      isVisible = document.visibilityState === 'visible';
+    });
 
     const observer = new ResizeObserver(() => {
       window.cancelAnimationFrame(frameId);
+      lastTick = 0;
       layout();
-      animate();
+      frameId = window.requestAnimationFrame(animate);
     });
 
     observer.observe(field);
