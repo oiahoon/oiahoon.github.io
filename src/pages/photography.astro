@@ -59,11 +59,13 @@ const groupedArchive = years.map((year) => ({
                 />
               </a>
               <div class="photo-feature__content">
-                <p class="photo-feature__eyebrow">最新作品</p>
-                <p class="photo-feature__meta">
-                  {featured.data.date.toLocaleDateString('zh-CN')}
-                  {featured.data.location ? ` · ${featured.data.location}` : ''}
-                </p>
+                <div class="photo-feature__lead">
+                  <p class="photo-feature__eyebrow">最新作品</p>
+                  <p class="photo-feature__meta">
+                    {featured.data.date.toLocaleDateString('zh-CN')}
+                    {featured.data.location ? ` · ${featured.data.location}` : ''}
+                  </p>
+                </div>
                 {featured.data.title && (
                   <h2 class="photo-feature__title">
                     <a href={`/posts/${featured.slug}/`}>{featured.data.title}</a>
@@ -128,10 +130,12 @@ const groupedArchive = years.map((year) => ({
                           {photo.data.date.toLocaleDateString('zh-CN')}
                           {photo.data.location ? ` · ${photo.data.location}` : ''}
                         </p>
-                        {photo.data.title && (
+                {photo.data.title && (
                           <h2 class="photo-card__title"><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h2>
                         )}
                         <div class="photo-card__footer">
+                          <span>{photo.data.date.toLocaleDateString('zh-CN')}</span>
+                          {photo.data.location && <span>{photo.data.location}</span>}
                           {photo.data.gallery && photo.data.gallery.length > 1 && <span>{photo.data.gallery.length} 张</span>}
                           {photo.data.camera?.model && <span>{photo.data.camera.model}</span>}
                         </div>
@@ -230,54 +234,64 @@ const groupedArchive = years.map((year) => ({
   .photo-feature__content {
     position: absolute;
     left: 0;
-    right: 0;
+    right: auto;
     bottom: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    min-height: 42%;
-    padding: clamp(1.1rem, 2.6vw, 1.8rem);
-    background: linear-gradient(180deg, rgba(5, 7, 11, 0.02) 0%, rgba(5, 7, 11, 0.5) 48%, rgba(5, 7, 11, 0.88) 100%);
+    gap: 0.55rem;
+    width: min(32rem, 78%);
+    min-height: 36%;
+    padding: clamp(1rem, 2.2vw, 1.5rem);
+    background:
+      linear-gradient(180deg, rgba(5, 7, 11, 0) 0%, rgba(5, 7, 11, 0.18) 34%, rgba(5, 7, 11, 0.72) 100%);
+  }
+
+  .photo-feature__lead {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
   }
 
   .photo-feature__eyebrow {
     margin: 0;
-    font-size: 0.74rem;
+    font-size: 0.68rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(226, 232, 240, 0.62);
+    color: rgba(226, 232, 240, 0.56);
   }
 
   .photo-feature__meta,
   .photo-card__meta {
-    margin: 0.55rem 0 0;
-    font-size: 0.8rem;
+    margin: 0;
+    font-size: 0.78rem;
     letter-spacing: 0.04em;
     color: rgba(195, 203, 214, 0.62);
   }
 
   .photo-feature__meta {
-    color: rgba(226, 232, 240, 0.72);
+    color: rgba(226, 232, 240, 0.62);
   }
 
   .photo-feature__title,
   .photo-card__title {
-    margin: 0.55rem 0 0;
+    margin: 0;
     font-size: clamp(1.4rem, 2.6vw, 2.4rem);
     line-height: 1.15;
   }
 
   .photo-feature__desc {
     max-width: 32rem;
-    margin: 0.9rem 0 0;
-    color: rgba(226, 232, 240, 0.78);
-    line-height: 1.75;
+    margin: 0.1rem 0 0;
+    color: rgba(226, 232, 240, 0.72);
+    line-height: 1.68;
   }
 
   .photo-feature__specs {
-    margin: 0.9rem 0 0;
-    font-size: 0.82rem;
-    color: rgba(226, 232, 240, 0.64);
+    margin: 0.1rem 0 0;
+    font-size: 0.76rem;
+    color: rgba(226, 232, 240, 0.56);
   }
 
   .photo-feature__actions {
@@ -285,7 +299,7 @@ const groupedArchive = years.map((year) => ({
     align-items: center;
     gap: 0.9rem;
     flex-wrap: wrap;
-    margin-top: 1rem;
+    margin-top: 0.4rem;
   }
 
   .photo-feature__link,
@@ -293,18 +307,19 @@ const groupedArchive = years.map((year) => ({
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 2.6rem;
-    padding: 0.7rem 1rem;
+    min-height: 2.4rem;
+    padding: 0.62rem 0.95rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(248, 250, 252, 0.92);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(248, 250, 252, 0.88);
+    font-size: 0.84rem;
   }
 
   .photo-card__footer span,
   .photo-archive__desc {
     font-size: 0.8rem;
-    color: rgba(195, 203, 214, 0.68);
+    color: rgba(195, 203, 214, 0.58);
   }
 
   .photo-archive__head {
@@ -337,19 +352,19 @@ const groupedArchive = years.map((year) => ({
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 2.3rem;
-    padding: 0.55rem 0.9rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 2.15rem;
+    padding: 0.48rem 0.82rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.02);
-    color: rgba(195, 203, 214, 0.76);
+    background: rgba(255, 255, 255, 0.015);
+    color: rgba(195, 203, 214, 0.68);
     flex: 0 0 auto;
     transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
   }
 
   .photo-year-jump__link.is-active {
-    border-color: rgba(255, 255, 255, 0.22);
-    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.05);
     color: rgba(248, 250, 252, 0.96);
     transform: translateY(-1px);
   }
@@ -378,7 +393,7 @@ const groupedArchive = years.map((year) => ({
 
   .photo-card {
     display: grid;
-    gap: 0.9rem;
+    gap: 0.7rem;
   }
 
   .photo-card__media {
@@ -427,7 +442,7 @@ const groupedArchive = years.map((year) => ({
 
   .photo-card__body {
     border-top: 1px solid rgba(255, 255, 255, 0.06);
-    padding-top: 0.7rem;
+    padding-top: 0.58rem;
     transition: transform 0.25s ease;
   }
 
@@ -436,23 +451,23 @@ const groupedArchive = years.map((year) => ({
   }
 
   .photo-card__title {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .photo-card__footer {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.55rem;
-    margin-top: 0.38rem;
-    font-size: 0.76rem;
-    color: rgba(195, 203, 214, 0.58);
-    line-height: 1.55;
+    gap: 0.45rem;
+    margin-top: 0.15rem;
+    font-size: 0.72rem;
+    color: rgba(195, 203, 214, 0.5);
+    line-height: 1.45;
   }
 
   .photo-card__footer span + span::before {
     content: '·';
-    margin-right: 0.55rem;
-    color: rgba(195, 203, 214, 0.38);
+    margin-right: 0.45rem;
+    color: rgba(195, 203, 214, 0.28);
   }
 
   @media (min-width: 900px) {
@@ -482,6 +497,12 @@ const groupedArchive = years.map((year) => ({
     .photo-archive__head {
       align-items: flex-start;
       flex-direction: column;
+    }
+
+    .photo-feature__content {
+      width: 100%;
+      min-height: 44%;
+      right: 0;
     }
 
     .photo-year-group__head {
