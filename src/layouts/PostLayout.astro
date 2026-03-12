@@ -18,8 +18,8 @@ export interface Props {
   camera?: { model?: string; lens?: string; settings?: string };
   location?: string;
   publishedDate?: string;
-  previousPhoto?: { slug: string; title?: string; date: Date };
-  nextPhoto?: { slug: string; title?: string; date: Date };
+  previousPhoto?: { slug: string; title?: string; date: Date; image?: string };
+  nextPhoto?: { slug: string; title?: string; date: Date; image?: string };
 }
 
 const { title, subtitle, author, date, tags, header_img, description, lang, type = 'article', gallery, camera, location, publishedDate, previousPhoto, nextPhoto } = Astro.props;

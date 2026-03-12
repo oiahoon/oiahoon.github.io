@@ -15,8 +15,8 @@ export interface Props {
   camera?: { model?: string; lens?: string; settings?: string };
   location?: string;
   publishedDate?: string;
-  previousPhoto?: { slug: string; title?: string; date: Date };
-  nextPhoto?: { slug: string; title?: string; date: Date };
+  previousPhoto?: { slug: string; title?: string; date: Date; image?: string };
+  nextPhoto?: { slug: string; title?: string; date: Date; image?: string };
 }
 
 const { title, subtitle, date, tags, header_img, description, lang, gallery, camera, location, publishedDate, previousPhoto, nextPhoto } = Astro.props;
@@ -169,6 +169,7 @@ const navigation = [
           <div class="photo-post-nav__inner">
             {previousPhoto ? (
               <a href={`/posts/${previousPhoto.slug}/`} class="photo-post-nav__link">
+                {previousPhoto.image && <img src={previousPhoto.image} alt={previousPhoto.title || '较新作品预览'} class="photo-post-nav__thumb" loading="lazy" decoding="async" />}
                 <span class="photo-post-nav__meta">← 较新作品</span>
                 <span class="photo-post-nav__title">{previousPhoto.title || previousPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
                 <span class="photo-post-nav__date">{previousPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
@@ -179,6 +180,7 @@ const navigation = [
 
             {nextPhoto ? (
               <a href={`/posts/${nextPhoto.slug}/`} class="photo-post-nav__link photo-post-nav__link--align-end">
+                {nextPhoto.image && <img src={nextPhoto.image} alt={nextPhoto.title || '较早作品预览'} class="photo-post-nav__thumb" loading="lazy" decoding="async" />}
                 <span class="photo-post-nav__meta">较早作品 →</span>
                 <span class="photo-post-nav__title">{nextPhoto.title || nextPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
                 <span class="photo-post-nav__date">{nextPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
@@ -557,6 +559,14 @@ const navigation = [
     transform: translateY(-1px);
     border-color: rgba(255, 255, 255, 0.14);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+  }
+
+  .photo-post-nav__thumb {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 0.85rem;
+    object-fit: cover;
+    margin-bottom: 0.3rem;
   }
 
   .photo-post-nav__link--align-end {

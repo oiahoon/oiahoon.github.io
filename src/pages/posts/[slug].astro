@@ -28,11 +28,13 @@ const { Content } = await post.render();
     slug: previousPhoto.slug,
     title: previousPhoto.data.title,
     date: previousPhoto.data.date,
+    image: previousPhoto.data.header_img || previousPhoto.data.gallery?.[0]?.src,
   } : undefined}
   nextPhoto={nextPhoto ? {
     slug: nextPhoto.slug,
     title: nextPhoto.data.title,
     date: nextPhoto.data.date,
+    image: nextPhoto.data.header_img || nextPhoto.data.gallery?.[0]?.src,
   } : undefined}
 >
   <Content />
