@@ -86,12 +86,12 @@ const groupedArchive = years.map((year) => ({
 
           <nav class="photo-year-jump mt-6" aria-label="年份快速跳转">
             {groupedArchive.map((group) => (
-              <a href={`#year-${group.year}`} class="photo-year-jump__link">{group.year}</a>
+              <a href={`#year-${group.year}`} class="photo-year-jump__link" data-year-link={String(group.year)}>{group.year}</a>
             ))}
           </nav>
 
           {groupedArchive.map((group) => (
-            <section class="photo-year-group mt-10" id={`year-${group.year}`}>
+            <section class="photo-year-group mt-10" id={`year-${group.year}`} data-year-group={String(group.year)}>
               <div class="photo-year-group__head">
                 <h2 class="photo-year-group__title">{group.year}</h2>
                 <p class="photo-year-group__count">{group.photos.length} 组作品</p>
@@ -321,6 +321,14 @@ const groupedArchive = years.map((year) => ({
     background: rgba(255, 255, 255, 0.02);
     color: rgba(195, 203, 214, 0.76);
     flex: 0 0 auto;
+    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  .photo-year-jump__link.is-active {
+    border-color: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(248, 250, 252, 0.96);
+    transform: translateY(-1px);
   }
 
   .photo-year-group__head {
@@ -434,3 +442,29 @@ const groupedArchive = years.map((year) => ({
     }
   }
 </style>
+
+<script>
+  const yearLinks = Array.from(document.querySelectorAll('[data-year-link]'));
+  const yearGroups = Array.from(document.querySelectorAll('[data-year-group]'));
+
+  if (yearLinks.length && yearGroups.length) {
+    const syncYearState = (year) => {
+      yearLinks.forEach((link) => {
+        link.classList.toggle('is-active', link.getAttribute('data-year-link') === String(year));
+      });
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (!visible) return;
+      const year = visible.target.getAttribute('data-year-group');
+      if (year) syncYearState(year);
+    }, { threshold: [0.2, 0.45], rootMargin: '-18% 0px -55% 0px' });
+
+    yearGroups.forEach((group) => observer.observe(group));
+    syncYearState(yearGroups[0].getAttribute('data-year-group'));
+  }
+</script>
