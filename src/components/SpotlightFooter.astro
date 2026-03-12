@@ -1,8 +1,9 @@
 ---
 const year = new Date().getFullYear();
+const isPhotoArchive = Astro.url.pathname === '/photography/';
 ---
 
-<footer class="mt-24 pb-12">
+<footer class={`mt-24 pb-12 ${isPhotoArchive ? 'spotlight-footer--inverse' : ''}`}>
   <div class="shell">
     <div class="border-t pt-8" style="border-color: var(--line);">
       <div class="grid gap-8 text-sm md:grid-cols-3">
@@ -37,3 +38,26 @@ const year = new Date().getFullYear();
     </div>
   </div>
 </footer>
+
+<style>
+  .spotlight-footer--inverse {
+    margin-top: 0;
+    background: #080c12;
+    color: rgba(238, 242, 247, 0.92);
+  }
+
+  .spotlight-footer--inverse p:first-child,
+  .spotlight-footer--inverse .font-semibold,
+  .spotlight-footer--inverse .text-base {
+    color: rgba(248, 250, 252, 0.96);
+  }
+
+  .spotlight-footer--inverse .muted,
+  .spotlight-footer--inverse a {
+    color: rgba(195, 203, 214, 0.74);
+  }
+
+  .spotlight-footer--inverse a:hover {
+    color: rgba(248, 250, 252, 0.96);
+  }
+</style>

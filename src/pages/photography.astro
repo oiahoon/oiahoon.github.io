@@ -207,7 +207,7 @@ const groupedArchive = years.map((year) => ({
   .photo-feature {
     display: grid;
     gap: 1.5rem;
-    align-items: stretch;
+    align-items: start;
   }
 
   .photo-feature__media {
@@ -231,7 +231,8 @@ const groupedArchive = years.map((year) => ({
   .photo-feature__content {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
+    align-self: end;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 1.4rem;
     padding: 1.35rem;
@@ -444,11 +445,6 @@ const groupedArchive = years.map((year) => ({
     .photo-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       align-items: start;
-    }
-
-    .photo-card:nth-child(5n + 1),
-    .photo-card:nth-child(5n + 4) {
-      transform: translateY(1.25rem);
     }
   }
 

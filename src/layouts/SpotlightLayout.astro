@@ -12,14 +12,21 @@ export interface Props {
 }
 
 const props = Astro.props;
+const isPhotoArchive = Astro.url.pathname === '/photography/';
 ---
 
 <BaseLayout {...props}>
-  <div class="min-h-screen w-full">
+  <div class={`min-h-screen w-full ${isPhotoArchive ? 'spotlight-layout--photo' : ''}`}>
     <SpotlightHeader />
-    <main class="pb-24">
+    <main class={isPhotoArchive ? 'pb-0' : 'pb-24'}>
       <slot />
     </main>
     <SpotlightFooter />
   </div>
 </BaseLayout>
+
+<style>
+  .spotlight-layout--photo {
+    background: linear-gradient(180deg, #05070b 0%, #070a10 72%, #080c12 100%);
+  }
+</style>
