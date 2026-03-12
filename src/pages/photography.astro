@@ -78,7 +78,7 @@ const groupedArchive = years.map((year) => ({
                   </p>
                 )}
                 <div class="photo-feature__actions">
-                    <a href={`/posts/${featured.slug}/`} class="photo-feature__link" data-astro-prefetch>进入作品</a>
+                  <a href={`/posts/${featured.slug}/`} class="photo-feature__link" data-astro-prefetch>进入作品</a>
                 </div>
               </div>
             </article>
@@ -108,12 +108,11 @@ const groupedArchive = years.map((year) => ({
               </div>
 
               <div class="photo-grid mt-6">
-                {group.photos.map((photo, index) => {
+                {group.photos.map((photo) => {
                   const image = photo.data.gallery?.[0]?.src || getPreviewImage(photo);
                   if (!image) return null;
-                  const tall = index % 5 === 0 || index % 5 === 3;
                   return (
-                    <article class={`photo-card ${tall ? 'photo-card--tall' : 'photo-card--wide'}`}>
+                    <article class="photo-card">
                       <a href={`/posts/${photo.slug}/`} class="photo-card__media" data-astro-prefetch>
                         <ProgressiveImage
                           src={image}
@@ -184,14 +183,11 @@ const groupedArchive = years.map((year) => ({
   .photo-index-hero__stats {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.9rem;
+    gap: 1.25rem;
   }
 
   .photo-index-hero__stats div {
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1rem;
-    padding: 0.9rem 1rem;
-    background: rgba(255, 255, 255, 0.03);
+    padding-top: 0.15rem;
   }
 
   .photo-index-hero__stats span {
@@ -199,32 +195,30 @@ const groupedArchive = years.map((year) => ({
     font-size: 0.78rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(195, 203, 214, 0.58);
+    color: rgba(195, 203, 214, 0.5);
   }
 
   .photo-index-hero__stats strong {
     display: block;
-    margin-top: 0.4rem;
-    font-size: clamp(1.1rem, 2.5vw, 1.65rem);
+    margin-top: 0.55rem;
+    font-size: clamp(1.2rem, 2.8vw, 1.8rem);
     font-weight: 600;
   }
 
   .photo-feature {
-    display: grid;
-    gap: 1.5rem;
-    align-items: start;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.75rem;
+    background: rgba(255, 255, 255, 0.03);
   }
 
   .photo-feature__media {
     display: block;
-    overflow: hidden;
-    border-radius: 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
   }
 
   .photo-feature__image {
     width: 100%;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
     transition: transform 0.45s ease;
   }
@@ -234,14 +228,16 @@ const groupedArchive = years.map((year) => ({
   }
 
   .photo-feature__content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-self: end;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1.4rem;
-    padding: 1.35rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
+    justify-content: flex-end;
+    min-height: 42%;
+    padding: clamp(1.1rem, 2.6vw, 1.8rem);
+    background: linear-gradient(180deg, rgba(5, 7, 11, 0.02) 0%, rgba(5, 7, 11, 0.5) 48%, rgba(5, 7, 11, 0.88) 100%);
   }
 
   .photo-feature__eyebrow {
@@ -249,7 +245,7 @@ const groupedArchive = years.map((year) => ({
     font-size: 0.74rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(195, 203, 214, 0.56);
+    color: rgba(226, 232, 240, 0.62);
   }
 
   .photo-feature__meta,
@@ -260,6 +256,10 @@ const groupedArchive = years.map((year) => ({
     color: rgba(195, 203, 214, 0.62);
   }
 
+  .photo-feature__meta {
+    color: rgba(226, 232, 240, 0.72);
+  }
+
   .photo-feature__title,
   .photo-card__title {
     margin: 0.55rem 0 0;
@@ -268,16 +268,16 @@ const groupedArchive = years.map((year) => ({
   }
 
   .photo-feature__desc {
-    max-width: 34rem;
+    max-width: 32rem;
     margin: 0.9rem 0 0;
-    color: rgba(195, 203, 214, 0.74);
-    line-height: 1.85;
+    color: rgba(226, 232, 240, 0.78);
+    line-height: 1.75;
   }
 
   .photo-feature__specs {
     margin: 0.9rem 0 0;
     font-size: 0.82rem;
-    color: rgba(195, 203, 214, 0.62);
+    color: rgba(226, 232, 240, 0.64);
   }
 
   .photo-feature__actions {
@@ -297,7 +297,7 @@ const groupedArchive = years.map((year) => ({
     padding: 0.7rem 1rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.04);
     color: rgba(248, 250, 252, 0.92);
   }
 
@@ -421,11 +421,7 @@ const groupedArchive = years.map((year) => ({
     opacity: 1;
   }
 
-  .photo-card--tall .photo-card__media {
-    aspect-ratio: 4 / 5;
-  }
-
-  .photo-card--wide .photo-card__media {
+  .photo-card__media {
     aspect-ratio: 4 / 3;
   }
 
@@ -465,8 +461,7 @@ const groupedArchive = years.map((year) => ({
     }
 
     .photo-feature {
-      grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.55fr);
-      gap: 2rem;
+      min-height: clamp(24rem, 44vw, 38rem);
     }
 
     .photo-grid {
