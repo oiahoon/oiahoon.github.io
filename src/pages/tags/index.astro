@@ -11,7 +11,7 @@ posts.forEach((post) => {
 });
 
 const sortedTags = Array.from(tagCounts.entries()).sort(([, a], [, b]) => b - a);
-const rows = [0, 1, 2].map((index) => sortedTags.filter((_, tagIndex) => tagIndex % 3 === index));
+const maxCount = Math.max(...sortedTags.map(([, count]) => count), 1);
 ---
 
 <SpotlightLayout title="标签 | Joey's Notes" description="按标签浏览文章，快速找到感兴趣的技术主题和内容分类。" lang="zh">
@@ -24,49 +24,43 @@ const rows = [0, 1, 2].map((index) => sortedTags.filter((_, tagIndex) => tagInde
       </div>
 
       <div class="tag-cloud-stage mx-auto mt-12 max-w-5xl">
-        <div class="tag-cloud-shell">
-          {rows.map((row, rowIndex) => (
-            <div class={`tag-cloud-lane ${rowIndex % 2 === 1 ? 'is-reverse' : ''}`}>
-              <div class="tag-cloud-track">
-                {row.map(([tag, count]) => (
-                  <a
-                    href={`/tags/${tag}/`}
-                    class="tag-cloud-pill"
-                    style={`--tag-scale:${Math.min(1.14, 0.92 + count / 14)};`}
-                  >
-                    <span class="tag-cloud-name">#{tag}</span>
-                    <span class="tag-cloud-count">{count}</span>
-                  </a>
-                ))}
-              </div>
+        <div class="tag-cloud-panel soft-panel">
+          <div class="tag-cloud-header">
+            <p class="tag-cloud-kicker">Floating Tags</p>
+            <p class="tag-cloud-note">标签会在区域内缓慢漂浮，触边反弹。悬停可暂停。</p>
+          </div>
 
-              <div class="tag-cloud-track" aria-hidden="true">
-                {row.map(([tag, count]) => (
-                  <a
-                    href={`/tags/${tag}/`}
-                    class="tag-cloud-pill"
-                    tabindex="-1"
-                    style={`--tag-scale:${Math.min(1.14, 0.92 + count / 14)};`}
-                  >
-                    <span class="tag-cloud-name">#{tag}</span>
-                    <span class="tag-cloud-count">{count}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          ))}
+          <div class="tag-cloud-field" data-tag-cloud-field>
+            {sortedTags.map(([tag, count], index) => {
+              const weight = count / maxCount;
+              const size = 0.92 + weight * 0.42;
+              return (
+                <a
+                  href={`/tags/${tag}/`}
+                  class="tag-cloud-pill"
+                  data-tag-pill
+                  data-weight={weight.toFixed(3)}
+                  data-index={index}
+                  style={`--tag-scale:${size.toFixed(3)};`}
+                >
+                  <span class="tag-cloud-name">#{tag}</span>
+                  <span class="tag-cloud-count">{count}</span>
+                </a>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      <div class="mx-auto mt-12 max-w-5xl">
-        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {sortedTags.map(([tag, count]) => (
-            <a href={`/tags/${tag}/`} class="soft-panel group flex items-center justify-between px-4 py-3 transition hover:border-[var(--accent)]">
-              <span class="text-sm font-medium">#{tag}</span>
-              <span class="text-xs muted">{count} 篇</span>
-            </a>
-          ))}
-        </div>
+        <noscript>
+          <div class="tag-fallback-grid">
+            {sortedTags.map(([tag, count]) => (
+              <a href={`/tags/${tag}/`} class="soft-panel group flex items-center justify-between px-4 py-3 transition hover:border-[var(--accent)]">
+                <span class="text-sm font-medium">#{tag}</span>
+                <span class="text-xs muted">{count} 篇</span>
+              </a>
+            ))}
+          </div>
+        </noscript>
       </div>
     </div>
   </section>
@@ -75,85 +69,85 @@ const rows = [0, 1, 2].map((index) => sortedTags.filter((_, tagIndex) => tagInde
 <style>
   .tag-cloud-stage {
     position: relative;
-    padding: 1.25rem 0;
   }
 
-  .tag-cloud-stage::before,
-  .tag-cloud-stage::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 4rem;
+  .tag-cloud-panel {
+    position: relative;
+    min-height: 30rem;
+    padding: 1.4rem;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at top, rgba(184, 95, 40, 0.08), transparent 38%),
+      linear-gradient(180deg, color-mix(in srgb, var(--surface) 96%, transparent), color-mix(in srgb, var(--surface) 92%, transparent));
+  }
+
+  .tag-cloud-header {
+    position: relative;
     z-index: 2;
-    pointer-events: none;
-  }
-
-  .tag-cloud-stage::before {
-    left: 0;
-    background: linear-gradient(90deg, var(--bg), transparent);
-  }
-
-  .tag-cloud-stage::after {
-    right: 0;
-    background: linear-gradient(270deg, var(--bg), transparent);
-  }
-
-  .tag-cloud-shell {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .tag-cloud-lane {
     display: flex;
-    width: max-content;
-    min-width: 100%;
-    gap: 0.9rem;
-    animation: tag-cloud-scroll 34s linear infinite;
-    will-change: transform;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-inline: 0.25rem;
   }
 
-  .tag-cloud-lane.is-reverse {
-    animation-direction: reverse;
-    animation-duration: 42s;
+  .tag-cloud-kicker {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
 
-  .tag-cloud-lane:hover {
-    animation-play-state: paused;
+  .tag-cloud-note {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--muted);
   }
 
-  .tag-cloud-track {
-    display: flex;
-    flex: none;
-    gap: 0.9rem;
-    padding-right: 0.9rem;
+  .tag-cloud-field {
+    position: relative;
+    min-height: 25rem;
+    margin-top: 1.25rem;
+    border-radius: calc(var(--radius-panel) * 0.9);
+    background:
+      radial-gradient(circle at 20% 20%, rgba(184, 95, 40, 0.08), transparent 24%),
+      radial-gradient(circle at 80% 30%, rgba(99, 112, 132, 0.08), transparent 22%),
+      radial-gradient(circle at 60% 80%, rgba(184, 95, 40, 0.06), transparent 18%);
   }
 
   .tag-cloud-pill {
+    position: absolute;
+    left: 0;
+    top: 0;
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
     white-space: nowrap;
-    border: 1px solid var(--line);
+    border: 1px solid color-mix(in srgb, var(--line) 88%, rgba(184, 95, 40, 0.14));
     border-radius: 9999px;
-    padding: 0.85rem 1.15rem;
+    padding: 0.8rem 1.1rem;
     background:
-      radial-gradient(circle at top left, rgba(184, 95, 40, 0.12), transparent 55%),
-      color-mix(in srgb, var(--surface) 94%, transparent);
-    box-shadow: 0 10px 30px rgba(15, 23, 32, 0.06);
-    transform: scale(var(--tag-scale, 1));
+      radial-gradient(circle at top left, rgba(184, 95, 40, 0.1), transparent 55%),
+      color-mix(in srgb, var(--surface) 97%, transparent);
+    box-shadow: 0 12px 28px rgba(15, 23, 32, 0.08);
+    transform: translate3d(0, 0, 0) scale(var(--tag-scale, 1));
     transform-origin: center;
-    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    will-change: transform;
   }
 
   .tag-cloud-pill:hover {
-    transform: scale(calc(var(--tag-scale, 1) + 0.04));
     border-color: color-mix(in srgb, var(--accent) 65%, var(--line));
-    box-shadow: 0 14px 35px rgba(15, 23, 32, 0.1);
+    box-shadow: 0 16px 34px rgba(15, 23, 32, 0.12);
+  }
+
+  .tag-cloud-pill.is-paused {
+    box-shadow: 0 18px 36px rgba(15, 23, 32, 0.14);
   }
 
   .tag-cloud-name {
-    font-size: 0.98rem;
+    font-size: clamp(0.95rem, 1rem + (var(--tag-scale, 1) - 1) * 0.35rem, 1.22rem);
     font-weight: 600;
     color: var(--text);
   }
@@ -169,42 +163,202 @@ const rows = [0, 1, 2].map((index) => sortedTags.filter((_, tagIndex) => tagInde
     background: color-mix(in srgb, var(--line) 72%, transparent);
     color: var(--muted);
     font-size: 0.78rem;
-    font-weight: 600;
+    font-weight: 700;
   }
 
-  @keyframes tag-cloud-scroll {
-    from {
-      transform: translateX(0);
-    }
-
-    to {
-      transform: translateX(calc(-50% - 0.45rem));
-    }
+  .tag-fallback-grid {
+    display: none;
   }
 
   @media (max-width: 640px) {
-    .tag-cloud-stage::before,
-    .tag-cloud-stage::after {
-      width: 1.25rem;
+    .tag-cloud-panel {
+      min-height: 24rem;
+      padding: 1rem;
     }
 
-    .tag-cloud-pill {
-      padding: 0.72rem 1rem;
+    .tag-cloud-field {
+      min-height: 19rem;
+    }
+
+    .tag-cloud-note {
+      font-size: 0.86rem;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .tag-cloud-lane {
-      animation: none;
-      width: 100%;
-      min-width: 0;
-      overflow-x: auto;
-      padding-bottom: 0.25rem;
-      scrollbar-width: none;
+    .tag-cloud-panel {
+      min-height: auto;
     }
 
-    .tag-cloud-lane::-webkit-scrollbar {
+    .tag-cloud-field {
       display: none;
+    }
+
+    .tag-fallback-grid {
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+  }
+
+  @media (min-width: 640px) and (prefers-reduced-motion: reduce) {
+    .tag-fallback-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+    .tag-fallback-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 </style>
+
+<script is:inline>
+  (() => {
+    const field = document.querySelector('[data-tag-cloud-field]');
+    if (!field || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const pills = Array.from(field.querySelectorAll('[data-tag-pill]'));
+    if (!pills.length) return;
+
+    const states = [];
+    let frameId = 0;
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function overlaps(candidate, placed) {
+      return placed.some((item) => {
+        return !(
+          candidate.x + candidate.width + 18 < item.x ||
+          candidate.x > item.x + item.width + 18 ||
+          candidate.y + candidate.height + 18 < item.y ||
+          candidate.y > item.y + item.height + 18
+        );
+      });
+    }
+
+    function layout() {
+      const width = field.clientWidth;
+      const height = field.clientHeight;
+      const placed = [];
+
+      states.length = 0;
+
+      pills.forEach((pill, index) => {
+        pill.style.transform = `translate3d(0px, 0px, 0) scale(${getComputedStyle(pill).getPropertyValue('--tag-scale') || 1})`;
+        const rect = pill.getBoundingClientRect();
+        const pillWidth = rect.width;
+        const pillHeight = rect.height;
+        const weight = Number(pill.dataset.weight || '0.5');
+        const speedBase = 0.16 + weight * 0.58;
+        let x = ((index * 97) % Math.max(width - pillWidth, 1));
+        let y = ((index * 71) % Math.max(height - pillHeight, 1));
+        let tries = 0;
+
+        while (overlaps({ x, y, width: pillWidth, height: pillHeight }, placed) && tries < 160) {
+          x = Math.random() * Math.max(width - pillWidth, 1);
+          y = Math.random() * Math.max(height - pillHeight, 1);
+          tries += 1;
+        }
+
+        placed.push({ x, y, width: pillWidth, height: pillHeight });
+        states.push({
+          pill,
+          x,
+          y,
+          width: pillWidth,
+          height: pillHeight,
+          vx: (Math.random() > 0.5 ? 1 : -1) * speedBase * (0.8 + Math.random() * 0.7),
+          vy: (Math.random() > 0.5 ? 1 : -1) * speedBase * (0.8 + Math.random() * 0.7),
+          paused: false,
+        });
+      });
+    }
+
+    function animate() {
+      const width = field.clientWidth;
+      const height = field.clientHeight;
+
+      for (let i = 0; i < states.length; i += 1) {
+        for (let j = i + 1; j < states.length; j += 1) {
+          const a = states[i];
+          const b = states[j];
+          const dx = b.x + b.width / 2 - (a.x + a.width / 2);
+          const dy = b.y + b.height / 2 - (a.y + a.height / 2);
+          const minDistanceX = (a.width + b.width) / 2 + 12;
+          const minDistanceY = (a.height + b.height) / 2 + 12;
+
+          if (Math.abs(dx) < minDistanceX && Math.abs(dy) < minDistanceY) {
+            const pushX = (minDistanceX - Math.abs(dx)) * 0.012 * (dx === 0 ? (Math.random() > 0.5 ? 1 : -1) : Math.sign(dx));
+            const pushY = (minDistanceY - Math.abs(dy)) * 0.012 * (dy === 0 ? (Math.random() > 0.5 ? 1 : -1) : Math.sign(dy));
+
+            if (!a.paused) {
+              a.vx -= pushX;
+              a.vy -= pushY;
+            }
+
+            if (!b.paused) {
+              b.vx += pushX;
+              b.vy += pushY;
+            }
+          }
+        }
+      }
+
+      states.forEach((state) => {
+        if (!state.paused) {
+          state.vx = clamp(state.vx, -1.25, 1.25);
+          state.vy = clamp(state.vy, -1.25, 1.25);
+          state.x += state.vx;
+          state.y += state.vy;
+
+          if (state.x <= 0 || state.x >= width - state.width) {
+            state.vx *= -1;
+            state.x = clamp(state.x, 0, width - state.width);
+          }
+
+          if (state.y <= 0 || state.y >= height - state.height) {
+            state.vy *= -1;
+            state.y = clamp(state.y, 0, height - state.height);
+          }
+        }
+
+        const scale = getComputedStyle(state.pill).getPropertyValue('--tag-scale') || 1;
+        state.pill.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(${scale})`;
+      });
+
+      frameId = window.requestAnimationFrame(animate);
+    }
+
+    pills.forEach((pill) => {
+      pill.addEventListener('mouseenter', () => {
+        const state = states.find((item) => item.pill === pill);
+        if (!state) return;
+        state.paused = true;
+        pill.classList.add('is-paused');
+      });
+
+      pill.addEventListener('mouseleave', () => {
+        const state = states.find((item) => item.pill === pill);
+        if (!state) return;
+        state.paused = false;
+        pill.classList.remove('is-paused');
+      });
+    });
+
+    layout();
+    animate();
+
+    const observer = new ResizeObserver(() => {
+      window.cancelAnimationFrame(frameId);
+      layout();
+      animate();
+    });
+
+    observer.observe(field);
+  })();
+</script>
