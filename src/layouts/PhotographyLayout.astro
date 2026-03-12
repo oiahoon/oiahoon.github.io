@@ -80,11 +80,17 @@ const navigation = [
           <div class="photo-hero__overlay photo-hero__overlay--top">
             <div class="photo-hero__topbar">
               <a href="/photography/" class="photo-hero__back">← 返回摄影列表</a>
-              {totalPhotos > 1 && (
-                <a href="#photo-2" class="photo-hero__jump">
-                  向下看下一张
-                </a>
-              )}
+              <div class="photo-hero__controls">
+                {totalPhotos > 1 && (
+                  <span class="photo-hero__index">01 / {String(totalPhotos).padStart(2, '0')}</span>
+                )}
+                {totalPhotos > 1 && (
+                  <a href="#photo-2" class="photo-hero__jump">
+                    <span>下一张</span>
+                    <span aria-hidden="true">↓</span>
+                  </a>
+                )}
+              </div>
             </div>
           </div>
 
@@ -140,8 +146,14 @@ const navigation = [
           </div>
 
           <div class="photo-gallery__footer-nav" id="photo-gallery-end">
-            <a href="#top" class="photo-gallery__jump">回到顶部</a>
-            <a href="#photo-1" class="photo-gallery__jump">回到首张</a>
+            <a href="#top" class="photo-gallery__jump">
+              <span>回到顶部</span>
+              <span aria-hidden="true">↑</span>
+            </a>
+            <a href="#photo-1" class="photo-gallery__jump">
+              <span>回到首张</span>
+              <span aria-hidden="true">↑</span>
+            </a>
           </div>
         </section>
       )}
@@ -157,8 +169,9 @@ const navigation = [
           <div class="photo-post-nav__inner">
             {previousPhoto ? (
               <a href={`/posts/${previousPhoto.slug}/`} class="photo-post-nav__link">
-                <span class="photo-post-nav__meta">较新作品</span>
+                <span class="photo-post-nav__meta">← 较新作品</span>
                 <span class="photo-post-nav__title">{previousPhoto.title || previousPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
+                <span class="photo-post-nav__date">{previousPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
               </a>
             ) : (
               <span class="photo-post-nav__link is-empty"></span>
@@ -166,8 +179,9 @@ const navigation = [
 
             {nextPhoto ? (
               <a href={`/posts/${nextPhoto.slug}/`} class="photo-post-nav__link photo-post-nav__link--align-end">
-                <span class="photo-post-nav__meta">较早作品</span>
+                <span class="photo-post-nav__meta">较早作品 →</span>
                 <span class="photo-post-nav__title">{nextPhoto.title || nextPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
+                <span class="photo-post-nav__date">{nextPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
               </a>
             ) : (
               <span class="photo-post-nav__link is-empty"></span>
@@ -336,6 +350,12 @@ const navigation = [
     gap: 1rem;
   }
 
+  .photo-hero__controls {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
   .photo-hero__overlay--bottom {
     bottom: 0;
     display: grid;
@@ -353,13 +373,29 @@ const navigation = [
     text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
   }
 
+  .photo-hero__index {
+    font-size: 0.76rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(226, 232, 240, 0.62);
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+  }
+
   .photo-hero__jump,
   .photo-gallery__jump {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 2.5rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9999px;
+    background: rgba(5, 7, 11, 0.22);
+    backdrop-filter: blur(8px);
     color: rgba(245, 247, 250, 0.86);
-    font-size: 0.85rem;
-    letter-spacing: 0.04em;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
   }
@@ -508,10 +544,19 @@ const navigation = [
 
   .photo-post-nav__link {
     display: grid;
-    gap: 0.35rem;
-    padding: 1rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 0.45rem;
+    padding: 1.15rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.1rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.01));
     color: rgba(245, 247, 250, 0.92);
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+
+  .photo-post-nav__link:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.14);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
   }
 
   .photo-post-nav__link--align-end {
@@ -530,8 +575,13 @@ const navigation = [
   }
 
   .photo-post-nav__title {
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 1.06rem;
+    line-height: 1.5;
+  }
+
+  .photo-post-nav__date {
+    font-size: 0.82rem;
+    color: rgba(195, 203, 214, 0.62);
   }
 
   .photo-footer {
@@ -630,6 +680,11 @@ const navigation = [
     .photo-hero__topbar {
       align-items: flex-start;
       flex-direction: column;
+    }
+
+    .photo-hero__controls {
+      width: 100%;
+      justify-content: space-between;
     }
 
     .photo-hero__overlay--bottom {
