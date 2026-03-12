@@ -19,54 +19,70 @@ export interface Props {
 
 const { title, subtitle, date, tags, header_img, description, lang, gallery, camera, location, publishedDate } = Astro.props;
 const cover = header_img || gallery?.[0]?.src;
+const heroPhoto = gallery?.[0];
+const galleryPhotos = heroPhoto ? gallery.slice(1) : gallery ?? [];
 ---
 
 <SpotlightLayout title={`${title} | Joey's Notes`} description={description || subtitle || title} image={cover} lang={lang}>
-  <article class="section-gap">
+  <article class="photo-essay section-gap">
     <div class="shell">
       <a href="/photography/" class="text-sm muted hover:text-[var(--text)]">← 返回摄影列表</a>
     </div>
 
-    <header class="shell mt-7">
-      <div class="mx-auto max-w-3xl text-center">
-        <p class="text-xs muted">
-          {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
-          {location ? ` · ${location}` : ''}
-          {publishedDate ? ` · 发布于 ${publishedDate}` : ''}
-        </p>
-        {title && <h1 class="mt-4 text-4xl font-semibold leading-tight sm:text-5xl" style="font-family: var(--font-serif);">{title}</h1>}
-        {subtitle && <p class="mt-4 text-lg leading-8 muted">{subtitle}</p>}
-      </div>
-    </header>
+    {heroPhoto && (
+      <section class="photo-hero full-bleed">
+        <div class="photo-hero__frame">
+          <ProgressiveImage
+            src={heroPhoto.src}
+            alt={heroPhoto.alt || title || '摄影作品'}
+            class="photo-hero__image"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
 
-    {gallery && gallery.length > 0 && (
-      <section class="mt-10 bg-[#0f1218] py-10 dark:bg-[#0c0f14]">
-        <div class="shell">
-          <div class="space-y-10">
-            {gallery.map((photo, index) => (
-              <figure class={`${index === 0 ? '' : 'mx-auto max-w-4xl'}`}>
-                <ProgressiveImage
-                  src={photo.src}
-                  alt={photo.alt || `Photo ${index + 1}`}
-                  class="w-full rounded-lg"
-                  loading={index < 2 ? 'eager' : 'lazy'}
-                  decoding="async"
-                />
-                {photo.caption && <figcaption class="mt-3 text-sm text-zinc-300">{photo.caption}</figcaption>}
-              </figure>
-            ))}
+        <div class="photo-hero__overlay">
+          <div class="photo-hero__meta">
+            <p class="photo-hero__date">
+              {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
+              {location ? ` · ${location}` : ''}
+              {publishedDate ? ` · 发布于 ${publishedDate}` : ''}
+            </p>
+            {title && <h1 class="photo-hero__title">{title}</h1>}
+            {subtitle && <p class="photo-hero__subtitle">{subtitle}</p>}
           </div>
         </div>
       </section>
     )}
 
-    <section class="shell mt-12">
-      <div class="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[2fr_1fr]">
-        <div class="prose prose-lg">
+    {galleryPhotos.length > 0 && (
+      <section class="photo-gallery full-bleed">
+        <div class="photo-gallery__stack">
+          {galleryPhotos.map((photo, index) => (
+            <figure class="photo-gallery__item">
+              <div class="photo-gallery__frame">
+                <ProgressiveImage
+                  src={photo.src}
+                  alt={photo.alt || `Photo ${index + 2}`}
+                  class="photo-gallery__image"
+                  loading={index < 1 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </div>
+              {photo.caption && <figcaption class="photo-gallery__caption">{photo.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="shell photo-notes">
+      <div class="photo-notes__layout">
+        <div class="prose prose-lg photo-notes__body">
           <slot />
         </div>
 
-        <aside class="soft-panel h-fit p-5 text-sm">
+        <aside class="soft-panel photo-notes__aside">
           <p class="eyebrow">拍摄信息</p>
           <div class="mt-3 space-y-2 muted">
             {camera?.model && <p><span class="text-[var(--text)]">相机：</span>{camera.model}</p>}
@@ -87,3 +103,169 @@ const cover = header_img || gallery?.[0]?.src;
     </section>
   </article>
 </SpotlightLayout>
+
+<style>
+  .full-bleed {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+  }
+
+  .photo-essay {
+    padding-bottom: 5rem;
+  }
+
+  .photo-hero {
+    position: relative;
+    margin-top: 1.5rem;
+    min-height: min(88vh, 68rem);
+    background:
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 35%),
+      #0c0f14;
+  }
+
+  .photo-hero__frame {
+    display: flex;
+    min-height: min(88vh, 68rem);
+    align-items: center;
+    justify-content: center;
+    padding: 3.5rem 1.5rem 8rem;
+  }
+
+  .photo-hero__image {
+    width: auto;
+    max-width: min(92vw, 110rem);
+    max-height: calc(min(88vh, 68rem) - 8rem);
+    border-radius: 1.25rem;
+    object-fit: contain;
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.32);
+  }
+
+  .photo-hero__overlay {
+    pointer-events: none;
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    padding: 0 1.5rem 1.75rem;
+    background: linear-gradient(180deg, transparent, rgba(12, 15, 20, 0.86) 55%, rgba(12, 15, 20, 0.96));
+  }
+
+  .photo-hero__meta {
+    width: min(44rem, 100%);
+    margin-inline: auto;
+    color: rgba(255, 255, 255, 0.92);
+    text-align: center;
+  }
+
+  .photo-hero__date {
+    margin: 0;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .photo-hero__title {
+    margin: 0.9rem 0 0;
+    font-size: clamp(2.6rem, 5vw, 4.8rem);
+    line-height: 1.04;
+    color: #f8fafc;
+  }
+
+  .photo-hero__subtitle {
+    margin: 1rem auto 0;
+    max-width: 38rem;
+    font-size: 1.03rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.74);
+  }
+
+  .photo-gallery {
+    background:
+      linear-gradient(180deg, #0c0f14, #11151c 22%, #10141a 78%, #f7f5f0 100%);
+    padding: 2rem 0 6rem;
+  }
+
+  .photo-gallery__stack {
+    display: grid;
+    gap: 4rem;
+    width: min(96vw, 100rem);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  .photo-gallery__item {
+    margin: 0;
+  }
+
+  .photo-gallery__frame {
+    display: flex;
+    min-height: min(84vh, 58rem);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .photo-gallery__image {
+    width: auto;
+    max-width: min(92vw, 96rem);
+    max-height: min(84vh, 58rem);
+    border-radius: 1rem;
+    object-fit: contain;
+    box-shadow: 0 24px 54px rgba(0, 0, 0, 0.24);
+  }
+
+  .photo-gallery__caption {
+    width: min(42rem, calc(100% - 2rem));
+    margin: 1rem auto 0;
+    color: rgba(255, 255, 255, 0.72);
+    text-align: center;
+    font-size: 0.94rem;
+    line-height: 1.8;
+  }
+
+  .photo-notes {
+    margin-top: 4rem;
+  }
+
+  .photo-notes__layout {
+    display: grid;
+    gap: 2.5rem;
+    width: min(70rem, 100%);
+    margin-inline: auto;
+  }
+
+  .photo-notes__body {
+    max-width: 44rem;
+  }
+
+  .photo-notes__aside {
+    height: fit-content;
+    padding: 1.2rem;
+    font-size: 0.94rem;
+  }
+
+  @media (min-width: 1024px) {
+    .photo-notes__layout {
+      grid-template-columns: minmax(0, 2.1fr) minmax(18rem, 0.9fr);
+      align-items: start;
+    }
+
+    .photo-notes__aside {
+      position: sticky;
+      top: 2rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .photo-hero__frame {
+      padding: 1.2rem 0.75rem 7rem;
+    }
+
+    .photo-gallery__stack {
+      gap: 2.2rem;
+      padding-inline: 0.75rem;
+    }
+
+    .photo-gallery__frame {
+      min-height: 52vh;
+    }
+  }
+</style>
