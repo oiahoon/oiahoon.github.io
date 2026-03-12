@@ -27,6 +27,12 @@ const allPhotos = heroPhoto ? [heroPhoto, ...galleryPhotos] : galleryPhotos;
 const totalPhotos = heroPhoto ? galleryPhotos.length + 1 : galleryPhotos.length;
 const currentPath = Astro.url.pathname;
 const year = new Date().getFullYear();
+const visibleTags = tags.filter((tag) => tag !== '摄影');
+const exifEntries = [
+  camera?.model,
+  camera?.lens,
+  camera?.settings,
+].filter(Boolean);
 
 const navigation = [
   { name: '文章', href: '/articles/' },
@@ -122,18 +128,19 @@ const navigation = [
               {subtitle && <p class="photo-hero__subtitle">{subtitle}</p>}
             </div>
 
-            <div class="photo-hero__info" aria-label="拍摄信息">
-              <p class="photo-hero__eyebrow">拍摄信息</p>
+            <div class="photo-hero__info" aria-label="EXIF">
+              {exifEntries.length > 0 && <p class="photo-hero__eyebrow">EXIF</p>}
               <div class="photo-hero__specs">
-                {camera?.model && <p><span>相机</span>{camera.model}</p>}
-                {camera?.lens && <p><span>镜头</span>{camera.lens}</p>}
-                {camera?.settings && <p><span>参数</span>{camera.settings}</p>}
-                {!camera?.model && !camera?.lens && !camera?.settings && <p><span>信息</span>暂无拍摄参数</p>}
+                {exifEntries.length > 0 ? (
+                  exifEntries.map((entry) => <p>{entry}</p>)
+                ) : (
+                  <p>暂无 EXIF 信息</p>
+                )}
               </div>
 
-              {tags.length > 0 && (
+              {visibleTags.length > 0 && (
                 <div class="photo-hero__tags">
-                  {tags.map((tag) => (
+                  {visibleTags.map((tag) => (
                     <span>{tag}</span>
                   ))}
                 </div>
@@ -215,7 +222,7 @@ const navigation = [
                 {previousPhoto.image && <img src={previousPhoto.image} alt={previousPhoto.title || '较新作品预览'} class="photo-post-nav__thumb" loading="lazy" decoding="async" />}
                 <span class="photo-post-nav__meta">← 较新作品</span>
                 <span class="photo-post-nav__title">{previousPhoto.title || previousPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
-                <span class="photo-post-nav__date">{previousPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
+                {previousPhoto.title && <span class="photo-post-nav__date">{previousPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>}
               </a>
             ) : (
               <span class="photo-post-nav__link is-empty"></span>
@@ -226,7 +233,7 @@ const navigation = [
                 {nextPhoto.image && <img src={nextPhoto.image} alt={nextPhoto.title || '较早作品预览'} class="photo-post-nav__thumb" loading="lazy" decoding="async" />}
                 <span class="photo-post-nav__meta">较早作品 →</span>
                 <span class="photo-post-nav__title">{nextPhoto.title || nextPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
-                <span class="photo-post-nav__date">{nextPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
+                {nextPhoto.title && <span class="photo-post-nav__date">{nextPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>}
               </a>
             ) : (
               <span class="photo-post-nav__link is-empty"></span>
