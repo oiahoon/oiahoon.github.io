@@ -23,6 +23,7 @@ const { title, subtitle, date, tags, header_img, description, lang, gallery, cam
 const cover = header_img || gallery?.[0]?.src;
 const heroPhoto = gallery?.[0];
 const galleryPhotos = heroPhoto ? gallery.slice(1) : gallery ?? [];
+const allPhotos = heroPhoto ? [heroPhoto, ...galleryPhotos] : galleryPhotos;
 const totalPhotos = heroPhoto ? galleryPhotos.length + 1 : galleryPhotos.length;
 const currentPath = Astro.url.pathname;
 const year = new Date().getFullYear();
@@ -124,6 +125,25 @@ const navigation = [
             </div>
           </div>
         </section>
+      )}
+
+      {totalPhotos > 1 && (
+        <nav class="photo-rail" aria-label="作品内照片导航">
+          <div class="photo-rail__inner">
+            {allPhotos.map((photo, index) => (
+              <a href={`#photo-${index + 1}`} class="photo-rail__item">
+                <img
+                  src={photo.src}
+                  alt={photo.alt || `照片 ${index + 1}`}
+                  class="photo-rail__thumb"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="photo-rail__label">{String(index + 1).padStart(2, '0')}</span>
+              </a>
+            ))}
+          </div>
+        </nav>
       )}
 
       {galleryPhotos.length > 0 && (
@@ -476,6 +496,49 @@ const navigation = [
     padding: 2.5rem 0 5rem;
   }
 
+  .photo-rail {
+    position: relative;
+    z-index: 3;
+    width: min(100%, 100rem);
+    margin: 0 auto;
+    padding: 1.25rem clamp(1rem, 3vw, 2rem) 0;
+  }
+
+  .photo-rail__inner {
+    display: flex;
+    gap: 0.8rem;
+    overflow-x: auto;
+    padding-bottom: 0.4rem;
+    scrollbar-width: none;
+  }
+
+  .photo-rail__inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .photo-rail__item {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 4.6rem;
+    color: rgba(226, 232, 240, 0.68);
+  }
+
+  .photo-rail__thumb {
+    width: 4.6rem;
+    height: 5.8rem;
+    border-radius: 0.8rem;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .photo-rail__label {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
   .photo-gallery__stack {
     display: grid;
     gap: 3rem;
@@ -666,6 +729,26 @@ const navigation = [
     .photo-post-nav__inner {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 2rem;
+    }
+
+    .photo-rail {
+      position: sticky;
+      top: 5.6rem;
+      margin-top: -8rem;
+      pointer-events: none;
+    }
+
+    .photo-rail__inner {
+      width: fit-content;
+      margin-left: auto;
+      display: grid;
+      gap: 0.7rem;
+      overflow: visible;
+      pointer-events: auto;
+    }
+
+    .photo-rail__item {
+      min-width: 0;
     }
   }
 
