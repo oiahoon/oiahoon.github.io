@@ -59,6 +59,7 @@ const groupedArchive = years.map((year) => ({
                 />
               </a>
               <div class="photo-feature__content">
+                <p class="photo-feature__eyebrow">最新作品</p>
                 <p class="photo-feature__meta">
                   {featured.data.date.toLocaleDateString('zh-CN')}
                   {featured.data.location ? ` · ${featured.data.location}` : ''}
@@ -69,11 +70,15 @@ const groupedArchive = years.map((year) => ({
                   </h2>
                 )}
                 {featured.data.subtitle && <p class="photo-feature__desc">{featured.data.subtitle}</p>}
+                {(featured.data.camera?.model || (featured.data.gallery && featured.data.gallery.length > 1)) && (
+                  <p class="photo-feature__specs">
+                    {featured.data.camera?.model}
+                    {featured.data.camera?.model && featured.data.gallery && featured.data.gallery.length > 1 ? ' · ' : ''}
+                    {featured.data.gallery && featured.data.gallery.length > 1 ? `${featured.data.gallery.length} 张照片` : ''}
+                  </p>
+                )}
                 <div class="photo-feature__actions">
                     <a href={`/posts/${featured.slug}/`} class="photo-feature__link" data-astro-prefetch>进入作品</a>
-                  {featured.data.gallery && featured.data.gallery.length > 1 && (
-                    <span class="photo-feature__count">{featured.data.gallery.length} 张照片</span>
-                  )}
                 </div>
               </div>
             </article>
@@ -239,9 +244,17 @@ const groupedArchive = years.map((year) => ({
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
   }
 
+  .photo-feature__eyebrow {
+    margin: 0;
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(195, 203, 214, 0.56);
+  }
+
   .photo-feature__meta,
   .photo-card__meta {
-    margin: 0;
+    margin: 0.55rem 0 0;
     font-size: 0.8rem;
     letter-spacing: 0.04em;
     color: rgba(195, 203, 214, 0.62);
@@ -256,9 +269,15 @@ const groupedArchive = years.map((year) => ({
 
   .photo-feature__desc {
     max-width: 34rem;
-    margin: 1rem 0 0;
+    margin: 0.9rem 0 0;
     color: rgba(195, 203, 214, 0.74);
     line-height: 1.85;
+  }
+
+  .photo-feature__specs {
+    margin: 0.9rem 0 0;
+    font-size: 0.82rem;
+    color: rgba(195, 203, 214, 0.62);
   }
 
   .photo-feature__actions {
@@ -266,7 +285,7 @@ const groupedArchive = years.map((year) => ({
     align-items: center;
     gap: 0.9rem;
     flex-wrap: wrap;
-    margin-top: 1.25rem;
+    margin-top: 1rem;
   }
 
   .photo-feature__link,
@@ -282,7 +301,6 @@ const groupedArchive = years.map((year) => ({
     color: rgba(248, 250, 252, 0.92);
   }
 
-  .photo-feature__count,
   .photo-card__footer span,
   .photo-archive__desc {
     font-size: 0.8rem;
@@ -413,7 +431,7 @@ const groupedArchive = years.map((year) => ({
 
   .photo-card__body {
     border-top: 1px solid rgba(255, 255, 255, 0.06);
-    padding-top: 0.85rem;
+    padding-top: 0.7rem;
     transition: transform 0.25s ease;
   }
 
@@ -428,8 +446,17 @@ const groupedArchive = years.map((year) => ({
   .photo-card__footer {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.85rem;
-    margin-top: 0.7rem;
+    gap: 0.55rem;
+    margin-top: 0.38rem;
+    font-size: 0.76rem;
+    color: rgba(195, 203, 214, 0.58);
+    line-height: 1.55;
+  }
+
+  .photo-card__footer span + span::before {
+    content: '·';
+    margin-right: 0.55rem;
+    color: rgba(195, 203, 214, 0.38);
   }
 
   @media (min-width: 900px) {
@@ -438,7 +465,7 @@ const groupedArchive = years.map((year) => ({
     }
 
     .photo-feature {
-      grid-template-columns: minmax(0, 1.3fr) minmax(18rem, 0.75fr);
+      grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.55fr);
       gap: 2rem;
     }
 
