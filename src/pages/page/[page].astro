@@ -26,12 +26,12 @@ const endIndex = startIndex + POSTS_PER_PAGE;
 const currentPosts = posts.slice(startIndex, endIndex);
 ---
 
-<SpotlightLayout title={`文章 | 第${currentPage}页`} description="技术文章分页浏览" lang="zh">
+<SpotlightLayout title={`文章 | 第${currentPage}页`} description="随便聊聊的分页归档" lang="zh">
   <section class="section-gap">
     <div class="shell">
       <div class="hero-intro">
         <p class="eyebrow">Articles</p>
-        <h1 class="mt-4 text-4xl font-semibold">第 {currentPage} 页</h1>
+        <h1 class="mt-4 text-4xl font-semibold">随便聊聊 · 第 {currentPage} 页</h1>
       </div>
 
       <div class="entry-stream mt-10">

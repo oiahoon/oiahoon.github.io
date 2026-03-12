@@ -6,12 +6,12 @@ const posts = await getCollection('posts', ({ data }) => !data.draft && data.typ
 const sorted = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
 
-<SpotlightLayout title="文章 | Joey's Notes" description="技术文章与实践复盘" lang="zh">
+<SpotlightLayout title="文章 | Joey's Notes" description="随便聊聊技术、工程和一些零散想法" lang="zh">
   <section class="section-gap">
     <div class="shell">
       <div class="hero-intro">
         <p class="eyebrow">Articles</p>
-        <h1 class="mt-4 text-4xl font-semibold">技术文章</h1>
+        <h1 class="mt-4 text-4xl font-semibold">随便聊聊</h1>
       </div>
 
       <div class="entry-stream mt-10">
