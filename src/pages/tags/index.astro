@@ -43,14 +43,6 @@ function getWeight(count: number) {
         ))}
       </div>
 
-      <div class="tag-directory mt-14">
-        {sortedTags.map(([tag, count]) => (
-          <a href={`/tags/${tag}/`} class="soft-panel group flex items-center justify-between px-4 py-3 transition hover:border-[var(--accent)]">
-            <span class="text-sm font-medium">#{tag}</span>
-            <span class="text-xs muted">{count} 篇</span>
-          </a>
-        ))}
-      </div>
     </div>
   </section>
 </SpotlightLayout>
@@ -123,25 +115,5 @@ function getWeight(count: number) {
     color: var(--muted);
     font-size: 0.82rem;
     font-weight: 700;
-  }
-
-  .tag-directory {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 0.75rem;
-    width: min(72rem, 100%);
-    margin-inline: auto;
-  }
-
-  @media (min-width: 640px) {
-    .tag-directory {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .tag-directory {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
   }
 </style>
