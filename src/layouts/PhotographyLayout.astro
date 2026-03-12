@@ -1090,12 +1090,16 @@ const navigation = [
   const topbar = document.querySelector('.photo-topbar');
   let activePhoto = 1;
   let lightboxIndex = 0;
+  let touchStartX = 0;
+  let touchDeltaX = 0;
 
   function syncActiveRail(index) {
     activePhoto = index;
     photoRailLinks.forEach((link) => {
       link.classList.toggle('is-active', Number(link.getAttribute('data-photo-target')) === index);
     });
+    const activeRailLink = photoRailLinks.find((link) => Number(link.getAttribute('data-photo-target')) === index);
+    activeRailLink?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
 
   if (photoPanels.length && photoRailLinks.length) {
@@ -1179,6 +1183,21 @@ const navigation = [
   lightbox?.addEventListener('click', (event) => {
     if (event.target === lightbox) closeLightbox();
   });
+  lightbox?.addEventListener('touchstart', (event) => {
+    touchStartX = event.changedTouches[0]?.clientX || 0;
+    touchDeltaX = 0;
+  }, { passive: true });
+  lightbox?.addEventListener('touchmove', (event) => {
+    const currentX = event.changedTouches[0]?.clientX || 0;
+    touchDeltaX = currentX - touchStartX;
+  }, { passive: true });
+  lightbox?.addEventListener('touchend', () => {
+    if (Math.abs(touchDeltaX) < 48) return;
+    if (touchDeltaX > 0) stepLightbox(-1);
+    if (touchDeltaX < 0) stepLightbox(1);
+    touchStartX = 0;
+    touchDeltaX = 0;
+  }, { passive: true });
 
   document.addEventListener('keydown', (event) => {
     const isOpen = lightbox && !lightbox.hidden;
