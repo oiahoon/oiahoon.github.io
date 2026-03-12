@@ -452,6 +452,8 @@ const groupedArchive = years.map((year) => ({
       yearLinks.forEach((link) => {
         link.classList.toggle('is-active', link.getAttribute('data-year-link') === String(year));
       });
+      const activeLink = yearLinks.find((link) => link.getAttribute('data-year-link') === String(year));
+      activeLink?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     };
 
     const observer = new IntersectionObserver((entries) => {
