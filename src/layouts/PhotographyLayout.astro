@@ -756,6 +756,9 @@ const navigation = [
     max-height: 78vh;
     object-fit: contain;
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+    transition: transform 0.18s ease;
+    transform-origin: center center;
+    touch-action: none;
   }
 
   .photo-lightbox__meta {
@@ -1092,6 +1095,26 @@ const navigation = [
   let lightboxIndex = 0;
   let touchStartX = 0;
   let touchDeltaX = 0;
+  let lightboxScale = 1;
+  let panX = 0;
+  let panY = 0;
+  let panStartX = 0;
+  let panStartY = 0;
+  let isPanning = false;
+
+  function applyLightboxTransform() {
+    if (!lightboxImage) return;
+    lightboxImage.style.transform = `translate(${panX}px, ${panY}px) scale(${lightboxScale})`;
+    lightboxImage.style.cursor = lightboxScale > 1 ? (isPanning ? 'grabbing' : 'grab') : 'zoom-in';
+  }
+
+  function resetLightboxTransform() {
+    lightboxScale = 1;
+    panX = 0;
+    panY = 0;
+    isPanning = false;
+    applyLightboxTransform();
+  }
 
   function syncActiveRail(index) {
     activePhoto = index;
@@ -1124,6 +1147,7 @@ const navigation = [
     lightboxImage.alt = current.alt || '';
     lightboxCaption.textContent = current.caption || '';
     lightboxCounter.textContent = `照片 ${String(lightboxIndex + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}`;
+    resetLightboxTransform();
     if (lightboxThumbs) {
       lightboxThumbs.innerHTML = photos.map((photo, index) => `
         <button
@@ -1162,6 +1186,7 @@ const navigation = [
     lightbox.hidden = true;
     lightbox.setAttribute('aria-hidden', 'true');
     document.documentElement.style.overflow = '';
+    resetLightboxTransform();
   }
 
   function stepLightbox(direction) {
@@ -1180,6 +1205,36 @@ const navigation = [
   lightboxClose?.addEventListener('click', closeLightbox);
   lightboxPrev?.addEventListener('click', () => stepLightbox(-1));
   lightboxNext?.addEventListener('click', () => stepLightbox(1));
+  lightboxImage?.addEventListener('dblclick', () => {
+    if (lightboxScale > 1) {
+      resetLightboxTransform();
+      return;
+    }
+    lightboxScale = 2;
+    applyLightboxTransform();
+  });
+  lightboxImage?.addEventListener('pointerdown', (event) => {
+    if (lightboxScale <= 1) return;
+    isPanning = true;
+    panStartX = event.clientX - panX;
+    panStartY = event.clientY - panY;
+    lightboxImage.setPointerCapture?.(event.pointerId);
+    applyLightboxTransform();
+  });
+  lightboxImage?.addEventListener('pointermove', (event) => {
+    if (!isPanning || lightboxScale <= 1) return;
+    panX = event.clientX - panStartX;
+    panY = event.clientY - panStartY;
+    applyLightboxTransform();
+  });
+  lightboxImage?.addEventListener('pointerup', () => {
+    isPanning = false;
+    applyLightboxTransform();
+  });
+  lightboxImage?.addEventListener('pointercancel', () => {
+    isPanning = false;
+    applyLightboxTransform();
+  });
   lightbox?.addEventListener('click', (event) => {
     if (event.target === lightbox) closeLightbox();
   });
