@@ -776,6 +776,42 @@ const navigation = [
     padding: 1.25rem;
     background: rgba(2, 3, 6, 0.92);
     backdrop-filter: blur(14px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.24s ease, backdrop-filter 0.24s ease;
+  }
+
+  .photo-lightbox.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .photo-lightbox__stage,
+  .photo-lightbox__close,
+  .photo-lightbox__nav {
+    transition: transform 0.24s ease, opacity 0.24s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .photo-lightbox__stage {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  .photo-lightbox.is-open .photo-lightbox__stage {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .photo-lightbox__close,
+  .photo-lightbox__nav {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  .photo-lightbox.is-open .photo-lightbox__close,
+  .photo-lightbox.is-open .photo-lightbox__nav {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .photo-lightbox__stage {
@@ -1126,6 +1162,7 @@ const navigation = [
   const topbar = document.querySelector('.photo-topbar');
   const heroTopOverlay = document.querySelector('[data-photo-overlay-top]');
   const heroBottomOverlay = document.querySelector('[data-photo-overlay-bottom]');
+  let lightboxCloseTimer = 0;
   let activePhoto = 1;
   let lightboxIndex = 0;
   let touchStartX = 0;
@@ -1209,19 +1246,29 @@ const navigation = [
 
   function openLightbox(index) {
     if (!lightbox || !photos.length) return;
+    window.clearTimeout(lightboxCloseTimer);
     lightboxIndex = Math.min(Math.max(index, 0), photos.length - 1);
     renderLightbox();
     lightbox.hidden = false;
     lightbox.setAttribute('aria-hidden', 'false');
     document.documentElement.style.overflow = 'hidden';
+    requestAnimationFrame(() => {
+      lightbox.classList.add('is-open');
+    });
   }
 
   function closeLightbox() {
     if (!lightbox) return;
-    lightbox.hidden = true;
+    lightbox.classList.remove('is-open');
     lightbox.setAttribute('aria-hidden', 'true');
     document.documentElement.style.overflow = '';
     resetLightboxTransform();
+    window.clearTimeout(lightboxCloseTimer);
+    lightboxCloseTimer = window.setTimeout(() => {
+      if (!lightbox?.classList.contains('is-open')) {
+        lightbox.hidden = true;
+      }
+    }, 240);
   }
 
   function stepLightbox(direction) {
