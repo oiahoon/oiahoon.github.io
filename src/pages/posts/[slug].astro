@@ -18,6 +18,15 @@ const previousPhoto = currentPhotoIndex > 0 ? photographyPosts[currentPhotoIndex
 const nextPhoto = currentPhotoIndex >= 0 && currentPhotoIndex < photographyPosts.length - 1
   ? photographyPosts[currentPhotoIndex + 1]
   : null;
+const photoCollection = post.data.type === 'photography'
+  ? photographyPosts.map((item) => ({
+      slug: item.slug,
+      title: item.data.title,
+      date: item.data.date,
+      image: item.data.header_img || item.data.gallery?.[0]?.src,
+      active: item.slug === post.slug,
+    }))
+  : undefined;
 const { Content } = await post.render();
 ---
 
@@ -36,6 +45,7 @@ const { Content } = await post.render();
     date: nextPhoto.data.date,
     image: nextPhoto.data.header_img || nextPhoto.data.gallery?.[0]?.src,
   } : undefined}
+  photoCollection={photoCollection}
 >
   <Content />
 </PostLayout>

@@ -18,9 +18,10 @@ export interface Props {
   publishedDate?: string;
   previousPhoto?: { slug: string; title?: string; date: Date; image?: string };
   nextPhoto?: { slug: string; title?: string; date: Date; image?: string };
+  photoCollection?: Array<{ slug: string; title?: string; date: Date; image?: string; active?: boolean }>;
 }
 
-const { slug, title, subtitle, date, tags, header_img, description, lang, gallery, camera, location, publishedDate, previousPhoto, nextPhoto } = Astro.props;
+const { slug, title, subtitle, date, tags, header_img, description, lang, gallery, camera, location, publishedDate, previousPhoto, nextPhoto, photoCollection = [] } = Astro.props;
 const cover = header_img || gallery?.[0]?.src;
 const heroPhoto = gallery?.[0];
 const galleryPhotos = heroPhoto ? gallery.slice(1) : gallery ?? [];
@@ -227,32 +228,48 @@ const navigation = [
         </div>
       </section>
 
-      {(previousPhoto || nextPhoto) && (
-        <nav class="photo-post-nav" aria-label="摄影作品分页导航">
-          <div class="photo-post-nav__inner">
-            {previousPhoto ? (
-              <a href={`/posts/${previousPhoto.slug}/`} class="photo-post-nav__link" data-astro-prefetch>
-                {previousPhoto.image && <img src={previousPhoto.image} alt={previousPhoto.title || '较新作品预览'} class="photo-post-nav__thumb" loading="lazy" decoding="async" style={`view-transition-name: photo-cover-${previousPhoto.slug};`} />}
-                <span class="photo-post-nav__meta">← 较新作品</span>
-                <span class="photo-post-nav__title">{previousPhoto.title || previousPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
-                {previousPhoto.title && <span class="photo-post-nav__date">{previousPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>}
-              </a>
-            ) : (
-              <span class="photo-post-nav__link is-empty"></span>
-            )}
-
-            {nextPhoto ? (
-              <a href={`/posts/${nextPhoto.slug}/`} class="photo-post-nav__link photo-post-nav__link--align-end" data-astro-prefetch>
-                {nextPhoto.image && <img src={nextPhoto.image} alt={nextPhoto.title || '较早作品预览'} class="photo-post-nav__thumb" loading="lazy" decoding="async" style={`view-transition-name: photo-cover-${nextPhoto.slug};`} />}
-                <span class="photo-post-nav__meta">较早作品 →</span>
-                <span class="photo-post-nav__title">{nextPhoto.title || nextPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>
-                {nextPhoto.title && <span class="photo-post-nav__date">{nextPhoto.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</span>}
-              </a>
-            ) : (
-              <span class="photo-post-nav__link is-empty"></span>
+      {photoCollection.length > 1 && (
+        <section class="photo-work-strip" aria-label="更多摄影作品">
+          <div class="photo-work-strip__head">
+            <div>
+              <p class="photo-work-strip__eyebrow">More Works</p>
+              <h2 class="photo-work-strip__title">继续浏览作品</h2>
+            </div>
+            {(previousPhoto || nextPhoto) && (
+              <p class="photo-work-strip__hint">
+                {previousPhoto && <span>← 较新</span>}
+                {previousPhoto && nextPhoto && <span>·</span>}
+                {nextPhoto && <span>较早 →</span>}
+              </p>
             )}
           </div>
-        </nav>
+
+          <div class="photo-work-strip__rail" data-work-rail>
+            {photoCollection.map((work) => (
+              <a
+                href={`/posts/${work.slug}/`}
+                class={`photo-work-strip__item ${work.active ? 'is-active' : ''}`}
+                data-work-link
+                data-astro-prefetch
+              >
+                {work.image && (
+                  <img
+                    src={work.image}
+                    alt={work.title || '摄影作品预览'}
+                    class="photo-work-strip__thumb"
+                    loading="lazy"
+                    decoding="async"
+                    style={`view-transition-name: photo-cover-${work.slug};`}
+                  />
+                )}
+                <div class="photo-work-strip__copy">
+                  <p class="photo-work-strip__date">{work.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</p>
+                  {work.title && <p class="photo-work-strip__name">{work.title}</p>}
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
       )}
 
       <div class="photo-lightbox" data-photo-lightbox hidden aria-hidden="true">
@@ -777,66 +794,109 @@ const navigation = [
     color: rgba(236, 240, 244, 0.78);
   }
 
-  .photo-post-nav {
-    padding: 0 0 4rem;
-  }
-
-  .photo-post-nav__inner {
-    display: grid;
-    gap: 1rem;
-    width: min(100%, 96rem);
+  .photo-work-strip {
+    width: min(100%, 100rem);
     margin-inline: auto;
-    padding-inline: clamp(1rem, 3vw, 2rem);
+    padding: 1rem clamp(1rem, 3vw, 2rem) 4rem;
   }
 
-  .photo-post-nav__link {
-    display: grid;
+  .photo-work-strip__head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .photo-work-strip__eyebrow {
+    margin: 0;
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(226, 232, 240, 0.56);
+  }
+
+  .photo-work-strip__title {
+    margin: 0.45rem 0 0;
+    font-size: clamp(1.15rem, 2.1vw, 1.55rem);
+    color: rgba(248, 250, 252, 0.96);
+  }
+
+  .photo-work-strip__hint {
+    display: flex;
+    align-items: center;
     gap: 0.45rem;
-    padding: 1.15rem 1.2rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1.1rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.01));
-    color: rgba(245, 247, 250, 0.92);
-    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-  }
-
-  .photo-post-nav__link:hover {
-    transform: translateY(-1px);
-    border-color: rgba(255, 255, 255, 0.14);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
-  }
-
-  .photo-post-nav__thumb {
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    border-radius: 0.85rem;
-    object-fit: cover;
-    margin-bottom: 0.3rem;
-  }
-
-  .photo-post-nav__link--align-end {
-    text-align: right;
-  }
-
-  .photo-post-nav__link.is-empty {
-    visibility: hidden;
-  }
-
-  .photo-post-nav__meta {
-    font-size: 0.75rem;
+    margin: 0;
+    font-size: 0.76rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(195, 203, 214, 0.58);
+    color: rgba(226, 232, 240, 0.52);
   }
 
-  .photo-post-nav__title {
-    font-size: 1.06rem;
-    line-height: 1.5;
+  .photo-work-strip__rail {
+    display: flex;
+    gap: 0.95rem;
+    overflow-x: auto;
+    padding-bottom: 0.4rem;
+    scrollbar-width: none;
   }
 
-  .photo-post-nav__date {
-    font-size: 0.82rem;
-    color: rgba(195, 203, 214, 0.62);
+  .photo-work-strip__rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .photo-work-strip__item {
+    display: grid;
+    gap: 0.7rem;
+    min-width: min(18rem, 76vw);
+    width: 18rem;
+    flex: 0 0 auto;
+    color: rgba(248, 250, 252, 0.88);
+    transition: transform 0.22s ease, opacity 0.22s ease;
+  }
+
+  .photo-work-strip__item:hover {
+    transform: translateY(-2px);
+  }
+
+  .photo-work-strip__item.is-active {
+    opacity: 1;
+  }
+
+  .photo-work-strip__item:not(.is-active) {
+    opacity: 0.74;
+  }
+
+  .photo-work-strip__thumb {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 1rem;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    transition: border-color 0.2s ease, transform 0.22s ease, opacity 0.22s ease;
+  }
+
+  .photo-work-strip__item.is-active .photo-work-strip__thumb {
+    border-color: rgba(255, 255, 255, 0.24);
+    transform: scale(1.01);
+  }
+
+  .photo-work-strip__copy {
+    display: grid;
+    gap: 0.22rem;
+  }
+
+  .photo-work-strip__date {
+    margin: 0;
+    font-size: 0.78rem;
+    color: rgba(226, 232, 240, 0.6);
+  }
+
+  .photo-work-strip__name {
+    margin: 0;
+    font-size: 0.94rem;
+    color: rgba(248, 250, 252, 0.9);
   }
 
   .photo-lightbox[hidden] {
@@ -1067,9 +1127,9 @@ const navigation = [
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .photo-post-nav__inner {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 2rem;
+    .photo-work-strip__item {
+      min-width: 19rem;
+      width: 19rem;
     }
 
     .photo-rail {
@@ -1103,8 +1163,9 @@ const navigation = [
       gap: 1rem;
     }
 
-    .photo-post-nav__inner {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .photo-work-strip__item {
+      min-width: 17rem;
+      width: 17rem;
     }
 
     .photo-lightbox {
@@ -1227,6 +1288,7 @@ const navigation = [
 <script>
   const galleryRoot = document.querySelector('.photo-page');
   const photoRailLinks = Array.from(document.querySelectorAll('[data-photo-link]'));
+  const workLinks = Array.from(document.querySelectorAll('[data-work-link]'));
   const photoPanels = Array.from(document.querySelectorAll('[data-photo-panel]'));
   const lightbox = document.querySelector('[data-photo-lightbox]');
   const lightboxImage = lightbox?.querySelector('[data-lightbox-image]');
@@ -1291,6 +1353,9 @@ const navigation = [
     photoPanels.forEach((panel) => observer.observe(panel));
     syncActiveRail(1);
   }
+
+  const activeWorkLink = workLinks.find((link) => link.classList.contains('is-active'));
+  activeWorkLink?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 
   function renderLightbox() {
     if (!photos[lightboxIndex] || !lightbox || !lightboxImage || !lightboxCaption || !lightboxCounter) return;
