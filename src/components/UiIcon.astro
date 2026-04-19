@@ -1,4 +1,25 @@
 ---
+import {
+  faArrowLeft,
+  faArrowRight,
+  faBars,
+  faBookOpen,
+  faBoxArchive,
+  faCalendarDays,
+  faCameraRetro,
+  faCircleInfo,
+  faCompass,
+  faFileLines,
+  faImage,
+  faMoon,
+  faRss,
+  faSun,
+  faTag,
+  faUser,
+  faWandMagicSparkles,
+  type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+
 export interface Props {
   name:
     | 'article'
@@ -19,145 +40,45 @@ export interface Props {
     | 'menu'
     | 'exif';
   size?: number;
-  strokeWidth?: number;
   class?: string;
   decorative?: boolean;
 }
 
-const { name, size = 16, strokeWidth = 1.7, class: className = '', decorative = true } = Astro.props;
+const iconMap: Record<Props['name'], IconDefinition> = {
+  article: faFileLines,
+  camera: faCameraRetro,
+  tag: faTag,
+  about: faUser,
+  notebook: faBookOpen,
+  spark: faWandMagicSparkles,
+  sun: faSun,
+  moon: faMoon,
+  archive: faBoxArchive,
+  calendar: faCalendarDays,
+  image: faImage,
+  arrowLeft: faArrowLeft,
+  arrowRight: faArrowRight,
+  compass: faCompass,
+  rss: faRss,
+  menu: faBars,
+  exif: faCircleInfo,
+};
+
+const { name, size = 16, class: className = '', decorative = true } = Astro.props;
+const icon = iconMap[name];
+const [width, height, , , svgPathData] = icon.icon;
 const ariaHidden = decorative ? 'true' : undefined;
+const pathData = Array.isArray(svgPathData) ? svgPathData : [svgPathData];
 ---
 
 <svg
-  class={`ui-icon ${className}`}
+  class={`ui-icon ui-icon--fa ${className}`}
   width={size}
   height={size}
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  stroke-width={strokeWidth}
-  stroke-linecap="round"
-  stroke-linejoin="round"
+  viewBox={`0 0 ${width} ${height}`}
+  fill="currentColor"
   aria-hidden={ariaHidden}
   focusable="false"
 >
-  {name === 'article' && (
-    <>
-      <path d="M7 4.75h7.25L18 8.5v10.75H7z" />
-      <path d="M14 4.75v4h4" />
-      <path d="M9.75 12h4.5" />
-      <path d="M9.75 15h3.25" />
-    </>
-  )}
-  {name === 'camera' && (
-    <>
-      <path d="M4.75 8.25h3l1.2-1.9h6.1l1.2 1.9h3v9.25H4.75z" />
-      <circle cx="12" cy="13" r="3.15" />
-      <path d="M17.35 10.1h.02" />
-    </>
-  )}
-  {name === 'tag' && (
-    <>
-      <path d="M5 5.75v5.7l7.2 7.2 6.45-6.45-7.2-7.2z" />
-      <circle cx="8.55" cy="8.55" r=".65" />
-    </>
-  )}
-  {name === 'about' && (
-    <>
-      <circle cx="12" cy="8" r="3" />
-      <path d="M5.75 19.25c.85-3.1 3.05-5 6.25-5s5.4 1.9 6.25 5" />
-    </>
-  )}
-  {name === 'notebook' && (
-    <>
-      <path d="M7.25 4.75h9.5v14.5h-9.5z" />
-      <path d="M9.5 4.75v14.5" />
-      <path d="M6 8h2.2" />
-      <path d="M6 12h2.2" />
-      <path d="M6 16h2.2" />
-    </>
-  )}
-  {name === 'spark' && (
-    <>
-      <path d="M12 4.75l1.35 4.05 3.9 1.2-3.9 1.2L12 15.25l-1.35-4.05-3.9-1.2 3.9-1.2z" />
-      <path d="M17.4 15.8l.55 1.65 1.55.5-1.55.5-.55 1.65-.55-1.65-1.55-.5 1.55-.5z" />
-    </>
-  )}
-  {name === 'sun' && (
-    <>
-      <circle cx="12" cy="12" r="3.4" />
-      <path d="M12 4.75v1.7" />
-      <path d="M12 17.55v1.7" />
-      <path d="M4.75 12h1.7" />
-      <path d="M17.55 12h1.7" />
-      <path d="M6.9 6.9l1.2 1.2" />
-      <path d="M15.9 15.9l1.2 1.2" />
-      <path d="M17.1 6.9l-1.2 1.2" />
-      <path d="M8.1 15.9l-1.2 1.2" />
-    </>
-  )}
-  {name === 'moon' && <path d="M17.85 14.65A6.1 6.1 0 0 1 9.35 6.15 6.8 6.8 0 1 0 17.85 14.65z" />}
-  {name === 'archive' && (
-    <>
-      <path d="M5.25 7.25h13.5v12H5.25z" />
-      <path d="M4.5 4.75h15v2.5h-15z" />
-      <path d="M9.25 11h5.5" />
-    </>
-  )}
-  {name === 'calendar' && (
-    <>
-      <path d="M5.25 6.75h13.5v12H5.25z" />
-      <path d="M8.25 4.75v3" />
-      <path d="M15.75 4.75v3" />
-      <path d="M5.25 10h13.5" />
-    </>
-  )}
-  {name === 'image' && (
-    <>
-      <path d="M4.75 6.25h14.5v11.5H4.75z" />
-      <circle cx="9" cy="10" r="1.25" />
-      <path d="M5.5 16.5l4.1-4.1 2.75 2.75 1.8-1.8 4.35 4.35" />
-    </>
-  )}
-  {name === 'arrowLeft' && (
-    <>
-      <path d="M19 12H5" />
-      <path d="M11 6l-6 6 6 6" />
-    </>
-  )}
-  {name === 'arrowRight' && (
-    <>
-      <path d="M5 12h14" />
-      <path d="M13 6l6 6-6 6" />
-    </>
-  )}
-  {name === 'compass' && (
-    <>
-      <circle cx="12" cy="12" r="7.25" />
-      <path d="M14.6 9.4l-1.45 3.75-3.75 1.45 1.45-3.75z" />
-    </>
-  )}
-  {name === 'rss' && (
-    <>
-      <path d="M6 7.25c5.9 0 10.75 4.85 10.75 10.75" />
-      <path d="M6 11.5A6.5 6.5 0 0 1 12.5 18" />
-      <circle cx="7.1" cy="16.9" r="1.1" />
-    </>
-  )}
-  {name === 'menu' && (
-    <>
-      <path d="M6.5 8h11" />
-      <path d="M6.5 12h11" />
-      <path d="M6.5 16h11" />
-    </>
-  )}
-  {name === 'exif' && (
-    <>
-      <circle cx="12" cy="12" r="7.25" />
-      <path d="M12 8.25v3.9" />
-      <path d="M12 15.75h.01" />
-      <path d="M16.4 9.2l-1.5 1" />
-      <path d="M7.6 9.2l1.5 1" />
-    </>
-  )}
+  {pathData.map((path) => <path d={path} />)}
 </svg>
