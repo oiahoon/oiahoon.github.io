@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
 import { getPreviewImage } from '../utils/extractFirstImage';
 import ProgressiveImage from '../components/ProgressiveImage.astro';
+import UiIcon from '../components/UiIcon.astro';
 
 const photos = await getCollection('posts', ({ data }) => !data.draft && data.type === 'photography');
 const sorted = photos.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
@@ -23,21 +24,21 @@ const groupedArchive = years.map((year) => ({
     <div class="photo-index-shell shell">
         <div class="photo-index-hero">
           <div>
-            <p class="eyebrow">Photography</p>
+            <p class="eyebrow section-kicker photo-kicker"><UiIcon name="camera" size={14} /> <span>Photography</span></p>
             <h1 class="mt-4 text-4xl font-semibold photo-index-shell__title">摄影作品</h1>
           </div>
 
           <div class="photo-index-hero__stats">
             <div>
-              <span>作品</span>
+              <span><UiIcon name="archive" size={13} />作品</span>
               <strong>{sorted.length}</strong>
             </div>
             <div>
-              <span>照片</span>
+              <span><UiIcon name="image" size={13} />照片</span>
               <strong>{totalImages}</strong>
             </div>
             <div>
-              <span>时间</span>
+              <span><UiIcon name="calendar" size={13} />时间</span>
               <strong>{latestYear === earliestYear ? latestYear : `${earliestYear} - ${latestYear}`}</strong>
             </div>
           </div>
@@ -60,7 +61,7 @@ const groupedArchive = years.map((year) => ({
               </a>
               <div class="photo-feature__content">
                 <div class="photo-feature__lead">
-                  <p class="photo-feature__eyebrow">最新作品</p>
+                  <p class="photo-feature__eyebrow"><UiIcon name="spark" size={13} /> <span>最新作品</span></p>
                   <p class="photo-feature__meta">
                     {featured.data.date.toLocaleDateString('zh-CN')}
                     {featured.data.location ? ` · ${featured.data.location}` : ''}
@@ -80,7 +81,7 @@ const groupedArchive = years.map((year) => ({
                   </p>
                 )}
                 <div class="photo-feature__actions">
-                  <a href={`/posts/${featured.slug}/`} class="photo-feature__link" data-astro-prefetch>进入作品</a>
+                  <a href={`/posts/${featured.slug}/`} class="photo-feature__link" data-astro-prefetch><span>进入作品</span><UiIcon name="arrowRight" size={14} /></a>
                 </div>
               </div>
             </article>
@@ -90,10 +91,10 @@ const groupedArchive = years.map((year) => ({
         <div class="photo-archive mt-16">
           <div class="photo-archive__head">
             <div>
-              <p class="eyebrow">Archive</p>
+              <p class="eyebrow section-kicker photo-kicker"><UiIcon name="archive" size={14} /> <span>Archive</span></p>
               <p class="photo-archive__desc">按拍摄时间浏览全部作品。</p>
             </div>
-            <a href="/tags/%E6%91%84%E5%BD%B1/" class="photo-archive__link">浏览摄影标签</a>
+            <a href="/tags/%E6%91%84%E5%BD%B1/" class="photo-archive__link"><span>浏览摄影标签</span><UiIcon name="tag" size={14} /></a>
           </div>
 
           <nav class="photo-year-jump mt-6" aria-label="年份快速跳转">
@@ -130,7 +131,7 @@ const groupedArchive = years.map((year) => ({
                           <h2 class="photo-card__title"><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h2>
                         )}
                         <div class="photo-card__footer">
-                          <span>{photo.data.date.toLocaleDateString('zh-CN')}</span>
+                          <span><UiIcon name="calendar" size={12} />{photo.data.date.toLocaleDateString('zh-CN')}</span>
                           {photo.data.location && <span>{photo.data.location}</span>}
                           {photo.data.gallery && photo.data.gallery.length > 1 && <span>{photo.data.gallery.length} 张</span>}
                           {photo.data.camera?.model && <span>{photo.data.camera.model}</span>}
@@ -191,7 +192,9 @@ const groupedArchive = years.map((year) => ({
   }
 
   .photo-index-hero__stats span {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
     font-size: 0.78rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -252,6 +255,9 @@ const groupedArchive = years.map((year) => ({
 
   .photo-feature__eyebrow {
     margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
     font-size: 0.68rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -307,10 +313,21 @@ const groupedArchive = years.map((year) => ({
     font-size: 0.84rem;
   }
 
+  .photo-feature__link,
+  .photo-archive__link {
+    gap: 0.42rem;
+  }
+
   .photo-card__footer span,
   .photo-archive__desc {
     font-size: 0.8rem;
     color: rgba(195, 203, 214, 0.58);
+  }
+
+  .photo-card__footer span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.26rem;
   }
 
   .photo-archive__head {

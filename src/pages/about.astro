@@ -1,5 +1,6 @@
 ---
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
+import UiIcon from '../components/UiIcon.astro';
 ---
 
 <SpotlightLayout title="关于我 | Joey's Notes" description="黄药师的个人介绍 - 软件工程师、摄影爱好者、猫奴">
@@ -7,7 +8,7 @@ import SpotlightLayout from '../layouts/SpotlightLayout.astro';
     <div class="shell">
       <div class="mx-auto grid max-w-5xl gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
         <div>
-          <p class="eyebrow">About</p>
+          <p class="eyebrow section-kicker"><UiIcon name="about" size={14} /> <span>About</span></p>
           <h1 class="mt-4 text-4xl font-semibold leading-tight sm:text-5xl" style="view-transition-name: site-identity-title;">我是黄药师，软件工程师与摄影爱好者</h1>
 
           <div class="mt-8 space-y-6 text-lg leading-8 muted">
@@ -16,11 +17,11 @@ import SpotlightLayout from '../layouts/SpotlightLayout.astro';
             <p>这个博客记录技术实践与生活观察。如果内容对你有帮助，欢迎通过下方渠道联系我。</p>
           </div>
 
-          <div class="mt-10 grid gap-3 text-sm sm:grid-cols-2">
-            <a href="https://github.com/oiahoon" target="_blank" rel="noopener noreferrer" class="soft-panel px-4 py-3 hover:border-[var(--accent)]">GitHub</a>
-            <a href="https://weibo.com/desiver" target="_blank" rel="noopener noreferrer" class="soft-panel px-4 py-3 hover:border-[var(--accent)]">微博</a>
-            <a href="/rss.xml" class="soft-panel px-4 py-3 hover:border-[var(--accent)]">RSS 订阅</a>
-            <a href="mailto:4296411@qq.com" class="soft-panel px-4 py-3 hover:border-[var(--accent)]">4296411@qq.com</a>
+          <div class="about-links mt-10 grid gap-3 text-sm sm:grid-cols-2">
+            <a href="https://github.com/oiahoon" target="_blank" rel="noopener noreferrer" class="soft-panel px-4 py-3 hover:border-[var(--accent)]"><UiIcon name="compass" size={14} /> <span>GitHub</span></a>
+            <a href="https://weibo.com/desiver" target="_blank" rel="noopener noreferrer" class="soft-panel px-4 py-3 hover:border-[var(--accent)]"><UiIcon name="spark" size={14} /> <span>微博</span></a>
+            <a href="/rss.xml" class="soft-panel px-4 py-3 hover:border-[var(--accent)]"><UiIcon name="rss" size={14} /> <span>RSS 订阅</span></a>
+            <a href="mailto:4296411@qq.com" class="soft-panel px-4 py-3 hover:border-[var(--accent)]"><UiIcon name="article" size={14} /> <span>4296411@qq.com</span></a>
           </div>
         </div>
 
@@ -31,3 +32,16 @@ import SpotlightLayout from '../layouts/SpotlightLayout.astro';
     </div>
   </section>
 </SpotlightLayout>
+
+<style>
+  .about-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.48rem;
+  }
+
+  .about-links :global(.ui-icon) {
+    color: color-mix(in srgb, var(--accent) 64%, var(--muted));
+    opacity: 0.72;
+  }
+</style>

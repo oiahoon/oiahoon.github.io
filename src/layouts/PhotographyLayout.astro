@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import ProgressiveImage from '../components/ProgressiveImage.astro';
+import UiIcon from '../components/UiIcon.astro';
 
 export interface Props {
   slug?: string;
@@ -41,11 +42,11 @@ const activeWorkIndex = Math.max(photoCollection.findIndex((work) => work.active
 const totalWorks = photoCollection.length;
 
 const navigation = [
-  { name: '文章', href: '/articles/' },
-  { name: '摄影', href: '/photography/' },
-  { name: '标签', href: '/tags/' },
-  { name: '关于', href: '/about/' },
-];
+  { name: '文章', href: '/articles/', icon: 'article' },
+  { name: '摄影', href: '/photography/', icon: 'camera' },
+  { name: '标签', href: '/tags/', icon: 'tag' },
+  { name: '关于', href: '/about/', icon: 'about' },
+] as const;
 ---
 
 <BaseLayout title={`${fallbackTitle} | Joey's Notes`} description={description || subtitle || fallbackTitle} image={cover} lang={lang} themeMode="locked-dark">
@@ -62,14 +63,15 @@ const navigation = [
     <section class="photo-stage">
       <header class="photo-topbar">
         <div class="photo-topbar__inner">
-          <a href="/" class="photo-topbar__brand" data-astro-prefetch style="view-transition-name: site-brand;">Joey's Notes</a>
+          <a href="/" class="photo-topbar__brand" data-astro-prefetch style="view-transition-name: site-brand;"><UiIcon name="notebook" size={17} /> <span>Joey's Notes</span></a>
 
           <nav class="photo-topbar__nav" aria-label="主导航">
             {navigation.map((item) => {
               const active = currentPath === item.href || (item.href === '/photography/' && currentPath.startsWith('/posts/'));
               return (
                 <a href={item.href} class={`photo-topbar__link ${active ? 'is-active' : ''}`} data-astro-prefetch>
-                  {item.name}
+                  <UiIcon name={item.icon} size={14} />
+                  <span>{item.name}</span>
                 </a>
               );
             })}
@@ -78,16 +80,13 @@ const navigation = [
           <div class="photo-topbar__actions">
             <details class="photo-topbar__menu-shell">
               <summary class="photo-topbar__menu-toggle" aria-label="导航">
-                <span class="photo-topbar__burger" aria-hidden="true">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </span>
+                <UiIcon name="menu" size={16} />
               </summary>
               <nav class="photo-topbar__menu" aria-label="移动导航">
                 {navigation.map((item) => (
                   <a href={item.href} class={`photo-topbar__menu-link ${currentPath === item.href || (item.href === '/photography/' && currentPath.startsWith('/posts/')) ? 'is-active' : ''}`} data-astro-prefetch>
-                    {item.name}
+                    <UiIcon name={item.icon} size={14} />
+                  <span>{item.name}</span>
                   </a>
                 ))}
               </nav>
@@ -119,7 +118,7 @@ const navigation = [
 
           <div class="photo-hero__overlay photo-hero__overlay--top" data-photo-overlay-top>
             <div class="photo-hero__topbar">
-              <a href="/photography/" class="photo-hero__back" data-astro-prefetch>← 返回摄影列表</a>
+              <a href="/photography/" class="photo-hero__back" data-astro-prefetch><UiIcon name="arrowLeft" size={15} /> <span>返回摄影列表</span></a>
               <div class="photo-hero__controls">
                 {totalPhotos > 1 && (
                   <span class="photo-hero__index">01 / {String(totalPhotos).padStart(2, '0')}</span>
@@ -146,7 +145,7 @@ const navigation = [
             </div>
 
             <div class="photo-hero__info" aria-label="EXIF">
-              {exifEntries.length > 0 && <p class="photo-hero__eyebrow">EXIF</p>}
+              {exifEntries.length > 0 && <p class="photo-hero__eyebrow"><UiIcon name="exif" size={14} /> <span>EXIF</span></p>}
               <div class="photo-hero__specs">
                 {exifEntries.length > 0 ? (
                   exifEntries.map((entry) => <p>{entry}</p>)
@@ -235,7 +234,7 @@ const navigation = [
         <section class="photo-work-strip" aria-label="更多摄影作品">
           <div class="photo-work-strip__head">
             <div>
-              <p class="photo-work-strip__eyebrow">More Works</p>
+              <p class="photo-work-strip__eyebrow"><UiIcon name="image" size={14} /> <span>More Works</span></p>
               <h2 class="photo-work-strip__title">继续浏览作品</h2>
             </div>
             {(previousPhoto || nextPhoto) && (
@@ -368,6 +367,9 @@ const navigation = [
   }
 
   .photo-topbar__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.48rem;
     font-size: 1.05rem;
     font-weight: 600;
     color: rgba(248, 250, 252, 0.96);
@@ -387,6 +389,9 @@ const navigation = [
 
   .photo-topbar__link {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
     color: rgba(226, 232, 240, 0.7);
     font-size: 0.94rem;
     transition: color 0.2s ease;
@@ -439,18 +444,6 @@ const navigation = [
     display: none;
   }
 
-  .photo-topbar__burger {
-    display: inline-grid;
-    gap: 0.22rem;
-  }
-
-  .photo-topbar__burger span {
-    display: block;
-    width: 0.95rem;
-    height: 1.5px;
-    border-radius: 9999px;
-    background: currentColor;
-  }
 
   .photo-topbar__menu {
     position: absolute;
@@ -466,7 +459,9 @@ const navigation = [
   }
 
   .photo-topbar__menu-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.48rem;
     padding: 0.65rem 0.85rem;
     border-radius: 0.8rem;
     color: rgba(226, 232, 240, 0.78);
@@ -569,6 +564,7 @@ const navigation = [
   .photo-hero__back {
     display: inline-flex;
     align-items: center;
+    gap: 0.42rem;
     color: rgba(245, 247, 250, 0.92);
     font-size: 0.94rem;
     letter-spacing: 0.01em;
@@ -645,6 +641,9 @@ const navigation = [
 
   .photo-hero__eyebrow {
     margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
     font-size: 0.78rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -816,6 +815,9 @@ const navigation = [
 
   .photo-work-strip__eyebrow {
     margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
     font-size: 0.74rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;

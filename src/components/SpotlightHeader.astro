@@ -1,26 +1,32 @@
 ---
+import UiIcon from './UiIcon.astro';
+
 const currentPath = Astro.url.pathname;
 const isPhotoArchive = currentPath === '/photography/';
 
 const navigation = [
-  { name: '文章', href: '/articles/' },
-  { name: '摄影', href: '/photography/' },
-  { name: '标签', href: '/tags/' },
-  { name: '关于', href: '/about/' },
-];
+  { name: '文章', href: '/articles/', icon: 'article' },
+  { name: '摄影', href: '/photography/', icon: 'camera' },
+  { name: '标签', href: '/tags/', icon: 'tag' },
+  { name: '关于', href: '/about/', icon: 'about' },
+] as const;
 ---
 
 <header class={`pt-8 sm:pt-10 ${isPhotoArchive ? 'spotlight-header--inverse' : ''}`}>
   <div class="shell">
     <div class="flex items-center justify-between gap-4 border-b pb-5 spotlight-header__bar" style="border-color: var(--line);">
-      <a href="/" class="text-lg font-semibold tracking-tight spotlight-header__brand text-[var(--text)]" data-astro-prefetch style="view-transition-name: site-brand;">Joey's Notes</a>
+      <a href="/" class="spotlight-header__brand text-lg font-semibold tracking-tight text-[var(--text)]" data-astro-prefetch style="view-transition-name: site-brand;">
+        <UiIcon name="notebook" size={17} class="spotlight-header__brand-icon" />
+        <span>Joey's Notes</span>
+      </a>
 
-      <nav class="hidden items-center gap-7 text-sm md:flex">
+      <nav class="hidden items-center gap-6 text-sm md:flex">
         {navigation.map((item) => {
           const active = currentPath === item.href;
           return (
             <a href={item.href} class={`relative transition spotlight-header__link ${active ? 'font-semibold text-[var(--text)]' : 'muted hover:text-[var(--text)]'}`} data-astro-prefetch>
-              {item.name}
+              <UiIcon name={item.icon} size={14} class="spotlight-header__nav-icon" />
+              <span>{item.name}</span>
               {active && <span class="absolute -bottom-1 left-0 right-0 h-px bg-[var(--accent)]" />}
             </a>
           );
@@ -32,25 +38,26 @@ const navigation = [
           <button
             type="button"
             data-theme-toggle
-            class="rounded-full border px-3 py-1.5 text-xs font-medium transition spotlight-header__button hover:bg-black/5 dark:hover:bg-white/10"
+            class="spotlight-header__button spotlight-header__theme-toggle rounded-full border px-3 py-1.5 text-xs font-medium transition hover:bg-black/5 dark:hover:bg-white/10"
             style="border-color: var(--line); color: var(--text);"
             aria-label="切换主题"
           >
+            <UiIcon name="moon" size={14} class="spotlight-header__theme-icon spotlight-header__theme-icon--dark" />
+            <UiIcon name="sun" size={14} class="spotlight-header__theme-icon spotlight-header__theme-icon--light" />
             <span data-theme-toggle-label>深色</span>
           </button>
         )}
 
         <details class="relative md:hidden">
-          <summary class="cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium spotlight-header__button spotlight-header__menu-toggle" style="border-color: var(--line); color: var(--text);" aria-label="导航">
-            <span class="spotlight-header__burger" aria-hidden="true">
-              <span></span>
-              <span></span>
-              <span></span>
-            </span>
+          <summary class="spotlight-header__button spotlight-header__menu-toggle cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium" style="border-color: var(--line); color: var(--text);" aria-label="导航">
+            <UiIcon name="menu" size={16} />
           </summary>
-          <nav class="absolute right-5 mt-2 min-w-36 rounded-xl border bg-[var(--surface)] p-2 text-sm shadow-sm spotlight-header__menu" style="border-color: var(--line);">
+          <nav class="spotlight-header__menu absolute right-5 mt-2 min-w-40 rounded-xl border bg-[var(--surface)] p-2 text-sm shadow-sm" style="border-color: var(--line);">
             {navigation.map((item) => (
-              <a href={item.href} class="block rounded-lg px-3 py-2 muted hover:bg-black/5 hover:text-[var(--text)] dark:hover:bg-white/5 spotlight-header__menu-link" data-astro-prefetch>{item.name}</a>
+              <a href={item.href} class="spotlight-header__menu-link muted flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-black/5 hover:text-[var(--text)] dark:hover:bg-white/5" data-astro-prefetch>
+                <UiIcon name={item.icon} size={14} />
+                <span>{item.name}</span>
+              </a>
             ))}
           </nav>
         </details>
@@ -66,6 +73,51 @@ const navigation = [
       linear-gradient(180deg, #05070b 0%, #070a10 100%);
   }
 
+  .spotlight-header__brand,
+  .spotlight-header__link,
+  .spotlight-header__theme-toggle {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .spotlight-header__brand {
+    gap: 0.48rem;
+  }
+
+  .spotlight-header__brand-icon {
+    color: color-mix(in srgb, var(--accent) 72%, var(--muted));
+    opacity: 0.82;
+  }
+
+  .spotlight-header__link {
+    gap: 0.38rem;
+  }
+
+  .spotlight-header__nav-icon {
+    opacity: 0.58;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .spotlight-header__link:hover .spotlight-header__nav-icon,
+  .spotlight-header__link.font-semibold .spotlight-header__nav-icon {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .spotlight-header__theme-toggle {
+    gap: 0.38rem;
+  }
+
+  .spotlight-header__theme-icon {
+    color: color-mix(in srgb, var(--accent) 70%, var(--muted));
+    opacity: 0.78;
+  }
+
+  :global(.dark) .spotlight-header__theme-icon--dark,
+  :global(html:not(.dark)) .spotlight-header__theme-icon--light {
+    display: none;
+  }
+
   .spotlight-header--inverse .spotlight-header__bar {
     border-color: rgba(255, 255, 255, 0.08) !important;
   }
@@ -74,6 +126,11 @@ const navigation = [
   .spotlight-header--inverse .spotlight-header__link,
   .spotlight-header--inverse .spotlight-header__button {
     color: rgba(248, 250, 252, 0.94) !important;
+  }
+
+  .spotlight-header--inverse .spotlight-header__brand-icon,
+  .spotlight-header--inverse .spotlight-header__theme-icon {
+    color: rgba(245, 158, 11, 0.78);
   }
 
   .spotlight-header--inverse .muted {
@@ -101,16 +158,7 @@ const navigation = [
     min-height: 2.5rem;
   }
 
-  .spotlight-header__burger {
-    display: inline-grid;
-    gap: 0.22rem;
-  }
-
-  .spotlight-header__burger span {
-    display: block;
-    width: 0.95rem;
-    height: 1.5px;
-    border-radius: 9999px;
-    background: currentColor;
+  .spotlight-header__menu-toggle::-webkit-details-marker {
+    display: none;
   }
 </style>

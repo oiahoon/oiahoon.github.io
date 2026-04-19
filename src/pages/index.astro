@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
 import ProgressiveImage from '../components/ProgressiveImage.astro';
+import UiIcon from '../components/UiIcon.astro';
 
 const posts = await getCollection('posts', ({ data }) => !data.draft);
 const sorted = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
@@ -15,7 +16,7 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
   <section class="section-gap">
     <div class="shell">
       <div class="hero-intro">
-        <p class="eyebrow">Notebook</p>
+        <p class="eyebrow section-kicker"><UiIcon name="notebook" size={14} /> <span>Notebook</span></p>
         <h1 class="mt-4 text-4xl font-semibold tracking-tight sm:text-6xl" style="view-transition-name: site-identity-title;">
           技术写作与摄影归档
         </h1>
@@ -26,7 +27,7 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
   <section class="section-gap">
     <div class="shell">
       <div class="section-head">
-        <h2 class="text-2xl font-semibold">最新文章</h2>
+        <h2 class="section-head__title text-2xl font-semibold"><UiIcon name="article" size={18} /> <span>最新文章</span></h2>
         <a href="/articles/" class="text-sm muted hover:text-[var(--text)]" data-astro-prefetch>查看全部</a>
       </div>
 
@@ -34,7 +35,8 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
         {latestArticles.map((post) => (
           <article class="entry-item">
             <time class="entry-meta skeleton-text" datetime={post.data.date.toISOString()}>
-              {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+              <UiIcon name="calendar" size={13} />
+              <span>{post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
             </time>
             <h3 class="entry-title skeleton-text">
               <a href={`/posts/${post.slug}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.slug};`}>
@@ -51,7 +53,7 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
   <section class="section-gap">
     <div class="shell">
       <div class="section-head">
-        <h2 class="text-2xl font-semibold">近期摄影</h2>
+        <h2 class="section-head__title text-2xl font-semibold"><UiIcon name="camera" size={18} /> <span>近期摄影</span></h2>
         <a href="/photography/" class="text-sm muted hover:text-[var(--text)]" data-astro-prefetch>浏览归档</a>
       </div>
 

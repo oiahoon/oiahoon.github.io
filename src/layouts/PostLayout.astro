@@ -2,6 +2,7 @@
 import SpotlightLayout from './SpotlightLayout.astro';
 import PhotographyLayout from './PhotographyLayout.astro';
 import { generateBlogPostStructuredData } from '../utils/seo';
+import UiIcon from '../components/UiIcon.astro';
 
 export interface Props {
   title: string;
@@ -68,16 +69,19 @@ const structuredData = generateBlogPostStructuredData({
     <article class="section-gap">
       <div class="shell">
         <div class="reading-narrow">
-          <a href="/articles/" class="text-sm muted hover:text-[var(--text)]" data-astro-prefetch>← 返回文章列表</a>
+          <a href="/articles/" class="article-back-link text-sm muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="arrowLeft" size={14} /> <span>返回文章列表</span></a>
 
           <header class="mt-8 border-b pb-10" style="border-color: var(--line);">
             <p class="entry-meta skeleton-text">
-              {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-              · {author}
+              <UiIcon name="calendar" size={13} />
+              <span>
+                {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+                · {author}
+              </span>
             </p>
             <h1
               class="mt-4 text-4xl font-semibold leading-[1.15] sm:text-5xl skeleton-text"
@@ -107,8 +111,9 @@ const structuredData = generateBlogPostStructuredData({
             <footer class="mt-14 border-t pt-6" style="border-color: var(--line);">
               <div class="flex flex-wrap gap-2">
                 {tags.map((tag) => (
-                  <a href={`/tags/${tag}/`} class="rounded-full border px-2.5 py-1 text-xs muted hover:text-[var(--text)]" style="border-color: var(--line);" data-astro-prefetch>
-                    {tag}
+                  <a href={`/tags/${tag}/`} class="article-tag-pill rounded-full border px-2.5 py-1 text-xs muted hover:text-[var(--text)]" style="border-color: var(--line);" data-astro-prefetch>
+                    <UiIcon name="tag" size={12} />
+                    <span>{tag}</span>
                   </a>
                 ))}
               </div>
@@ -116,11 +121,25 @@ const structuredData = generateBlogPostStructuredData({
           )}
 
           <div class="mt-8 flex items-center justify-between border-t pt-6 text-sm" style="border-color: var(--line);">
-            <a href="/articles/" class="muted hover:text-[var(--text)]" data-astro-prefetch>返回文章列表</a>
-            <a href="/tags/" class="muted hover:text-[var(--text)]" data-astro-prefetch>浏览全部标签</a>
+            <a href="/articles/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="article" size={14} /> <span>返回文章列表</span></a>
+            <a href="/tags/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="tag" size={14} /> <span>浏览全部标签</span></a>
           </div>
         </div>
       </div>
     </article>
-  </SpotlightLayout>
+    <style>
+    .article-back-link,
+    .article-tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .article-back-link :global(.ui-icon),
+    .article-tag-pill :global(.ui-icon) {
+      color: color-mix(in srgb, var(--accent) 64%, var(--muted));
+      opacity: 0.68;
+    }
+  </style>
+</SpotlightLayout>
 )}

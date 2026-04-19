@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import SpotlightLayout from '../../layouts/SpotlightLayout.astro';
+import UiIcon from '../../components/UiIcon.astro';
 
 const posts = await getCollection('posts', ({ data }) => !data.draft);
 const tagCounts = new Map();
@@ -30,7 +31,7 @@ function getTagTransitionName(tag: string) {
   <section class="section-gap">
     <div class="shell">
       <div class="hero-intro">
-        <p class="eyebrow">Tags</p>
+        <p class="eyebrow section-kicker"><UiIcon name="tag" size={14} /> <span>Tags</span></p>
         <h1 class="mt-4 text-4xl font-semibold">文章标签</h1>
         <p class="mt-4 muted">共 {sortedTags.length} 个标签，{posts.length} 篇文章。</p>
       </div>
@@ -43,6 +44,7 @@ function getTagTransitionName(tag: string) {
             data-astro-prefetch
             style={`view-transition-name: ${getTagTransitionName(tag)};`}
           >
+            <UiIcon name="tag" size={14} class="tag-cloud__icon" />
             <span class="tag-cloud__name">#{tag}</span>
             <span class="tag-cloud__count">{count}</span>
           </a>
@@ -80,6 +82,11 @@ function getTagTransitionName(tag: string) {
     transform: translateY(-2px);
     border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
     box-shadow: 0 14px 34px rgba(15, 23, 32, 0.1);
+  }
+
+  .tag-cloud__icon {
+    color: color-mix(in srgb, var(--accent) 64%, var(--muted));
+    opacity: 0.62;
   }
 
   .tag-cloud__pill--xl {
