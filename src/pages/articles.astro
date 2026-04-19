@@ -1,35 +1,194 @@
 ---
 import { getCollection } from 'astro:content';
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
-import UiIcon from '../components/UiIcon.astro';
 
 const posts = await getCollection('posts', ({ data }) => !data.draft && data.type !== 'photography');
-const sorted = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+const sorted = [...posts].sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const tagCounts = new Map<string, number>();
+const excludedTopicTags = new Set(['Notes']);
+posts.forEach((post) => {
+  post.data.tags
+    ?.filter((tag): tag is string => typeof tag === 'string' && tag.trim().length > 0)
+    .forEach((tag) => {
+      const normalized = tag.trim();
+      if (excludedTopicTags.has(normalized)) return;
+      tagCounts.set(normalized, (tagCounts.get(normalized) || 0) + 1);
+    });
+});
+
+const topTags = Array.from(tagCounts.entries())
+  .sort(([tagA, countA], [tagB, countB]) => countB - countA || tagA.localeCompare(tagB, 'zh-CN'))
+  .slice(0, 8);
+
+const shouldShowTopicLinks = topTags.length >= 3;
 ---
 
 <SpotlightLayout title="文章 | Joey's Notes" description="随便聊聊技术、工程和一些零散想法" lang="zh">
-  <section class="section-gap">
+  <section class="section-gap articles-page">
     <div class="shell">
-      <div class="hero-intro">
-        <p class="eyebrow section-kicker"><UiIcon name="article" size={14} /> <span>Articles</span></p>
-        <h1 class="mt-4 text-4xl font-semibold">随便聊聊</h1>
+      <div class="hero-intro articles-hero">
+        <p class="eyebrow articles-kicker">Articles</p>
+        <h1 class="articles-title">随便聊聊</h1>
+        <p class="articles-lede">工程实践、工具折腾和一些不太正式的记录。</p>
+
+        {shouldShowTopicLinks && (
+          <nav class="articles-topic-links" aria-label="高频文章标签">
+            {topTags.map(([tag, count]) => (
+              <a
+                href={`/tags/${encodeURIComponent(tag)}/`}
+                class="articles-topic-link"
+                aria-label={`浏览 ${tag} 标签，共 ${count} 篇文章`}
+                data-astro-prefetch
+              >
+                <span>#{tag}</span>
+                <span class="articles-topic-count" aria-hidden="true">{count}</span>
+              </a>
+            ))}
+          </nav>
+        )}
       </div>
 
-      <div class="entry-stream mt-10">
+      <div class="entry-stream articles-stream">
         {sorted.map((post) => (
           <article class="entry-item">
             <time class="entry-meta skeleton-text" datetime={post.data.date.toISOString()}>
               <span>{post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
             </time>
-            <h2 class="entry-title skeleton-text">
+            <h2 class="entry-title skeleton-text articles-entry-title">
               <a href={`/posts/${post.slug}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.slug};`}>
                 {post.data.title}
               </a>
             </h2>
-            <p class="entry-desc skeleton-text">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
+            <p class="entry-desc skeleton-text articles-entry-desc">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
           </article>
         ))}
       </div>
     </div>
   </section>
 </SpotlightLayout>
+
+<style>
+  .articles-page {
+    margin-top: clamp(2.8rem, 6vw, 5.2rem);
+  }
+
+  .articles-hero {
+    width: min(44rem, 100%);
+  }
+
+  .articles-kicker {
+    display: block;
+    text-align: center;
+  }
+
+  .articles-title {
+    margin-top: 1rem;
+    font-size: clamp(2.45rem, 6vw, 4rem);
+    line-height: 1.08;
+    font-weight: 600;
+  }
+
+  .articles-lede {
+    width: min(32rem, 100%);
+    margin: 1.05rem auto 0;
+    color: color-mix(in srgb, var(--muted) 88%, var(--text));
+    font-size: clamp(0.98rem, 2.2vw, 1.08rem);
+    line-height: 1.8;
+  }
+
+  .articles-topic-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1.45rem;
+  }
+
+  .articles-topic-link {
+    display: inline-flex;
+    min-height: 2.55rem;
+    align-items: center;
+    gap: 0.55rem;
+    border: 1px solid color-mix(in srgb, var(--line) 88%, var(--accent));
+    border-radius: 9999px;
+    padding: 0.45rem 0.75rem 0.45rem 0.9rem;
+    color: color-mix(in srgb, var(--text) 84%, var(--muted));
+    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    font-size: 0.9rem;
+    line-height: 1;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  }
+
+  .articles-topic-link:hover,
+  .articles-topic-link:focus-visible {
+    color: var(--text);
+    border-color: color-mix(in srgb, var(--accent) 56%, var(--line));
+    background: color-mix(in srgb, var(--surface) 90%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .articles-topic-link:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--accent) 62%, transparent);
+    outline-offset: 3px;
+  }
+
+  .articles-topic-count {
+    display: inline-flex;
+    min-width: 1.55rem;
+    height: 1.55rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--line) 70%, transparent);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .articles-stream {
+    margin-top: clamp(2.1rem, 4.5vw, 3rem);
+  }
+
+  .articles-entry-title,
+  .articles-entry-desc {
+    overflow-wrap: anywhere;
+  }
+
+  .articles-entry-desc {
+    color: color-mix(in srgb, var(--muted) 86%, var(--text));
+  }
+
+  @media (max-width: 640px) {
+    .articles-page {
+      margin-top: 2.35rem;
+    }
+
+    .articles-title {
+      margin-top: 0.8rem;
+      font-size: clamp(2.15rem, 12vw, 3rem);
+    }
+
+    .articles-lede {
+      margin-top: 0.85rem;
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+
+    .articles-topic-links {
+      justify-content: flex-start;
+      margin-top: 1.2rem;
+    }
+
+    .articles-topic-link {
+      min-height: 2.75rem;
+      padding-inline: 0.85rem 0.7rem;
+      font-size: 0.88rem;
+    }
+
+    .articles-stream {
+      margin-top: 1.9rem;
+    }
+  }
+</style>
