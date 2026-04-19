@@ -126,11 +126,7 @@ const groupedArchive = years.map((year) => ({
                         />
                       </a>
                       <div class="photo-card__body">
-                        <p class="photo-card__meta">
-                          {photo.data.date.toLocaleDateString('zh-CN')}
-                          {photo.data.location ? ` · ${photo.data.location}` : ''}
-                        </p>
-                {photo.data.title && (
+                        {photo.data.title && (
                           <h2 class="photo-card__title"><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h2>
                         )}
                         <div class="photo-card__footer">
@@ -262,16 +258,11 @@ const groupedArchive = years.map((year) => ({
     color: rgba(226, 232, 240, 0.56);
   }
 
-  .photo-feature__meta,
-  .photo-card__meta {
+  .photo-feature__meta {
     margin: 0;
     font-size: 0.78rem;
     letter-spacing: 0.04em;
     color: rgba(195, 203, 214, 0.62);
-  }
-
-  .photo-feature__meta {
-    color: rgba(226, 232, 240, 0.62);
   }
 
   .photo-feature__title,

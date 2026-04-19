@@ -36,6 +36,9 @@ const exifEntries = [
   camera?.settings,
 ].filter(Boolean);
 const photoTransitionName = slug ? `photo-cover-${slug}` : undefined;
+const fallbackTitle = title || `摄影作品 · ${date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}`;
+const activeWorkIndex = Math.max(photoCollection.findIndex((work) => work.active), 0);
+const totalWorks = photoCollection.length;
 
 const navigation = [
   { name: '文章', href: '/articles/' },
@@ -45,7 +48,7 @@ const navigation = [
 ];
 ---
 
-<BaseLayout title={`${title} | Joey's Notes`} description={description || subtitle || title} image={cover} lang={lang} themeMode="locked-dark">
+<BaseLayout title={`${fallbackTitle} | Joey's Notes`} description={description || subtitle || fallbackTitle} image={cover} lang={lang} themeMode="locked-dark">
   <article
     class="photo-page"
     id="top"
@@ -237,6 +240,8 @@ const navigation = [
             </div>
             {(previousPhoto || nextPhoto) && (
               <p class="photo-work-strip__hint">
+                <span>{String(activeWorkIndex + 1).padStart(2, '0')} / {String(totalWorks).padStart(2, '0')}</span>
+                {(previousPhoto || nextPhoto) && <span>·</span>}
                 {previousPhoto && <span>← 较新</span>}
                 {previousPhoto && nextPhoto && <span>·</span>}
                 {nextPhoto && <span>较早 →</span>}
@@ -269,6 +274,7 @@ const navigation = [
               </a>
             ))}
           </div>
+          <p class="photo-work-strip__scroll-hint">横向滑动查看更多作品</p>
         </section>
       )}
 
@@ -878,7 +884,8 @@ const navigation = [
   }
 
   .photo-work-strip__item.is-active .photo-work-strip__thumb {
-    border-color: rgba(255, 255, 255, 0.24);
+    border-color: rgba(245, 158, 11, 0.72);
+    box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.18), 0 18px 42px rgba(0, 0, 0, 0.22);
     transform: scale(1.01);
   }
 
@@ -897,6 +904,12 @@ const navigation = [
     margin: 0;
     font-size: 0.94rem;
     color: rgba(248, 250, 252, 0.9);
+  }
+
+  .photo-work-strip__scroll-hint {
+    margin: 0.7rem 0 0;
+    font-size: 0.76rem;
+    color: rgba(226, 232, 240, 0.48);
   }
 
   .photo-lightbox[hidden] {

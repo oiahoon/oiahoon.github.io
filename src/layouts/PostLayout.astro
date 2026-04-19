@@ -24,12 +24,15 @@ export interface Props {
 }
 
 const { title, subtitle, author, date, slug, tags, header_img, description, lang, type = 'article', gallery, camera, location, publishedDate, previousPhoto, nextPhoto, photoCollection } = Astro.props;
+const fallbackTitle = title || (type === 'photography'
+  ? `摄影作品 · ${date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}`
+  : '文章');
 
 const postUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const previewImage = header_img || (type === 'photography' && gallery?.[0]?.src);
 const structuredData = generateBlogPostStructuredData({
-  title,
-  description: description || subtitle,
+  title: fallbackTitle,
+  description: description || subtitle || fallbackTitle,
   author,
   date,
   image: previewImage,
@@ -61,7 +64,7 @@ const structuredData = generateBlogPostStructuredData({
     <slot />
   </PhotographyLayout>
 ) : (
-  <SpotlightLayout title={`${title} | Joey's Notes`} description={description || subtitle || title} image={previewImage || undefined} lang={lang} structuredData={structuredData}>
+  <SpotlightLayout title={`${fallbackTitle} | Joey's Notes`} description={description || subtitle || fallbackTitle} image={previewImage || undefined} lang={lang} structuredData={structuredData}>
     <article class="section-gap">
       <div class="shell">
         <div class="reading-narrow">
