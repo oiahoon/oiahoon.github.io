@@ -25,7 +25,7 @@ const navigation = [
           const active = currentPath === item.href;
           return (
             <a href={item.href} class={`relative transition spotlight-header__link ${active ? 'font-semibold text-[var(--text)]' : 'muted hover:text-[var(--text)]'}`} data-astro-prefetch>
-              <UiIcon name={item.icon} size={14} class="spotlight-header__nav-icon" />
+              <UiIcon name={item.icon} size={13} class="spotlight-header__nav-icon" />
               <span>{item.name}</span>
               {active && <span class="absolute -bottom-1 left-0 right-0 h-px bg-[var(--accent)]" />}
             </a>
@@ -84,7 +84,7 @@ const navigation = [
     gap: 0.48rem;
   }
 
-  .spotlight-header__brand-icon {
+  :global(.spotlight-header__brand-icon) {
     color: color-mix(in srgb, var(--accent) 72%, var(--muted));
     opacity: 0.82;
   }
@@ -93,14 +93,14 @@ const navigation = [
     gap: 0.38rem;
   }
 
-  .spotlight-header__nav-icon {
-    opacity: 0.58;
+  :global(.spotlight-header__nav-icon) {
+    opacity: 0.5;
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
-  .spotlight-header__link:hover .spotlight-header__nav-icon,
-  .spotlight-header__link.font-semibold .spotlight-header__nav-icon {
-    opacity: 0.9;
+  .spotlight-header__link:hover :global(.spotlight-header__nav-icon),
+  .spotlight-header__link.font-semibold :global(.spotlight-header__nav-icon) {
+    opacity: 0.82;
     transform: translateY(-1px);
   }
 
@@ -108,13 +108,13 @@ const navigation = [
     gap: 0.38rem;
   }
 
-  .spotlight-header__theme-icon {
+  :global(.spotlight-header__theme-icon) {
     color: color-mix(in srgb, var(--accent) 70%, var(--muted));
     opacity: 0.78;
   }
 
-  :global(.dark) .spotlight-header__theme-icon--dark,
-  :global(html:not(.dark)) .spotlight-header__theme-icon--light {
+  :global(.dark) :global(.spotlight-header__theme-icon--dark),
+  :global(html:not(.dark)) :global(.spotlight-header__theme-icon--light) {
     display: none;
   }
 
@@ -128,8 +128,8 @@ const navigation = [
     color: rgba(248, 250, 252, 0.94) !important;
   }
 
-  .spotlight-header--inverse .spotlight-header__brand-icon,
-  .spotlight-header--inverse .spotlight-header__theme-icon {
+  .spotlight-header--inverse :global(.spotlight-header__brand-icon),
+  .spotlight-header--inverse :global(.spotlight-header__theme-icon) {
     color: rgba(245, 158, 11, 0.78);
   }
 

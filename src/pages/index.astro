@@ -35,7 +35,6 @@ const description = '以简洁排版记录软件工程实践与摄影观察。';
         {latestArticles.map((post) => (
           <article class="entry-item">
             <time class="entry-meta skeleton-text" datetime={post.data.date.toISOString()}>
-              <UiIcon name="calendar" size={13} />
               <span>{post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
             </time>
             <h3 class="entry-title skeleton-text">

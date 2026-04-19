@@ -122,6 +122,12 @@
 }
 
 @layer components {
+  .ui-icon {
+    display: inline-block;
+    flex: 0 0 auto;
+    vertical-align: -0.125em;
+  }
+
   .shell {
     width: min(var(--shell-max), 100%);
     margin-inline: auto;
@@ -157,6 +163,32 @@
     gap: 1rem;
   }
 
+  .section-head__title,
+  .section-kicker {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .section-head__title {
+    gap: 0.48rem;
+  }
+
+  .section-head__title .ui-icon {
+    color: color-mix(in srgb, var(--accent) 58%, var(--muted));
+    opacity: 0.7;
+  }
+
+  .section-kicker {
+    gap: 0.5rem;
+    justify-content: center;
+    width: auto;
+  }
+
+  .section-kicker .ui-icon {
+    color: color-mix(in srgb, var(--accent) 54%, var(--muted));
+    opacity: 0.62;
+  }
+
   .entry-stream {
     width: min(var(--content-max), 100%);
     margin-inline: auto;
@@ -177,6 +209,9 @@
   }
 
   .entry-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
     font-size: 0.78rem;
     letter-spacing: 0.02em;
     color: var(--muted);
