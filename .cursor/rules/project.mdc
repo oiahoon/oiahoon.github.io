@@ -1,0 +1,23 @@
+---
+description: Joey's Notes layered agent context router
+alwaysApply: true
+---
+
+# Joey's Notes Cursor Rules
+
+Read first: `docs/agent/index.md`.
+
+Do not load all files in `docs/agent/` by default. Use `docs/agent/index.md` to choose only the context needed for the current task.
+
+Always preserve these guardrails:
+
+- Preserve the quiet, low-saturation, reading-first visual language.
+- Keep `/articles/` as a text stream, not a card feed.
+- Keep `/photography/` and photography detail pages fixed dark and image-led.
+- Do not reintroduce dynamic animated tag clouds or continuous high-cost animation.
+- Do not add copy that explains the design itself.
+- Do not force `未命名作品` as a visible photography fallback.
+- Avoid global style changes unless the regression scope is clear.
+- Validate content workflow changes with `npm run check:content-health`.
+- Validate build changes with `npm run build`.
+- Check mobile and iPad behavior for photography UI.

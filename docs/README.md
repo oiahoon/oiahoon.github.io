@@ -25,6 +25,7 @@ npm run build
 ## Documentation Map
 
 ### Planning & Progress
+- **[Agent Context Router](agent/index.md)** - layered context entry for Codex, Claude Code, Cursor, Copilot, and other coding agents; load task-specific context on demand
 - **[Project Analysis and Improvement Plan](project-analysis-and-improvement-plan.md)** - execution plan and priorities
 - **[Improvement Progress](improvement-progress.md)** - ongoing implementation log and status board
 - **[UX Review](ux-review.md)** - Product, UI/UX, and Developer review of real reading and publishing experience
