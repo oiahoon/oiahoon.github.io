@@ -27,6 +27,8 @@ npm run build
 ### Planning & Progress
 - **[Project Analysis and Improvement Plan](project-analysis-and-improvement-plan.md)** - execution plan and priorities
 - **[Improvement Progress](improvement-progress.md)** - ongoing implementation log and status board
+- **[UX Review](ux-review.md)** - Product, UI/UX, and Developer review of real reading and publishing experience
+- **[Improvement Backlog](improvement-backlog.md)** - prioritized follow-up work for reading, photography, and publishing workflows
 
 ### Historical Records (Archive)
 - **[Phase 1 Progress](phase1-progress.md)** - historical migration/setup record (2025-10)
@@ -36,6 +38,7 @@ npm run build
 ### Feature and Operation Docs
 - **[Photography Feature Implementation](photography-feature-implementation.md)**
 - **[Content Management Guide](content-management-guide.md)**
+- **[Publishing Workflow](publishing-workflow.md)**
 - **[Build and Deployment Guide](build-and-deployment-guide.md)**
 - **[Tag Governance](tag-governance.md)**
 - **[Content Health Report](content-health-report.md)**
