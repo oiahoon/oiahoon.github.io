@@ -17,7 +17,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 // Default description for better SEO
 const defaultDescription = "黄药师的个人技术博客 - 分享软件开发经验、技术心得和摄影作品";
-const seoDescription = description || defaultDescription;
+const cleanTitle = String(title || '').trim();
+const seoTitle = cleanTitle && !['undefined', 'null'].includes(cleanTitle.toLowerCase())
+  ? cleanTitle
+  : "Joey's Notes";
+const cleanDescription = String(description || '').trim();
+const seoDescription = cleanDescription && !['undefined', 'null'].includes(cleanDescription.toLowerCase())
+  ? cleanDescription
+  : defaultDescription;
 
 // Generate website structured data for homepage
 const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStructuredData() : null;
@@ -35,7 +42,7 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
   
   <link rel="canonical" href={canonicalURL} />
   
-  <title>{title}</title>
+  <title>{seoTitle}</title>
   <meta name="description" content={seoDescription} />
   <meta name="generator" content={Astro.generator} />
   <meta name="author" content="Joey" />
@@ -44,16 +51,16 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalURL} />
-  <meta property="og:title" content={title} />
+  <meta property="og:title" content={seoTitle} />
   <meta property="og:description" content={seoDescription} />
   <meta property="og:site_name" content="Joey's Notes" />
   <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
   {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
-  {image && <meta property="og:image:alt" content={title} />}
+  {image && <meta property="og:image:alt" content={seoTitle} />}
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={title} />
+  <meta name="twitter:title" content={seoTitle} />
   <meta name="twitter:description" content={seoDescription} />
   <meta name="twitter:creator" content="@oiahoon" />
   {image && <meta name="twitter:image" content={new URL(image, Astro.site)} />}

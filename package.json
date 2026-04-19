@@ -12,6 +12,8 @@
     "check:content-health": "node scripts/check-content-health.js",
     "fix:content-health": "node scripts/fix-content-health.js",
     "report:content-health": "node scripts/check-content-health.js --write",
+    "new:post": "node scripts/new-content.js post",
+    "new:photo": "node scripts/new-content.js photo",
     "check:security": "npm audit --audit-level=high"
   },
   "dependencies": {

@@ -62,10 +62,10 @@ const groupedArchive = years.map((year) => ({
               <div class="photo-feature__content">
                 <div class="photo-feature__lead">
                   <p class="photo-feature__eyebrow"><UiIcon name="image" size={13} /> <span>最新作品</span></p>
-                  <p class="photo-feature__meta">
+                  <time class="photo-feature__meta" datetime={featured.data.date.toISOString()}>
                     {featured.data.date.toLocaleDateString('zh-CN')}
                     {featured.data.location ? ` · ${featured.data.location}` : ''}
-                  </p>
+                  </time>
                 </div>
                 {featured.data.title && (
                   <h2 class="photo-feature__title">
@@ -131,7 +131,7 @@ const groupedArchive = years.map((year) => ({
                           <h2 class="photo-card__title"><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h2>
                         )}
                         <div class="photo-card__footer">
-                          <span><UiIcon name="calendar" size={12} />{photo.data.date.toLocaleDateString('zh-CN')}</span>
+                          <time datetime={photo.data.date.toISOString()}><UiIcon name="calendar" size={12} />{photo.data.date.toLocaleDateString('zh-CN')}</time>
                           {photo.data.location && <span>{photo.data.location}</span>}
                           {photo.data.gallery && photo.data.gallery.length > 1 && <span>{photo.data.gallery.length} 张</span>}
                           {photo.data.camera?.model && <span>{photo.data.camera.model}</span>}
@@ -318,13 +318,13 @@ const groupedArchive = years.map((year) => ({
     gap: 0.42rem;
   }
 
-  .photo-card__footer span,
+  .photo-card__footer :is(span, time),
   .photo-archive__desc {
     font-size: 0.8rem;
     color: rgba(195, 203, 214, 0.58);
   }
 
-  .photo-card__footer span {
+  .photo-card__footer :is(span, time) {
     display: inline-flex;
     align-items: center;
     gap: 0.26rem;
@@ -472,7 +472,7 @@ const groupedArchive = years.map((year) => ({
     line-height: 1.45;
   }
 
-  .photo-card__footer span + span::before {
+  .photo-card__footer :is(span, time) + :is(span, time)::before {
     content: '·';
     margin-right: 0.45rem;
     color: rgba(195, 203, 214, 0.28);

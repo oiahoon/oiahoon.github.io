@@ -26,23 +26,25 @@ src/content/config.ts
 
 ## 发布普通文章
 
-### 1. 创建 Markdown 文件
+### 1. 创建草稿
 
-建议文件名：
+推荐使用模板脚本：
+
+```bash
+npm run new:post -- "文章标题"
+```
+
+脚本会在 `src/content/posts/` 生成 `draft: true` 的草稿，避免误发布。
+
+如果手动创建，建议文件名：
 
 ```text
 YYYY-MM-DD-slug.md
 ```
 
-示例：
-
-```text
-2026-04-19-my-note.md
-```
-
 ### 2. 填写 frontmatter
 
-推荐模板：
+模板脚本会预填基础 frontmatter。手动创建时可参考：
 
 ```yaml
 ---
@@ -53,10 +55,12 @@ date: 2026-04-19
 tags:
   - Notes
 lang: zh
-draft: false
+draft: true
 description: 用一句话概括这篇文章。
 ---
 ```
+
+确认发布时再把 `draft` 改为 `false`。
 
 ### 3. 编写正文
 
@@ -90,14 +94,6 @@ git commit -m "content: add article title"
 git push origin master
 ```
 
-### 无标题摄影作品注意事项
-
-摄影作品可以不写 `title`，但必须保证页面 fallback 正常：
-
-- 浏览器标题不能出现 `undefined`。
-- 列表和详情页不应强制显示“未命名作品”。
-- 发布后要打开详情页检查标题栏和分享预览。
-
 ## 发布摄影作品
 
 ### 1. 准备图片
@@ -114,7 +110,23 @@ public/photos/
 - 文件名使用英文、数字、短横线。
 - 同一组照片使用相近命名，便于维护。
 
-### 2. 使用脚本同步照片
+### 2. 创建摄影草稿
+
+如果需要手动填写摄影内容，推荐先生成草稿：
+
+```bash
+npm run new:photo -- "可选标题"
+```
+
+无标题摄影作品可以省略标题：
+
+```bash
+npm run new:photo
+```
+
+脚本会生成 `draft: true`，并预填 `type: photography`、`tags: [摄影]`、`gallery` 和基础 EXIF 字段。
+
+### 3. 使用脚本同步照片
 
 如果照片在本地准备好，可以使用：
 
@@ -136,9 +148,7 @@ node scripts/sync-photos.js --dry-run
 - 生成摄影 Markdown
 - 检测重复图片引用
 
-### 3. 手动创建摄影 Markdown
-
-推荐模板：
+### 4. 摄影 frontmatter 参考
 
 ```yaml
 ---
@@ -157,7 +167,7 @@ camera:
   settings: "ISO 100, f/2.8, 1/250s"
 location: "可选地点"
 publishedDate: "April 19, 2026"
-draft: false
+draft: true
 description: 摄影作品。
 ---
 ```
@@ -168,8 +178,9 @@ description: 摄影作品。
 - `gallery` 第一张会作为封面和详情页首图。
 - `tags` 至少保留 `摄影`，其他标签按需添加。
 - EXIF 信息应尽量简洁，不需要重复写“相机”等描述词。
+- 确认发布时再把 `draft` 改为 `false`。
 
-### 4. 摄影发布前检查
+### 5. 摄影发布前检查
 
 必须检查：
 
@@ -186,13 +197,21 @@ npm run check:content-health
 npm run build
 ```
 
-### 5. 提交和部署
+### 6. 提交和部署
 
 ```bash
 git add public/photos src/content/posts
 git commit -m "content: add photography work"
 git push origin master
 ```
+
+## 无标题摄影作品注意事项
+
+摄影作品可以不写 `title`，但必须保证页面 fallback 正常：
+
+- 浏览器标题不能出现 `undefined`。
+- 列表和详情页不应强制显示“未命名作品”。
+- 发布后要打开详情页检查标题栏和分享预览。
 
 ## 发布后检查
 
@@ -219,9 +238,14 @@ git push origin master
 
 不要直接删除远端历史，优先使用 `git revert`。
 
+## 已有自动化
+
+- `npm run new:post -- "文章标题"`：生成普通文章草稿模板。
+- `npm run new:photo -- "可选标题"`：生成摄影作品草稿模板。
+- `npm run check:content-health`：检查 title、description、tags、日期、重复 slug、摄影 gallery、摄影标签、本地图片路径等发布风险。
+- `npm run photos:sync`：从本地照片生成摄影内容。
+
 ## 后续可优化
 
-- 增加 `npm run new:post`：生成文章模板。
-- 增加 `npm run new:photo`：生成摄影模板。
 - 让 `photos:sync` 输出更完整的后续操作提示。
-- 在内容健康检查中增加摄影专项规则，例如 `gallery[0]` 必填、图片路径存在、摄影标签存在。
+- 增加可选的浏览器回归脚本，覆盖文章页、摄影列表页和摄影详情页移动端。

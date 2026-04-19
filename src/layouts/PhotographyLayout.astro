@@ -1330,6 +1330,7 @@ const navigation = [
   let panStartX = 0;
   let panStartY = 0;
   let isPanning = false;
+  let lightboxReturnFocus = null;
 
   function applyLightboxTransform() {
     if (!lightboxImage) return;
@@ -1406,6 +1407,7 @@ const navigation = [
 
   function openLightbox(index) {
     if (!lightbox || !photos.length) return;
+    lightboxReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     window.clearTimeout(lightboxCloseTimer);
     lightboxIndex = Math.min(Math.max(index, 0), photos.length - 1);
     renderLightbox();
@@ -1414,6 +1416,7 @@ const navigation = [
     document.documentElement.style.overflow = 'hidden';
     requestAnimationFrame(() => {
       lightbox.classList.add('is-open');
+      lightboxClose?.focus?.();
     });
   }
 
@@ -1427,6 +1430,8 @@ const navigation = [
     lightboxCloseTimer = window.setTimeout(() => {
       if (!lightbox?.classList.contains('is-open')) {
         lightbox.hidden = true;
+        lightboxReturnFocus?.focus?.({ preventScroll: true });
+        lightboxReturnFocus = null;
       }
     }, 240);
   }
