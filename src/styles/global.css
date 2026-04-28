@@ -17,12 +17,12 @@
   --font-serif: "Iowan Old Style", "Palatino Linotype", "Times New Roman",
     "Noto Serif SC", serif;
 
-  --bg: #f7f5f0;
-  --surface: #ffffff;
-  --text: #1f2933;
-  --muted: #637084;
-  --line: #e6e1d8;
-  --accent: #b85f28;
+  --bg: #f7f3ec;
+  --surface: #fffaf3;
+  --text: #1f1e1b;
+  --muted: #6f685f;
+  --line: #d9d0c3;
+  --accent: #9c4f3f;
   --shell-max: 72rem;
   --content-max: 52rem;
   --reading-max: 46rem;
@@ -31,12 +31,12 @@
 }
 
 .dark {
-  --bg: #111318;
-  --surface: #171b22;
-  --text: #edf1f5;
-  --muted: #aab5c4;
-  --line: #2a3240;
-  --accent: #f59a63;
+  --bg: #11100e;
+  --surface: #191816;
+  --text: #eee7dc;
+  --muted: #aaa197;
+  --line: #34302b;
+  --accent: #d08a72;
 }
 
 @layer base {
@@ -50,7 +50,7 @@
   body {
     margin: 0;
     color: var(--text);
-    background: radial-gradient(1200px 400px at 10% -10%, rgba(184, 95, 40, 0.08), transparent 70%),
+    background: radial-gradient(1200px 400px at 10% -10%, rgba(156, 79, 63, 0.07), transparent 70%),
       var(--bg);
     font-family: var(--font-sans);
     overflow-x: clip;
@@ -74,7 +74,12 @@
   }
 
   ::selection {
-    background: rgba(184, 95, 40, 0.25);
+    background: rgba(156, 79, 63, 0.24);
+  }
+
+  :focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--accent) 74%, transparent);
+    outline-offset: 3px;
   }
 
   ::view-transition-old(root),
@@ -115,6 +120,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;

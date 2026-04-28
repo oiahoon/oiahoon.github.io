@@ -16,7 +16,7 @@ const { title, description, image, lang = 'zh', structuredData, themeMode = 'sys
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 // Default description for better SEO
-const defaultDescription = "黄药师的个人技术博客 - 分享软件开发经验、技术心得和摄影作品";
+const defaultDescription = "Joey Huang 的摄影作品、生活观察，以及一些早年的工程笔记。";
 const cleanTitle = String(title || '').trim();
 const seoTitle = cleanTitle && !['undefined', 'null'].includes(cleanTitle.toLowerCase())
   ? cleanTitle
@@ -75,7 +75,7 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
   
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#f97316" />
+  <meta name="theme-color" content="#9c4f3f" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Joey's Notes" />
@@ -133,7 +133,7 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
           localStorage.setItem(storageKey, theme);
         }
         if (themeColorMeta) {
-          themeColorMeta.setAttribute('content', theme === 'dark' ? '#080c12' : '#f97316');
+          themeColorMeta.setAttribute('content', theme === 'dark' ? '#11100e' : '#f7f3ec');
         }
         document.querySelectorAll('[data-theme-toggle-label]').forEach((node) => {
           node.textContent = theme === 'dark' ? '浅色' : '深色';

@@ -57,7 +57,7 @@ export function generateWebsiteStructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Joey's Notes",
-    "description": "黄药师的个人技术博客 - 分享软件开发经验、技术心得和摄影作品",
+    "description": "Joey Huang 的摄影作品、生活观察，以及一些早年的工程笔记。",
     "url": "https://notes.miaowu.org",
     "author": {
       "@type": "Person",

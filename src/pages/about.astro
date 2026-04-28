@@ -1,47 +1,154 @@
 ---
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
-import UiIcon from '../components/UiIcon.astro';
 ---
 
-<SpotlightLayout title="关于我 | Joey's Notes" description="黄药师的个人介绍 - 软件工程师、摄影爱好者、猫奴">
-  <section class="section-gap">
-    <div class="shell">
-      <div class="mx-auto grid max-w-5xl gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
-        <div>
-          <p class="eyebrow section-kicker"><UiIcon name="about" size={14} /> <span>About</span></p>
-          <h1 class="mt-4 text-4xl font-semibold leading-tight sm:text-5xl" style="view-transition-name: site-identity-title;">我是黄药师，软件工程师与摄影爱好者</h1>
+<SpotlightLayout title="About | Joey's Notes" description="Joey Huang - software engineer by trade, photographer by curiosity.">
+  <section class="about-page">
+    <div class="shell about-grid">
+      <div class="about-main">
+        <p class="eyebrow">About</p>
+        <h1 style="view-transition-name: site-identity-title;">Joey Huang</h1>
+        <p class="about-lede">Software engineer by trade, photographer by curiosity. 拍拍照，养养猫，旅行和咖啡才是生活的主题，代码不过是对生活的消遣。</p>
 
-          <div class="mt-8 space-y-6 text-lg leading-8 muted">
-            <p>拍拍照，养养猫，旅行和咖啡才是生活的主题，代码不过是对生活的消遣。</p>
-            <p>我专注于 Web 开发和系统架构设计，喜欢把复杂问题拆解为可执行的工程步骤。</p>
-            <p>这个博客记录技术实践与生活观察。如果内容对你有帮助，欢迎通过下方渠道联系我。</p>
-          </div>
-
-          <div class="about-links mt-10 grid gap-3 text-sm sm:grid-cols-2">
-            <a href="https://github.com/oiahoon" target="_blank" rel="noopener noreferrer" class="soft-panel px-4 py-3 hover:border-[var(--accent)]"><UiIcon name="compass" size={14} /> <span>GitHub</span></a>
-            <a href="https://weibo.com/desiver" target="_blank" rel="noopener noreferrer" class="soft-panel px-4 py-3 hover:border-[var(--accent)]"><UiIcon name="spark" size={14} /> <span>微博</span></a>
-            <a href="/rss.xml" class="soft-panel px-4 py-3 hover:border-[var(--accent)]"><UiIcon name="rss" size={14} /> <span>RSS 订阅</span></a>
-            <a href="mailto:4296411@qq.com" class="soft-panel px-4 py-3 hover:border-[var(--accent)]"><UiIcon name="article" size={14} /> <span>4296411@qq.com</span></a>
-          </div>
-        </div>
-
-        <div class="mx-auto w-full max-w-sm lg:mx-0">
-          <img src="/img/avatar-joey.jpg" alt="Joey Huang" class="w-full rounded-2xl object-cover" />
+        <div class="about-rows" aria-label="关于 Joey">
+          <section class="about-row">
+            <h2>Currently</h2>
+            <p>Based in Chengdu. Photographing street scenes, cafes, cats, travel, and quiet everyday moments.</p>
+          </section>
+          <section class="about-row">
+            <h2>Work</h2>
+            <p>Software engineer and engineering manager. Interested in systems, architecture, and practical execution.</p>
+          </section>
+          <section class="about-row">
+            <h2>Elsewhere</h2>
+            <p><a href="https://github.com/oiahoon" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://weibo.com/desiver" target="_blank" rel="noopener noreferrer">Weibo</a> · <a href="/rss.xml">RSS</a> · <a href="mailto:4296411@qq.com">Email</a></p>
+          </section>
         </div>
       </div>
+
+      <aside class="about-side" aria-label="摄影与使用器材">
+        <figure>
+          <img src="/img/avatar-joey.jpg" alt="Joey Huang" width="640" height="640" loading="eager" decoding="async" />
+          <figcaption>Portrait / self image. Kept personal, not corporate.</figcaption>
+        </figure>
+
+        <div class="about-side__rows">
+          <section class="about-row">
+            <h2>Uses</h2>
+            <p>Leica M6 / M262<br />Hasselblad 500 C/M / 907X<br />B&W film developing at home</p>
+          </section>
+          <section class="about-row">
+            <h2>Focus</h2>
+            <p>Photography, travel, coffee, Japanese learning, management, and self-improvement.</p>
+          </section>
+        </div>
+      </aside>
     </div>
   </section>
 </SpotlightLayout>
 
 <style>
-  .about-links a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.48rem;
+  .about-page {
+    margin-top: clamp(3rem, 7vw, 5.5rem);
   }
 
-  .about-links :global(.ui-icon) {
-    color: color-mix(in srgb, var(--accent) 64%, var(--muted));
-    opacity: 0.72;
+  .about-grid {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .about-main h1 {
+    margin: 1rem 0 0;
+    font-size: clamp(4rem, 10vw, 7rem);
+    line-height: 0.95;
+    font-weight: 600;
+  }
+
+  .about-lede {
+    max-width: 42rem;
+    margin: 1rem 0 0;
+    color: color-mix(in srgb, var(--text) 84%, var(--muted));
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    line-height: 1.85;
+  }
+
+  .about-rows,
+  .about-side__rows {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+
+  .about-rows {
+    margin-top: clamp(2.4rem, 5vw, 3.5rem);
+  }
+
+  .about-side__rows {
+    margin-top: 2rem;
+  }
+
+  .about-row {
+    display: grid;
+    gap: 0.65rem;
+    border-bottom: 1px solid var(--line);
+    padding-block: 1.35rem;
+  }
+
+  .about-row h2 {
+    margin: 0;
+    color: var(--muted);
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .about-row p {
+    margin: 0;
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .about-row a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .about-row a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.35em;
+  }
+
+  .about-side figure {
+    margin: 0;
+  }
+
+  .about-side img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: var(--line);
+  }
+
+  .about-side figcaption {
+    margin-top: 0.95rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  @media (min-width: 760px) {
+    .about-row {
+      grid-template-columns: 7.5rem minmax(0, 1fr);
+    }
+  }
+
+  @media (min-width: 980px) {
+    .about-grid {
+      grid-template-columns: minmax(0, 1.2fr) minmax(20rem, 0.8fr);
+      align-items: start;
+    }
   }
 </style>
