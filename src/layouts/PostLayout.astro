@@ -111,7 +111,7 @@ const structuredData = generateBlogPostStructuredData({
             <footer class="mt-14 border-t pt-6" style="border-color: var(--line);">
               <div class="flex flex-wrap gap-2">
                 {tags.map((tag) => (
-                  <a href={`/tags/${tag}/`} class="article-tag-pill rounded-full border px-2.5 py-1 text-xs muted hover:text-[var(--text)]" style="border-color: var(--line);" data-astro-prefetch>
+                  <a href={`/tags/${encodeURIComponent(tag)}/`} class="article-tag-pill rounded-full border px-2.5 py-1 text-xs muted hover:text-[var(--text)]" style="border-color: var(--line);" data-astro-prefetch>
                     <UiIcon name="tag" size={12} />
                     <span>{tag}</span>
                   </a>

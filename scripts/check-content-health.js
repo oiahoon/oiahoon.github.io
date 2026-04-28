@@ -62,6 +62,7 @@ function main() {
     futureDates: [],
     duplicateSlugs: [],
     missingPhotographyGallery: [],
+    missingPhotographyMetadata: [],
     missingPhotographyTag: [],
     missingLocalImages: [],
     oversizedLocalImages: [],
@@ -108,6 +109,14 @@ function main() {
     }
 
     if (type === 'photography') {
+      if (!isDraft && isBadPlaceholder(data.title)) {
+        pushIssue(issues.invalidTitle, file, 'published photography must have a meaningful title');
+      }
+
+      if (!isDraft && isBlank(data.location)) {
+        pushIssue(issues.missingPhotographyMetadata, file, 'published photography must have location');
+      }
+
       if (!isDraft && Array.isArray(data.tags) && !data.tags.includes('摄影')) {
         pushIssue(issues.missingPhotographyTag, file, 'photography content must include 摄影 tag');
       }
@@ -118,8 +127,19 @@ function main() {
         pushIssue(issues.missingPhotographyGallery, file, 'published photography content must have gallery[0].src');
       }
 
-      for (const item of gallery) {
+      for (const [index, item] of gallery.entries()) {
         const src = String(item?.src || '').trim();
+        if (!isDraft) {
+          if (isBadPlaceholder(item?.alt)) {
+            pushIssue(issues.missingPhotographyMetadata, file, `gallery[${index}].alt must describe the image`);
+          }
+          if (isBadPlaceholder(item?.caption)) {
+            pushIssue(issues.missingPhotographyMetadata, file, `gallery[${index}].caption is required`);
+          }
+          if (!Number.isFinite(Number(item?.width)) || !Number.isFinite(Number(item?.height))) {
+            pushIssue(issues.missingPhotographyMetadata, file, `gallery[${index}] must include width and height`);
+          }
+        }
         if (!src || isRemoteAsset(src)) continue;
         const localPath = localAssetPath(src);
         if (!localPath) continue;
@@ -152,6 +172,7 @@ function main() {
     ['Future dates', issues.futureDates],
     ['Duplicate slugs', issues.duplicateSlugs],
     ['Missing photography gallery', issues.missingPhotographyGallery],
+    ['Missing photography metadata', issues.missingPhotographyMetadata],
     ['Missing photography tag', issues.missingPhotographyTag],
     ['Missing local images', issues.missingLocalImages],
   ];
@@ -181,6 +202,7 @@ function main() {
     `- Future dates: ${issues.futureDates.length}`,
     `- Duplicate slugs: ${issues.duplicateSlugs.length}`,
     `- Missing photography gallery: ${issues.missingPhotographyGallery.length}`,
+    `- Missing photography metadata: ${issues.missingPhotographyMetadata.length}`,
     `- Missing photography tag: ${issues.missingPhotographyTag.length}`,
     `- Missing local images: ${issues.missingLocalImages.length}`,
     `- Oversized local images: ${issues.oversizedLocalImages.length}`,

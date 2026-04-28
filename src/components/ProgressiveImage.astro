@@ -7,6 +7,10 @@ export interface Props {
   loading?: 'eager' | 'lazy';
   decoding?: 'sync' | 'async' | 'auto';
   sizes?: string;
+  width?: number | string;
+  height?: number | string;
+  style?: string;
+  fetchpriority?: 'high' | 'low' | 'auto';
 }
 
 const {
@@ -17,6 +21,10 @@ const {
   loading = 'lazy',
   decoding = 'async',
   sizes,
+  width,
+  height,
+  style,
+  fetchpriority,
 } = Astro.props;
 
 function resolveLowResSource(imageSrc: string) {
@@ -60,6 +68,10 @@ const placeholderSrc = lowSrc || resolveLowResSource(src);
     loading={loading}
     decoding={decoding}
     sizes={sizes}
+    width={width}
+    height={height}
+    style={style}
+    fetchpriority={fetchpriority}
     onload="this.closest('[data-progressive-image]')?.classList.add('is-loaded')"
   />
 </span>

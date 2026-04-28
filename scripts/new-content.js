@@ -81,9 +81,13 @@ lang: zh
 type: photography
 gallery:
   - src: ""
-    alt: "摄影作品"
+    alt: ""
+    caption: ""
+    width: 0
+    height: 0
 camera:
   model: ""
+location: ""
 publishedDate: "${today}"
 draft: true
 description: ${JSON.stringify(fallbackTitle)}

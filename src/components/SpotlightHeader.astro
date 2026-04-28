@@ -5,10 +5,9 @@ const currentPath = Astro.url.pathname;
 const isPhotoArchive = currentPath === '/photography/';
 
 const navigation = [
-  { name: '文章', href: '/articles/', icon: 'article' },
-  { name: '摄影', href: '/photography/', icon: 'camera' },
-  { name: '标签', href: '/tags/', icon: 'tag' },
-  { name: '关于', href: '/about/', icon: 'about' },
+  { name: 'Photographs', href: '/photography/', icon: 'camera' },
+  { name: 'Notes', href: '/articles/', icon: 'article' },
+  { name: 'About', href: '/about/', icon: 'about' },
 ] as const;
 ---
 
@@ -24,7 +23,7 @@ const navigation = [
         {navigation.map((item) => {
           const active = currentPath === item.href;
           return (
-            <a href={item.href} class={`relative transition spotlight-header__link ${active ? 'font-semibold text-[var(--text)]' : 'muted hover:text-[var(--text)]'}`} data-astro-prefetch>
+            <a href={item.href} class={`relative transition spotlight-header__link ${active ? 'font-semibold text-[var(--text)]' : 'muted hover:text-[var(--text)]'}`} aria-current={active ? 'page' : undefined} data-astro-prefetch>
               <UiIcon name={item.icon} size={13} class="spotlight-header__nav-icon" />
               <span>{item.name}</span>
               {active && <span class="absolute -bottom-1 left-0 right-0 h-px bg-[var(--accent)]" />}
@@ -54,7 +53,7 @@ const navigation = [
           </summary>
           <nav class="spotlight-header__menu absolute right-5 mt-2 min-w-40 rounded-xl border bg-[var(--surface)] p-2 text-sm shadow-sm" style="border-color: var(--line);">
             {navigation.map((item) => (
-              <a href={item.href} class="spotlight-header__menu-link muted flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-black/5 hover:text-[var(--text)] dark:hover:bg-white/5" data-astro-prefetch>
+              <a href={item.href} class="spotlight-header__menu-link muted flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-black/5 hover:text-[var(--text)] dark:hover:bg-white/5" aria-current={currentPath === item.href ? 'page' : undefined} data-astro-prefetch>
                 <UiIcon name={item.icon} size={14} />
                 <span>{item.name}</span>
               </a>

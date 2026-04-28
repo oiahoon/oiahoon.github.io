@@ -1,4 +1,6 @@
 ---
+title: Late Light
+subtitle: 傍晚落在墙面和街边的低饱和光。
 author: Joey
 date: 2024-06-11T00:00:00.000Z
 tags:
@@ -7,11 +9,14 @@ type: photography
 gallery:
   - src: >-
       https://images.unsplash.com/photo-1718123734763-a78eed668cd8?ixid=M3w4MjA3NjB8MHwxfGFsbHx8fHx8fHx8fDE3NjEyNjE1Njl8&ixlib=rb-4.1.0?ixlib=rb-4.1.0&auto=format&fit=crop&w=1200&q=80
-    alt: 摄影作品
+    alt: 傍晚街边低饱和光线和建筑边缘
+    caption: 傍晚的光没有很亮，只是把街边的轮廓轻轻描出来。
+    width: 1200
+    height: 800
 camera:
   model: 'Leica Camera AG, LEICA M (Typ 262)'
+location: Chengdu
 publishedDate: 'June 11, 2024'
 draft: false
-description: 摄影作品。
+description: 成都傍晚街边的一张低饱和光线摄影。
 ---
-

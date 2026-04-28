@@ -39,7 +39,7 @@ function getTagTransitionName(tag: string) {
       <div class="tag-cloud mt-12">
         {sortedTags.map(([tag, count]) => (
           <a
-            href={`/tags/${tag}/`}
+            href={`/tags/${encodeURIComponent(tag)}/`}
             class={`tag-cloud__pill tag-cloud__pill--${getWeight(count)}`}
             data-astro-prefetch
             style={`view-transition-name: ${getTagTransitionName(tag)};`}

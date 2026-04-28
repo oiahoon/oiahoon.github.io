@@ -117,19 +117,36 @@ function formatDate(exif, filePath) {
   return fs.statSync(filePath).birthtime.toISOString().split('T')[0];
 }
 
-function generateArticle(photoFilename, exif, date) {
+async function imageDimensions(photoPath) {
+  try {
+    const metadata = await sharp(photoPath).metadata();
+    return {
+      width: metadata.width || 0,
+      height: metadata.height || 0,
+    };
+  } catch {
+    return { width: 0, height: 0 };
+  }
+}
+
+function generateArticle(photoFilename, exif, date, dimensions) {
   const photoId = path.basename(photoFilename, path.extname(photoFilename));
   const filename = `${date}-photography-${photoId}.md`;
+  const title = `Photograph ${photoId}`;
 
   const lines = [
     '---',
+    `title: "${title}"`,
     'author: Joey',
     `date: ${date}`,
     'tags: ["摄影"]',
     'type: photography',
     'gallery:',
     `  - src: "/photos/${photoFilename}"`,
-    '    alt: "摄影作品"',
+    `    alt: "${title}"`,
+    `    caption: "${title}"`,
+    `    width: ${dimensions.width}`,
+    `    height: ${dimensions.height}`,
   ];
 
   const camera = formatCamera(exif);
@@ -146,7 +163,7 @@ function generateArticle(photoFilename, exif, date) {
     if (settings.length > 0) lines.push(`  settings: "${settings.join(', ')}"`);
   }
 
-  lines.push('draft: false', '---', '');
+  lines.push('location: ""', 'draft: true', `description: "${title}"`, '---', '');
   return { filename, content: `${lines.join('\n')}` };
 }
 
@@ -177,7 +194,8 @@ async function processPhoto(photoPath, existingRefs) {
       return;
     }
 
-    const { filename: articleFilename, content } = generateArticle(filename, exif, date);
+    const dimensions = await imageDimensions(path.join(PHOTOS_DIR, filename));
+    const { filename: articleFilename, content } = generateArticle(filename, exif, date, dimensions);
     const articlePath = path.join(POSTS_DIR, articleFilename);
     const exists = fs.existsSync(articlePath);
 

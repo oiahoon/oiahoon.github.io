@@ -2,78 +2,403 @@
 import { getCollection } from 'astro:content';
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
 import ProgressiveImage from '../components/ProgressiveImage.astro';
-import UiIcon from '../components/UiIcon.astro';
 
 const posts = await getCollection('posts', ({ data }) => !data.draft);
 const sorted = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
-const latestArticles = sorted.filter((p) => p.data.type !== 'photography').slice(0, 6);
-const latestPhotos = sorted.filter((p) => p.data.type === 'photography').slice(0, 4);
+const legacyNotes = sorted.filter((p) => p.data.type !== 'photography').slice(0, 4);
+const photographs = sorted.filter((p) => p.data.type === 'photography');
+const heroPhoto = photographs[0];
+const selectedPhotos = photographs.slice(0, 5);
 
-const description = '以简洁排版记录软件工程实践与摄影观察。';
+const description = 'Joey Huang 的摄影作品、生活观察，以及一些早年的工程笔记。';
+
+function photoImage(photo: typeof photographs[number]) {
+  return photo.data.gallery?.[0];
+}
+
+function photoMeta(photo: typeof photographs[number]) {
+  const parts = [photo.data.location, String(photo.data.date.getFullYear())].filter(Boolean);
+  return parts.join(' · ');
+}
 ---
 
-<SpotlightLayout title="Joey's Notes | 黄药师的笔记本" description={description}>
-  <section class="section-gap">
-    <div class="shell">
-      <div class="hero-intro">
-        <p class="eyebrow section-kicker"><UiIcon name="notebook" size={14} /> <span>Notebook</span></p>
-        <h1 class="mt-4 text-4xl font-semibold tracking-tight sm:text-6xl" style="view-transition-name: site-identity-title;">
-          技术写作与摄影归档
-        </h1>
+<SpotlightLayout title="Joey Huang — Photographs & field notes" description={description}>
+  <section class="home-hero">
+    <div class="shell home-hero__grid">
+      {heroPhoto && photoImage(heroPhoto) && (
+        <a href={`/posts/${heroPhoto.slug}/`} class="home-hero__media" data-astro-prefetch aria-label={`查看摄影作品 ${heroPhoto.data.title}`}>
+          <ProgressiveImage
+            src={photoImage(heroPhoto)!.src}
+            alt={photoImage(heroPhoto)!.alt || heroPhoto.data.title || 'Selected photograph'}
+            class="home-hero__image"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+            width={photoImage(heroPhoto)!.width}
+            height={photoImage(heroPhoto)!.height}
+            sizes="(min-width: 960px) 48vw, 100vw"
+            style={`view-transition-name: photo-cover-${heroPhoto.slug};`}
+          />
+        </a>
+      )}
+
+      <div class="home-hero__copy">
+        <p class="eyebrow">Photography-first personal site</p>
+        <h1 style="view-transition-name: site-identity-title;">Photographs & field notes.</h1>
+        <p class="home-hero__lede">街头、旅行、咖啡馆、猫与生活里的微光。这里保存我的摄影作品、生活观察，以及一些早年的工程笔记。</p>
+        <div class="home-hero__actions">
+          <a href="/photography/" class="home-button" data-astro-prefetch>Browse photographs</a>
+          <a href="/about/" class="home-text-link" data-astro-prefetch>Read about Joey</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="section-gap">
+  <section class="home-section">
     <div class="shell">
-      <div class="section-head">
-        <h2 class="section-head__title text-2xl font-semibold"><UiIcon name="article" size={18} /> <span>最新文章</span></h2>
-        <a href="/articles/" class="text-sm muted hover:text-[var(--text)]" data-astro-prefetch>查看全部</a>
+      <div class="home-section__head">
+        <h2>Selected photographs</h2>
+        <a href="/photography/" data-astro-prefetch>All photographs</a>
       </div>
 
-      <div class="entry-stream">
-        {latestArticles.map((post) => (
-          <article class="entry-item">
-            <time class="entry-meta skeleton-text" datetime={post.data.date.toISOString()}>
-              <span>{post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-            </time>
-            <h3 class="entry-title skeleton-text">
-              <a href={`/posts/${post.slug}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.slug};`}>
-                {post.data.title}
-              </a>
-            </h3>
-            <p class="entry-desc skeleton-text">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="section-gap">
-    <div class="shell">
-      <div class="section-head">
-        <h2 class="section-head__title text-2xl font-semibold"><UiIcon name="camera" size={18} /> <span>近期摄影</span></h2>
-        <a href="/photography/" class="text-sm muted hover:text-[var(--text)]" data-astro-prefetch>浏览归档</a>
-      </div>
-
-      <div class="photo-grid mx-auto mt-6 grid max-w-[52rem] grid-cols-2 gap-4 sm:grid-cols-4">
-        {latestPhotos.map((photo) => {
-          const image = photo.data.gallery?.[0]?.src;
+      <div class="selected-grid" aria-label="精选摄影作品">
+        {selectedPhotos.map((photo, index) => {
+          const image = photoImage(photo);
           if (!image) return null;
+          const sizeClass = index === 0 ? 'selected-card--large' : index === 1 ? 'selected-card--medium' : 'selected-card--small';
           return (
-            <a href={`/posts/${photo.slug}/`} class="block overflow-hidden rounded-xl" data-astro-prefetch>
-              <ProgressiveImage
-                src={image}
-                alt={photo.data.title || '摄影作品'}
-                class="aspect-[4/5] w-full"
-                loading="lazy"
-                decoding="async"
-                style={`view-transition-name: photo-cover-${photo.slug};`}
-              />
-            </a>
+            <article class={`selected-card ${sizeClass}`}>
+              <a href={`/posts/${photo.slug}/`} class="selected-card__media" data-astro-prefetch>
+                <ProgressiveImage
+                  src={image.src}
+                  alt={image.alt || photo.data.title || 'Selected photograph'}
+                  class="selected-card__image"
+                  loading={index < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  width={image.width}
+                  height={image.height}
+                  sizes={index === 0 ? '(min-width: 960px) 54vw, 100vw' : '(min-width: 960px) 28vw, 50vw'}
+                  style={`view-transition-name: photo-cover-${photo.slug};`}
+                />
+              </a>
+              <h3><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h3>
+              <p>{photoMeta(photo)}</p>
+            </article>
           );
         })}
       </div>
     </div>
   </section>
+
+  <section class="home-section">
+    <div class="shell">
+      <div class="home-section__head">
+        <h2>Recent series</h2>
+      </div>
+
+      <div class="series-grid">
+        <article>
+          <p class="series-grid__title">Chengdu Street Notes</p>
+          <p>Street scenes · 2024</p>
+        </article>
+        <article>
+          <p class="series-grid__title">Coffee Windows</p>
+          <p>Cafes · Hasselblad</p>
+        </article>
+        <article>
+          <p class="series-grid__title">Quiet Interiors</p>
+          <p>Home · Daily life</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <div class="shell home-about">
+      <h2>Joey Huang</h2>
+      <p>Software engineer by trade, photographer by curiosity. 拍拍街头、咖啡馆、旅行和安静日常，也把早年的工程笔记留作可查阅的 archive。</p>
+      <a href="/about/" data-astro-prefetch>About Joey</a>
+    </div>
+  </section>
+
+  <section class="home-section home-section--notes">
+    <div class="shell">
+      <div class="home-section__head">
+        <h2>Legacy notes archive</h2>
+        <p>早年的 Rails、Docker、工具折腾与工程实践笔记，作为 archive 保留。</p>
+      </div>
+
+      <div class="legacy-list">
+        {legacyNotes.map((post) => (
+          <article class="legacy-row">
+            <time datetime={post.data.date.toISOString()}>
+              {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replaceAll('/', '.')}
+            </time>
+            <div>
+              <h3>
+                <a href={`/posts/${post.slug}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.slug};`}>
+                  {post.data.title}
+                </a>
+              </h3>
+              <p>{post.data.description || post.data.subtitle}</p>
+            </div>
+            <p class="legacy-row__tags">{post.data.tags?.slice(0, 2).join(' · ')}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
 </SpotlightLayout>
+
+<style>
+  .home-hero {
+    margin-top: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .home-hero__grid {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .home-hero__media {
+    display: block;
+    order: -1;
+    background: var(--line);
+  }
+
+  .home-hero__image {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+  }
+
+  .home-hero__copy h1 {
+    max-width: 10ch;
+    margin: 1.2rem 0 0;
+    font-size: clamp(3.4rem, 10vw, 6.4rem);
+    line-height: 0.95;
+    font-weight: 600;
+  }
+
+  .home-hero__lede {
+    max-width: 37rem;
+    margin-top: 1.2rem;
+    color: color-mix(in srgb, var(--text) 82%, var(--muted));
+    font-size: clamp(1.02rem, 1.7vw, 1.22rem);
+    line-height: 1.85;
+  }
+
+  .home-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.35rem;
+    align-items: center;
+    margin-top: 2rem;
+  }
+
+  .home-button {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.62rem 1.25rem;
+    background: var(--text);
+    color: var(--bg);
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+
+  .home-text-link,
+  .home-section__head a,
+  .home-about a {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 0.35em;
+    text-decoration-thickness: 1px;
+  }
+
+  .home-section {
+    margin-top: clamp(4.5rem, 8vw, 7rem);
+  }
+
+  .home-section__head {
+    display: grid;
+    gap: 1rem;
+    align-items: end;
+    border-top: 1px solid var(--line);
+    padding-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .home-section__head h2,
+  .home-about h2 {
+    margin: 0;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    line-height: 1.05;
+    font-weight: 600;
+  }
+
+  .home-section__head p {
+    max-width: 28rem;
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .selected-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.75rem);
+    margin-top: 2rem;
+  }
+
+  .selected-card {
+    min-width: 0;
+  }
+
+  .selected-card--large {
+    grid-column: 1 / -1;
+  }
+
+  .selected-card__media {
+    display: block;
+    overflow: hidden;
+    background: var(--line);
+  }
+
+  .selected-card__image {
+    aspect-ratio: 4 / 3;
+    transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease;
+  }
+
+  .selected-card:hover .selected-card__image {
+    transform: scale(1.018);
+  }
+
+  .selected-card h3 {
+    margin: 0.85rem 0 0;
+    font-family: var(--font-sans);
+    font-size: clamp(1rem, 2vw, 1.18rem);
+    line-height: 1.35;
+  }
+
+  .selected-card p,
+  .series-grid p,
+  .home-about p,
+  .legacy-row p {
+    color: var(--muted);
+  }
+
+  .selected-card p {
+    margin: 0.18rem 0 0;
+    font-size: 0.92rem;
+  }
+
+  .series-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .series-grid article {
+    border-top: 1px solid var(--line);
+    padding-top: 1rem;
+  }
+
+  .series-grid__title {
+    margin: 0;
+    color: var(--text) !important;
+    font-weight: 700;
+  }
+
+  .series-grid p:last-child {
+    margin: 0.35rem 0 0;
+  }
+
+  .home-about {
+    display: grid;
+    gap: 1rem;
+    border-top: 1px solid var(--line);
+    padding-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .home-about p {
+    max-width: 38rem;
+    margin: 0;
+    font-size: 1.03rem;
+    line-height: 1.85;
+  }
+
+  .legacy-list {
+    margin-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .legacy-row {
+    display: grid;
+    gap: 0.75rem;
+    border-bottom: 1px solid var(--line);
+    padding-block: 1.25rem;
+  }
+
+  .legacy-row time,
+  .legacy-row__tags {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  .legacy-row h3 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: clamp(1.08rem, 2.5vw, 1.35rem);
+    line-height: 1.35;
+  }
+
+  .legacy-row p {
+    margin: 0.3rem 0 0;
+    line-height: 1.65;
+  }
+
+  @media (min-width: 720px) {
+    .home-section__head,
+    .home-about,
+    .legacy-row {
+      grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.42fr);
+    }
+
+    .series-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 960px) {
+    .home-hero__grid {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    }
+
+    .home-hero__media {
+      order: 0;
+    }
+
+    .selected-grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .selected-card--large {
+      grid-column: span 7;
+    }
+
+    .selected-card--medium {
+      grid-column: span 5;
+    }
+
+    .selected-card--small {
+      grid-column: span 4;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .selected-card__image {
+      transition: none;
+    }
+  }
+</style>
