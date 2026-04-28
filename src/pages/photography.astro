@@ -1,149 +1,131 @@
 ---
 import { getCollection } from 'astro:content';
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
-import { getPreviewImage } from '../utils/extractFirstImage';
 import ProgressiveImage from '../components/ProgressiveImage.astro';
-import UiIcon from '../components/UiIcon.astro';
 
 const photos = await getCollection('posts', ({ data }) => !data.draft && data.type === 'photography');
 const sorted = photos.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
-const featured = sorted[0];
-const remaining = sorted.slice(1);
+const selected = sorted.slice(0, 6);
+const archive = sorted.slice(0);
+const filters = ['All', 'Chengdu', 'Japan', 'Film', 'Digital', 'Coffee', 'Cats'];
 const years = [...new Set(sorted.map((photo) => photo.data.date.getFullYear()))].sort((a, b) => b - a);
-const latestYear = years[0];
-const earliestYear = years[years.length - 1];
-const totalImages = sorted.reduce((sum, photo) => sum + (photo.data.gallery?.length || 1), 0);
-const groupedArchive = years.map((year) => ({
-  year,
-  photos: remaining.filter((photo) => photo.data.date.getFullYear() === year),
-})).filter((group) => group.photos.length > 0);
+
+function firstImage(photo: typeof sorted[number]) {
+  return photo.data.gallery?.[0];
+}
+
+function cardMeta(photo: typeof sorted[number], includeCamera = false) {
+  const values = [photo.data.location, String(photo.data.date.getFullYear())];
+  if (includeCamera && photo.data.camera?.model) {
+    values.push(photo.data.camera.model.replace('Leica Camera AG, ', '').replace('Hasselblad, ', ''));
+  }
+  return values.filter(Boolean).join(' · ');
+}
 ---
 
-<SpotlightLayout title="摄影作品 | Joey's Notes" description="摄影归档" lang="zh">
-  <section class="section-gap photo-index-page">
-    <div class="photo-index-shell shell">
-        <div class="photo-index-hero">
+<SpotlightLayout title="Photographs | Joey's Notes" description="Personal photographs from Chengdu, Japan, cafes, streets, and quiet daily light." lang="zh">
+  <section class="photo-index-page">
+    <div class="photo-shell shell">
+      <header class="photo-intro">
+        <p class="eyebrow">Photography</p>
+        <div class="photo-intro__grid">
           <div>
-            <p class="eyebrow section-kicker photo-kicker"><UiIcon name="camera" size={14} /> <span>Photography</span></p>
-            <h1 class="mt-4 text-4xl font-semibold photo-index-shell__title">摄影作品</h1>
+            <h1>Personal photographs from Chengdu, Japan, and elsewhere.</h1>
+            <p>街头、旅行、咖啡馆、猫与日常生活里的安静片段。使用 Leica、Hasselblad、胶片与数码记录。</p>
           </div>
+          <dl class="photo-index-stats" aria-label="摄影归档概览">
+            <div>
+              <dt>Photographs</dt>
+              <dd>{sorted.length}</dd>
+            </div>
+            <div>
+              <dt>Latest year</dt>
+              <dd>{years[0]}</dd>
+            </div>
+            <div>
+              <dt>Archive</dt>
+              <dd>{years.length}</dd>
+            </div>
+          </dl>
+        </div>
+      </header>
 
-          <div class="photo-index-hero__stats">
-            <div>
-              <span><UiIcon name="archive" size={13} />作品</span>
-              <strong>{sorted.length}</strong>
-            </div>
-            <div>
-              <span><UiIcon name="image" size={13} />照片</span>
-              <strong>{totalImages}</strong>
-            </div>
-            <div>
-              <span><UiIcon name="calendar" size={13} />时间</span>
-              <strong>{latestYear === earliestYear ? latestYear : `${earliestYear} - ${latestYear}`}</strong>
-            </div>
+      <section class="photo-section" aria-labelledby="selected-title">
+        <div class="photo-section__head">
+          <div>
+            <h2 id="selected-title">Selected photographs</h2>
+            <nav class="filter-index" aria-label="摄影筛选索引">
+              {filters.map((filter, index) => (
+                <a href={index === 0 ? '/photography/' : `#${filter.toLowerCase()}`} aria-current={index === 0 ? 'page' : undefined}>{filter}</a>
+              ))}
+            </nav>
           </div>
+          <p>不是“最新作品”，而是我作为作者最愿意让读者先看的图。</p>
         </div>
 
-        {featured && (() => {
-          const image = featured.data.gallery?.[0]?.src || getPreviewImage(featured);
-          if (!image) return null;
-          return (
-            <article class="photo-feature mt-12">
-              <a href={`/posts/${featured.slug}/`} class="photo-feature__media" data-astro-prefetch>
-                <ProgressiveImage
-                  src={image}
-                  alt={featured.data.title || '摄影作品'}
-                  class="photo-feature__image"
-                  loading="eager"
-                  decoding="async"
-                  style={`view-transition-name: photo-cover-${featured.slug};`}
-                />
-              </a>
-              <div class="photo-feature__content">
-                <div class="photo-feature__lead">
-                  <p class="photo-feature__eyebrow"><UiIcon name="image" size={13} /> <span>最新作品</span></p>
-                  <time class="photo-feature__meta" datetime={featured.data.date.toISOString()}>
-                    {featured.data.date.toLocaleDateString('zh-CN')}
-                    {featured.data.location ? ` · ${featured.data.location}` : ''}
-                  </time>
-                </div>
-                {featured.data.title && (
-                  <h2 class="photo-feature__title">
-                    <a href={`/posts/${featured.slug}/`}>{featured.data.title}</a>
-                  </h2>
-                )}
-                {featured.data.subtitle && <p class="photo-feature__desc">{featured.data.subtitle}</p>}
-                {(featured.data.camera?.model || (featured.data.gallery && featured.data.gallery.length > 1)) && (
-                  <p class="photo-feature__specs">
-                    {featured.data.camera?.model}
-                    {featured.data.camera?.model && featured.data.gallery && featured.data.gallery.length > 1 ? ' · ' : ''}
-                    {featured.data.gallery && featured.data.gallery.length > 1 ? `${featured.data.gallery.length} 张照片` : ''}
-                  </p>
-                )}
-                <div class="photo-feature__actions">
-                  <a href={`/posts/${featured.slug}/`} class="photo-feature__link" data-astro-prefetch><span>进入作品</span><UiIcon name="arrowRight" size={14} /></a>
-                </div>
-              </div>
-            </article>
-          );
-        })()}
-
-        <div class="photo-archive mt-16">
-          <div class="photo-archive__head">
-            <div>
-              <p class="eyebrow section-kicker photo-kicker"><UiIcon name="archive" size={14} /> <span>Archive</span></p>
-              <p class="photo-archive__desc">按拍摄时间浏览全部作品。</p>
-            </div>
-            <a href="/tags/%E6%91%84%E5%BD%B1/" class="photo-archive__link"><span>浏览摄影标签</span><UiIcon name="tag" size={14} /></a>
-          </div>
-
-          <nav class="photo-year-jump mt-6" aria-label="年份快速跳转">
-            {groupedArchive.map((group) => (
-              <a href={`#year-${group.year}`} class="photo-year-jump__link" data-year-link={String(group.year)}>{group.year}</a>
-            ))}
-          </nav>
-
-          {groupedArchive.map((group) => (
-            <section class="photo-year-group mt-10" id={`year-${group.year}`} data-year-group={String(group.year)}>
-              <div class="photo-year-group__head">
-                <h2 class="photo-year-group__title">{group.year}</h2>
-                <p class="photo-year-group__count">{group.photos.length} 组作品</p>
-              </div>
-
-              <div class="photo-grid mt-6">
-                {group.photos.map((photo) => {
-                  const image = photo.data.gallery?.[0]?.src || getPreviewImage(photo);
-                  if (!image) return null;
-                  return (
-                    <article class="photo-card">
-                      <a href={`/posts/${photo.slug}/`} class="photo-card__media" data-astro-prefetch>
-                        <ProgressiveImage
-                          src={image}
-                          alt={photo.data.title || '摄影作品'}
-                          class="photo-card__image"
-                          loading="lazy"
-                          decoding="async"
-                          style={`view-transition-name: photo-cover-${photo.slug};`}
-                        />
-                      </a>
-                      <div class="photo-card__body">
-                        {photo.data.title && (
-                          <h2 class="photo-card__title"><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h2>
-                        )}
-                        <div class="photo-card__footer">
-                          <time datetime={photo.data.date.toISOString()}><UiIcon name="calendar" size={12} />{photo.data.date.toLocaleDateString('zh-CN')}</time>
-                          {photo.data.location && <span>{photo.data.location}</span>}
-                          {photo.data.gallery && photo.data.gallery.length > 1 && <span>{photo.data.gallery.length} 张</span>}
-                          {photo.data.camera?.model && <span>{photo.data.camera.model}</span>}
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
+        <div class="selected-photo-grid">
+          {selected.map((photo, index) => {
+            const image = firstImage(photo);
+            if (!image) return null;
+            const size = index === 0 ? 'is-lead' : index === 1 || index === 3 ? 'is-medium' : 'is-small';
+            return (
+              <article class={`photo-tile ${size}`}>
+                <a href={`/posts/${photo.slug}/`} class="photo-tile__media" data-astro-prefetch>
+                  <ProgressiveImage
+                    src={image.src}
+                    alt={image.alt || photo.data.title || 'Photograph'}
+                    class="photo-tile__image"
+                    loading={index < 2 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    width={image.width}
+                    height={image.height}
+                    sizes={index === 0 ? '(min-width: 960px) 54vw, 100vw' : '(min-width: 960px) 30vw, 50vw'}
+                    style={`view-transition-name: photo-cover-${photo.slug};`}
+                  />
+                </a>
+                <h3><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h3>
+                <p>{cardMeta(photo, index > 0)}</p>
+              </article>
+            );
+          })}
         </div>
+      </section>
+
+      <section class="photo-section" aria-labelledby="archive-title">
+        <div class="photo-section__head">
+          <div>
+            <p class="eyebrow">Archive</p>
+            <h2 id="archive-title">Archive · {years[0]}</h2>
+          </div>
+          <p>归档区保持高效率浏览，但标题和地点仍然存在。</p>
+        </div>
+
+        <div class="archive-grid">
+          {archive.map((photo) => {
+            const image = firstImage(photo);
+            if (!image) return null;
+            return (
+              <article class="archive-card">
+                <a href={`/posts/${photo.slug}/`} data-astro-prefetch>
+                  <ProgressiveImage
+                    src={image.src}
+                    alt={image.alt || photo.data.title || 'Photograph'}
+                    class="archive-card__image"
+                    loading="lazy"
+                    decoding="async"
+                    width={image.width}
+                    height={image.height}
+                    sizes="(min-width: 960px) 18vw, 45vw"
+                    style={`view-transition-name: photo-cover-${photo.slug};`}
+                  />
+                </a>
+                <h3><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h3>
+                <p>{photo.data.location} · {photo.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+              </article>
+            );
+          })}
+        </div>
+      </section>
     </div>
   </section>
 </SpotlightLayout>
@@ -151,399 +133,220 @@ const groupedArchive = years.map((year) => ({
 <style>
   .photo-index-page {
     margin-top: 0;
-    padding-block: clamp(2.5rem, 5vw, 4rem);
+    padding-block: clamp(2.8rem, 6vw, 5rem) clamp(4rem, 8vw, 7rem);
     background:
-      radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent 20%),
-      linear-gradient(180deg, #05070b 0%, #070a10 58%, #080c12 100%);
+      radial-gradient(circle at top, rgba(208, 138, 114, 0.08), transparent 24%),
+      linear-gradient(180deg, #11100e 0%, #141210 54%, #11100e 100%);
+    color: #eee7dc;
   }
 
-  .photo-index-shell {
-    width: min(100%, 96rem);
-    padding-inline: clamp(1.1rem, 3vw, 2.2rem);
-    color: rgba(238, 242, 247, 0.94);
+  .photo-shell {
+    width: min(100%, 92rem);
   }
 
-  .photo-index-shell :is(a, h1, h2, h3, strong) {
-    color: rgba(248, 250, 252, 0.96);
+  .photo-shell :is(h1, h2, h3, a, dd) {
+    color: #eee7dc;
   }
 
-  .photo-index-shell .eyebrow {
-    color: rgba(195, 203, 214, 0.64);
+  .photo-shell .eyebrow,
+  .photo-shell p,
+  .photo-shell dt {
+    color: #aaa197;
   }
 
-  .photo-index-shell__title {
-    color: rgba(248, 250, 252, 0.98);
+  .photo-intro {
+    padding-top: clamp(1rem, 2vw, 2rem);
   }
 
-  .photo-index-hero {
+  .photo-intro__grid {
     display: grid;
-    gap: 2rem;
+    gap: clamp(2rem, 5vw, 4rem);
     align-items: end;
+    margin-top: 1.2rem;
   }
 
-  .photo-index-hero__stats {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
-  }
-
-  .photo-index-hero__stats div {
-    padding-top: 0.15rem;
-  }
-
-  .photo-index-hero__stats span {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.42rem;
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(195, 203, 214, 0.5);
-  }
-
-  .photo-index-hero__stats strong {
-    display: block;
-    margin-top: 0.55rem;
-    font-size: clamp(1.2rem, 2.8vw, 1.8rem);
+  .photo-intro h1 {
+    max-width: 13ch;
+    margin: 0;
+    font-size: clamp(3.2rem, 8vw, 6.4rem);
+    line-height: 0.98;
     font-weight: 600;
   }
 
-  .photo-feature {
-    position: relative;
-    overflow: hidden;
-    border-radius: 1.75rem;
-    background: rgba(255, 255, 255, 0.03);
+  .photo-intro p {
+    max-width: 39rem;
+    margin: 1.35rem 0 0;
+    font-size: clamp(1rem, 2vw, 1.18rem);
+    line-height: 1.85;
   }
 
-  .photo-feature__media {
-    display: block;
-  }
-
-  .photo-feature__image {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    transition: transform 0.45s ease;
-  }
-
-  .photo-feature__media:hover .photo-feature__image {
-    transform: scale(1.02);
-  }
-
-  .photo-feature__content {
-    position: absolute;
-    left: 0;
-    right: auto;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 0.55rem;
-    width: min(32rem, 78%);
-    min-height: 36%;
-    padding: clamp(1rem, 2.2vw, 1.5rem);
-    background:
-      linear-gradient(180deg, rgba(5, 7, 11, 0) 0%, rgba(5, 7, 11, 0.18) 34%, rgba(5, 7, 11, 0.72) 100%);
-  }
-
-  .photo-feature__lead {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-
-  .photo-feature__eyebrow {
-    margin: 0;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.42rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(226, 232, 240, 0.56);
-  }
-
-  .photo-feature__meta {
-    margin: 0;
-    font-size: 0.78rem;
-    letter-spacing: 0.04em;
-    color: rgba(195, 203, 214, 0.62);
-  }
-
-  .photo-feature__title,
-  .photo-card__title {
-    margin: 0;
-    font-size: clamp(1.4rem, 2.6vw, 2.4rem);
-    line-height: 1.15;
-  }
-
-  .photo-feature__desc {
-    max-width: 32rem;
-    margin: 0.1rem 0 0;
-    color: rgba(226, 232, 240, 0.72);
-    line-height: 1.68;
-  }
-
-  .photo-feature__specs {
-    margin: 0.1rem 0 0;
-    font-size: 0.76rem;
-    color: rgba(226, 232, 240, 0.56);
-  }
-
-  .photo-feature__actions {
-    display: flex;
-    align-items: center;
-    gap: 0.9rem;
-    flex-wrap: wrap;
-    margin-top: 0.4rem;
-  }
-
-  .photo-feature__link,
-  .photo-archive__link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 2.4rem;
-    padding: 0.62rem 0.95rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.03);
-    color: rgba(248, 250, 252, 0.88);
-    font-size: 0.84rem;
-  }
-
-  .photo-feature__link,
-  .photo-archive__link {
-    gap: 0.42rem;
-  }
-
-  .photo-card__footer :is(span, time),
-  .photo-archive__desc {
-    font-size: 0.8rem;
-    color: rgba(195, 203, 214, 0.58);
-  }
-
-  .photo-card__footer :is(span, time) {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.26rem;
-  }
-
-  .photo-archive__head {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
-    gap: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 1.25rem;
-  }
-
-  .photo-grid {
+  .photo-index-stats {
     display: grid;
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.4rem;
+    border-top: 1px solid #34302b;
+    padding-top: 1.5rem;
   }
 
-  .photo-year-jump {
-    display: flex;
-    gap: 0.75rem;
-    overflow-x: auto;
-    padding-bottom: 0.35rem;
-    scrollbar-width: none;
-  }
-
-  .photo-year-jump::-webkit-scrollbar {
-    display: none;
-  }
-
-  .photo-year-jump__link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 2.15rem;
-    padding: 0.48rem 0.82rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.015);
-    color: rgba(195, 203, 214, 0.68);
-    flex: 0 0 auto;
-    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
-  }
-
-  .photo-year-jump__link.is-active {
-    border-color: rgba(255, 255, 255, 0.16);
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(248, 250, 252, 0.96);
-    transform: translateY(-1px);
-  }
-
-  .photo-year-group__head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    padding-top: 0.25rem;
-  }
-
-  .photo-year-group__title {
+  .photo-index-stats div,
+  .photo-index-stats dd,
+  .photo-index-stats dt {
     margin: 0;
-    font-size: clamp(1.5rem, 2.5vw, 2rem);
-    color: rgba(248, 250, 252, 0.96);
   }
 
-  .photo-year-group__count {
-    margin: 0;
-    font-size: 0.82rem;
+  .photo-index-stats dt {
+    font-size: 0.74rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(195, 203, 214, 0.58);
   }
 
-  .photo-card {
+  .photo-index-stats dd {
+    margin-top: 0.45rem;
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    line-height: 1;
+  }
+
+  .photo-section {
+    margin-top: clamp(4rem, 8vw, 7rem);
+    border-top: 1px solid #34302b;
+    padding-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .photo-section__head {
     display: grid;
-    gap: 0.7rem;
+    gap: 1rem;
+    align-items: start;
   }
 
-  .photo-card__media {
-    position: relative;
+  .photo-section h2 {
+    margin: 0;
+    font-size: clamp(2.1rem, 5vw, 3.5rem);
+    line-height: 1.05;
+    font-weight: 600;
+  }
+
+  .photo-section__head > p {
+    max-width: 25rem;
+    margin: 0;
+    line-height: 1.8;
+  }
+
+  .filter-index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem 1rem;
+    margin-top: 1.4rem;
+  }
+
+  .filter-index a {
+    color: #aaa197;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .filter-index a:hover,
+  .filter-index a[aria-current='page'] {
+    color: #eee7dc;
+    text-decoration: underline;
+    text-underline-offset: 0.35em;
+  }
+
+  .selected-photo-grid,
+  .archive-grid {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.65rem);
+    margin-top: 2rem;
+  }
+
+  .selected-photo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .photo-tile.is-lead {
+    grid-column: 1 / -1;
+  }
+
+  .photo-tile__media,
+  .archive-card a:first-child {
     display: block;
     overflow: hidden;
-    border-radius: 1.1rem;
-    background: rgba(255, 255, 255, 0.03);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #191816;
   }
 
-  .photo-card__media::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(5, 7, 11, 0) 38%, rgba(5, 7, 11, 0.18) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-
-  .photo-card__image {
+  .photo-tile__image,
+  .archive-card__image {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.45s ease, filter 0.45s ease;
+    transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease;
   }
 
-  .photo-card__media:hover .photo-card__image {
-    transform: scale(1.035);
-    filter: saturate(1.04);
-  }
-
-  .photo-card__media:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.22);
-  }
-
-  .photo-card__media:hover::after {
-    opacity: 1;
-  }
-
-  .photo-card__media {
+  .photo-tile__image {
     aspect-ratio: 4 / 3;
   }
 
-  .photo-card__body {
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    padding-top: 0.58rem;
-    transition: transform 0.25s ease;
+  .archive-card__image {
+    aspect-ratio: 1 / 1;
   }
 
-  .photo-card:hover .photo-card__body {
-    transform: translateY(-1px);
+  .photo-tile:hover .photo-tile__image,
+  .archive-card:hover .archive-card__image {
+    transform: scale(1.018);
   }
 
-  .photo-card__title {
-    font-size: 1rem;
+  .photo-tile h3,
+  .archive-card h3 {
+    margin: 0.85rem 0 0;
+    font-family: var(--font-sans);
+    font-size: clamp(1rem, 1.8vw, 1.18rem);
+    line-height: 1.35;
   }
 
-  .photo-card__footer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-    margin-top: 0.15rem;
-    font-size: 0.72rem;
-    color: rgba(195, 203, 214, 0.5);
-    line-height: 1.45;
+  .photo-tile p,
+  .archive-card p {
+    margin: 0.22rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
-  .photo-card__footer :is(span, time) + :is(span, time)::before {
-    content: '·';
-    margin-right: 0.45rem;
-    color: rgba(195, 203, 214, 0.28);
+  .archive-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  @media (min-width: 900px) {
-    .photo-index-hero {
-      grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.9fr);
+  @media (min-width: 760px) {
+    .photo-intro__grid,
+    .photo-section__head {
+      grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
     }
 
-    .photo-feature {
-      min-height: clamp(24rem, 44vw, 38rem);
-    }
-
-    .photo-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      align-items: start;
+    .archive-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
   }
 
-  @media (max-width: 640px) {
-    .photo-index-shell {
-      padding-inline: 1rem;
+  @media (min-width: 960px) {
+    .selected-photo-grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
     }
 
-    .photo-index-hero__stats {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .photo-tile.is-lead {
+      grid-column: span 7;
+      grid-row: span 2;
     }
 
-    .photo-archive__head {
-      align-items: flex-start;
-      flex-direction: column;
+    .photo-tile.is-medium {
+      grid-column: span 5;
     }
 
-    .photo-feature__content {
-      width: 100%;
-      min-height: 44%;
-      right: 0;
+    .photo-tile.is-small {
+      grid-column: span 4;
     }
+  }
 
-    .photo-year-group__head {
-      align-items: flex-start;
-      flex-direction: column;
+  @media (prefers-reduced-motion: reduce) {
+    .photo-tile__image,
+    .archive-card__image {
+      transition: none;
     }
   }
 </style>
-
-<script>
-  const yearLinks = Array.from(document.querySelectorAll('[data-year-link]'));
-  const yearGroups = Array.from(document.querySelectorAll('[data-year-group]'));
-
-  if (yearLinks.length && yearGroups.length) {
-    const syncYearState = (year) => {
-      yearLinks.forEach((link) => {
-        link.classList.toggle('is-active', link.getAttribute('data-year-link') === String(year));
-      });
-      const activeLink = yearLinks.find((link) => link.getAttribute('data-year-link') === String(year));
-      activeLink?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-      if (!visible) return;
-      const year = visible.target.getAttribute('data-year-group');
-      if (year) syncYearState(year);
-    }, { threshold: [0.2, 0.45], rootMargin: '-18% 0px -55% 0px' });
-
-    yearGroups.forEach((group) => observer.observe(group));
-    syncYearState(yearGroups[0].getAttribute('data-year-group'));
-  }
-</script>

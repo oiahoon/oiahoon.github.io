@@ -42,10 +42,9 @@ const activeWorkIndex = Math.max(photoCollection.findIndex((work) => work.active
 const totalWorks = photoCollection.length;
 
 const navigation = [
-  { name: '文章', href: '/articles/', icon: 'article' },
-  { name: '摄影', href: '/photography/', icon: 'camera' },
-  { name: '标签', href: '/tags/', icon: 'tag' },
-  { name: '关于', href: '/about/', icon: 'about' },
+  { name: 'Photographs', href: '/photography/', icon: 'camera' },
+  { name: 'Notes', href: '/articles/', icon: 'article' },
+  { name: 'About', href: '/about/', icon: 'about' },
 ] as const;
 ---
 
@@ -69,7 +68,7 @@ const navigation = [
             {navigation.map((item) => {
               const active = currentPath === item.href || (item.href === '/photography/' && currentPath.startsWith('/posts/'));
               return (
-                <a href={item.href} class={`photo-topbar__link ${active ? 'is-active' : ''}`} data-astro-prefetch>
+                <a href={item.href} class={`photo-topbar__link ${active ? 'is-active' : ''}`} aria-current={active ? 'page' : undefined} data-astro-prefetch>
                   <UiIcon name={item.icon} size={14} />
                   <span>{item.name}</span>
                 </a>
@@ -84,7 +83,7 @@ const navigation = [
               </summary>
               <nav class="photo-topbar__menu" aria-label="移动导航">
                 {navigation.map((item) => (
-                  <a href={item.href} class={`photo-topbar__menu-link ${currentPath === item.href || (item.href === '/photography/' && currentPath.startsWith('/posts/')) ? 'is-active' : ''}`} data-astro-prefetch>
+                  <a href={item.href} class={`photo-topbar__menu-link ${currentPath === item.href || (item.href === '/photography/' && currentPath.startsWith('/posts/')) ? 'is-active' : ''}`} aria-current={currentPath === item.href || (item.href === '/photography/' && currentPath.startsWith('/posts/')) ? 'page' : undefined} data-astro-prefetch>
                     <UiIcon name={item.icon} size={14} />
                   <span>{item.name}</span>
                   </a>
@@ -104,6 +103,10 @@ const navigation = [
               class="photo-hero__image"
               loading="eager"
               decoding="async"
+              fetchpriority="high"
+              width={heroPhoto.width}
+              height={heroPhoto.height}
+              sizes="100vw"
               style={photoTransitionName ? `view-transition-name: ${photoTransitionName};` : undefined}
             />
             <button
@@ -136,16 +139,15 @@ const navigation = [
           <div class="photo-hero__overlay photo-hero__overlay--bottom" data-photo-overlay-bottom>
             <div class="photo-hero__caption">
               <p class="photo-hero__date">
-                {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
-                {location ? ` · ${location}` : ''}
-                {publishedDate ? ` · 发布于 ${publishedDate}` : ''}
+                {location ? `${location} · ` : ''}
+                {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'long' })}
               </p>
-              {title && <h1 class="photo-hero__title">{title}</h1>}
-              {subtitle && <p class="photo-hero__subtitle">{subtitle}</p>}
+              {title && <h1 class="photo-hero__title" style={photoTransitionName ? `view-transition-name: photo-title-${slug};` : undefined}>{title}</h1>}
+              {(subtitle || heroPhoto.caption) && <p class="photo-hero__subtitle">{subtitle || heroPhoto.caption}</p>}
             </div>
 
-            <div class="photo-hero__info" aria-label="EXIF">
-              {exifEntries.length > 0 && <p class="photo-hero__eyebrow"><UiIcon name="exif" size={14} /> <span>EXIF</span></p>}
+            <details class="photo-hero__info" aria-label="Technical details">
+              <summary><UiIcon name="exif" size={14} /> <span>Technical details</span></summary>
               <div class="photo-hero__specs">
                 {exifEntries.length > 0 ? (
                   exifEntries.map((entry) => <p>{entry}</p>)
@@ -161,7 +163,7 @@ const navigation = [
                   ))}
                 </div>
               )}
-            </div>
+            </details>
           </div>
         </section>
       )}
@@ -197,6 +199,9 @@ const navigation = [
                     class="photo-gallery__image"
                     loading={index < 1 ? 'eager' : 'lazy'}
                     decoding="async"
+                    width={photo.width}
+                    height={photo.height}
+                    sizes="100vw"
                   />
                   <button
                     type="button"
@@ -234,8 +239,8 @@ const navigation = [
         <section class="photo-work-strip" aria-label="更多摄影作品">
           <div class="photo-work-strip__head">
             <div>
-              <p class="photo-work-strip__eyebrow"><UiIcon name="image" size={14} /> <span>More Works</span></p>
-              <h2 class="photo-work-strip__title">继续浏览作品</h2>
+              <p class="photo-work-strip__eyebrow"><UiIcon name="image" size={14} /> <span>More from this series</span></p>
+              <h2 class="photo-work-strip__title">Continue browsing photographs</h2>
             </div>
             {(previousPhoto || nextPhoto) && (
               <p class="photo-work-strip__hint">
@@ -296,16 +301,16 @@ const navigation = [
           <div class="photo-footer__grid">
             <section>
               <p class="photo-footer__title">Joey's Notes</p>
-              <p class="photo-footer__copy">记录软件工程实践与摄影观察，保持长期、可复用、可查阅的写作习惯。</p>
+              <p class="photo-footer__copy">Photographs, field notes, and a legacy archive of engineering notes.</p>
             </section>
 
             <section>
               <p class="photo-footer__title">导航</p>
               <div class="photo-footer__links">
-                <a href="/articles/" data-astro-prefetch>文章</a>
-                <a href="/photography/" data-astro-prefetch>摄影</a>
-                <a href="/tags/" data-astro-prefetch>标签</a>
-                <a href="/about/" data-astro-prefetch>关于</a>
+                <a href="/photography/" data-astro-prefetch>Photographs</a>
+                <a href="/articles/" data-astro-prefetch>Notes</a>
+                <a href="/about/" data-astro-prefetch>About</a>
+                <a href="/tags/" data-astro-prefetch>Tags</a>
               </div>
             </section>
 
@@ -608,6 +613,36 @@ const navigation = [
     transition: opacity 0.22s ease, transform 0.22s ease;
   }
 
+  .photo-hero__info {
+    align-self: end;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    padding-top: 0.85rem;
+  }
+
+  .photo-hero__info summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    color: rgba(226, 232, 240, 0.78);
+    font-size: 0.86rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .photo-hero__info summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .photo-hero__info summary::after {
+    content: '+';
+    margin-left: 0.4rem;
+    color: rgba(226, 232, 240, 0.58);
+  }
+
+  .photo-hero__info[open] summary::after {
+    content: '-';
+  }
+
   .photo-hero__date {
     margin: 0;
     font-size: 0.84rem;
@@ -637,17 +672,6 @@ const navigation = [
 
   .photo-hero__overlay--bottom.is-quiet .photo-hero__info {
     transform: translateY(6px);
-  }
-
-  .photo-hero__eyebrow {
-    margin: 0;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.42rem;
-    font-size: 0.78rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(226, 232, 240, 0.66);
   }
 
   .photo-hero__specs {
