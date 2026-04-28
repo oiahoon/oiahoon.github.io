@@ -7,7 +7,15 @@ const photos = await getCollection('posts', ({ data }) => !data.draft && data.ty
 const sorted = photos.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 const selected = sorted.slice(0, 6);
 const archive = sorted.slice(0);
-const filters = ['All', 'Chengdu', 'Japan', 'Film', 'Digital', 'Coffee', 'Cats'];
+const filters = [
+  { label: 'All', value: 'all' },
+  { label: 'Chengdu', value: 'chengdu' },
+  { label: 'Japan', value: 'japan' },
+  { label: 'Film', value: 'film' },
+  { label: 'Digital', value: 'digital' },
+  { label: 'Coffee', value: 'coffee' },
+  { label: 'Cats', value: 'cats' },
+] as const;
 const years = [...new Set(sorted.map((photo) => photo.data.date.getFullYear()))].sort((a, b) => b - a);
 
 function firstImage(photo: typeof sorted[number]) {
@@ -20,6 +28,28 @@ function cardMeta(photo: typeof sorted[number], includeCamera = false) {
     values.push(photo.data.camera.model.replace('Leica Camera AG, ', '').replace('Hasselblad, ', ''));
   }
   return values.filter(Boolean).join(' · ');
+}
+
+function filterGroups(photo: typeof sorted[number]) {
+  const haystack = [
+    photo.data.title,
+    photo.data.description,
+    photo.data.location,
+    photo.data.camera?.model,
+    photo.data.camera?.lens,
+    ...(photo.data.tags ?? []),
+    ...(photo.data.gallery ?? []).flatMap((image) => [image.alt, image.caption]),
+  ].filter(Boolean).join(' ').toLowerCase();
+
+  const groups = new Set<string>(['all']);
+  if (haystack.includes('chengdu') || haystack.includes('成都')) groups.add('chengdu');
+  if (haystack.includes('japan') || haystack.includes('日本')) groups.add('japan');
+  if (haystack.includes('noritsu') || haystack.includes('film') || haystack.includes('胶片')) groups.add('film');
+  if (photo.data.camera?.model && !groups.has('film')) groups.add('digital');
+  if (haystack.includes('coffee') || haystack.includes('cafe') || haystack.includes('咖啡')) groups.add('coffee');
+  if (haystack.includes('cat') || haystack.includes('猫')) groups.add('cats');
+
+  return [...groups].join(' ');
 }
 ---
 
@@ -56,7 +86,13 @@ function cardMeta(photo: typeof sorted[number], includeCamera = false) {
             <h2 id="selected-title">Selected photographs</h2>
             <nav class="filter-index" aria-label="摄影筛选索引">
               {filters.map((filter, index) => (
-                <a href={index === 0 ? '/photography/' : `#${filter.toLowerCase()}`} aria-current={index === 0 ? 'page' : undefined}>{filter}</a>
+                <a
+                  href={index === 0 ? '/photography/' : `/photography/?tag=${filter.value}`}
+                  aria-current={index === 0 ? 'page' : undefined}
+                  data-photo-filter={filter.value}
+                >
+                  {filter.label}
+                </a>
               ))}
             </nav>
           </div>
@@ -69,7 +105,7 @@ function cardMeta(photo: typeof sorted[number], includeCamera = false) {
             if (!image) return null;
             const size = index === 0 ? 'is-lead' : index === 1 || index === 3 ? 'is-medium' : 'is-small';
             return (
-              <article class={`photo-tile ${size}`}>
+              <article class={`photo-tile ${size}`} data-photo-filter-groups={filterGroups(photo)}>
                 <a href={`/posts/${photo.slug}/`} class="photo-tile__media" data-astro-prefetch>
                   <ProgressiveImage
                     src={image.src}
@@ -83,7 +119,7 @@ function cardMeta(photo: typeof sorted[number], includeCamera = false) {
                     style={`view-transition-name: photo-cover-${photo.slug};`}
                   />
                 </a>
-                <h3><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h3>
+                <h3><a href={`/posts/${photo.slug}/`} data-astro-prefetch style={`view-transition-name: photo-title-${photo.slug};`}>{photo.data.title}</a></h3>
                 <p>{cardMeta(photo, index > 0)}</p>
               </article>
             );
@@ -105,7 +141,7 @@ function cardMeta(photo: typeof sorted[number], includeCamera = false) {
             const image = firstImage(photo);
             if (!image) return null;
             return (
-              <article class="archive-card">
+              <article class="archive-card" data-photo-filter-groups={filterGroups(photo)}>
                 <a href={`/posts/${photo.slug}/`} data-astro-prefetch>
                   <ProgressiveImage
                     src={image.src}
@@ -116,7 +152,6 @@ function cardMeta(photo: typeof sorted[number], includeCamera = false) {
                     width={image.width}
                     height={image.height}
                     sizes="(min-width: 960px) 18vw, 45vw"
-                    style={`view-transition-name: photo-cover-${photo.slug};`}
                   />
                 </a>
                 <h3><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h3>
@@ -243,7 +278,7 @@ function cardMeta(photo: typeof sorted[number], includeCamera = false) {
     color: #aaa197;
     font-size: 0.95rem;
     text-decoration: none;
-    transition: color 180ms ease;
+    transition: color var(--duration-fast) var(--ease-standard);
   }
 
   .filter-index a:hover,
@@ -258,6 +293,11 @@ function cardMeta(photo: typeof sorted[number], includeCamera = false) {
     display: grid;
     gap: clamp(1rem, 2vw, 1.65rem);
     margin-top: 2rem;
+  }
+
+  .photo-tile[hidden],
+  .archive-card[hidden] {
+    display: none;
   }
 
   .selected-photo-grid {
@@ -278,7 +318,9 @@ function cardMeta(photo: typeof sorted[number], includeCamera = false) {
   .photo-tile__image,
   .archive-card__image {
     width: 100%;
-    transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease;
+    transition:
+      transform var(--duration-slow) var(--ease-standard),
+      opacity var(--duration-base) var(--ease-standard);
   }
 
   .photo-tile__image {
@@ -350,3 +392,63 @@ function cardMeta(photo: typeof sorted[number], includeCamera = false) {
     }
   }
 </style>
+
+<script>
+  (() => {
+    const root = document.querySelector('.photo-index-page');
+    if (!root || root.dataset.photoFiltersBound === 'true') return;
+
+    const links = Array.from(root.querySelectorAll('[data-photo-filter]'));
+    const items = Array.from(root.querySelectorAll('[data-photo-filter-groups]'));
+    if (!links.length || !items.length) return;
+
+    root.dataset.photoFiltersBound = 'true';
+    const controller = new AbortController();
+    const filters = new Set(links.map((link) => link.getAttribute('data-photo-filter')).filter(Boolean));
+
+    function getFilterFromUrl() {
+      const tag = new URL(window.location.href).searchParams.get('tag') || 'all';
+      return filters.has(tag) ? tag : 'all';
+    }
+
+    function updateUrl(filter) {
+      const url = new URL(window.location.href);
+      if (filter === 'all') {
+        url.searchParams.delete('tag');
+      } else {
+        url.searchParams.set('tag', filter);
+      }
+      url.hash = '';
+      history.pushState({ photoFilter: filter }, '', url);
+    }
+
+    function applyFilter(filter) {
+      items.forEach((item) => {
+        const groups = (item.getAttribute('data-photo-filter-groups') || '').split(/\s+/);
+        item.hidden = filter !== 'all' && !groups.includes(filter);
+      });
+
+      links.forEach((link) => {
+        const active = link.getAttribute('data-photo-filter') === filter;
+        if (active) {
+          link.setAttribute('aria-current', 'page');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    }
+
+    links.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const filter = link.getAttribute('data-photo-filter') || 'all';
+        event.preventDefault();
+        applyFilter(filter);
+        updateUrl(filter);
+      }, { signal: controller.signal });
+    });
+
+    window.addEventListener('popstate', () => applyFilter(getFilterFromUrl()), { signal: controller.signal });
+    document.addEventListener('astro:before-swap', () => controller.abort(), { once: true, signal: controller.signal });
+    applyFilter(getFilterFromUrl());
+  })();
+</script>

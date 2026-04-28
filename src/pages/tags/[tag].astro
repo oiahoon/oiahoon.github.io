@@ -19,7 +19,11 @@ export async function getStaticPaths() {
 }
 
 const { posts, tag } = Astro.props;
-const tagTransitionName = `tag-label-${encodeURIComponent(tag)}`;
+let tagHash = 0;
+for (let index = 0; index < tag.length; index += 1) {
+  tagHash = ((tagHash << 5) - tagHash + tag.charCodeAt(index)) | 0;
+}
+const tagTransitionName = `tag-label-${Math.abs(tagHash).toString(36)}`;
 ---
 
 <SpotlightLayout title={`标签: ${tag} | Joey's Notes`} description={`查看所有标记为 "${tag}" 的文章`}>

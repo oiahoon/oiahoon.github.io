@@ -268,7 +268,6 @@ const navigation = [
                     class="photo-work-strip__thumb"
                     loading="lazy"
                     decoding="async"
-                    style={`view-transition-name: photo-cover-${work.slug};`}
                   />
                 )}
                 <div class="photo-work-strip__copy">
@@ -282,7 +281,7 @@ const navigation = [
         </section>
       )}
 
-      <div class="photo-lightbox" data-photo-lightbox hidden aria-hidden="true">
+      <div class="photo-lightbox" data-photo-lightbox hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Photo viewer" tabindex="-1">
         <button type="button" class="photo-lightbox__close" data-lightbox-close aria-label="关闭全屏查看">关闭</button>
         <button type="button" class="photo-lightbox__nav photo-lightbox__nav--prev" data-lightbox-prev aria-label="查看上一张">←</button>
         <div class="photo-lightbox__stage">
@@ -1343,6 +1342,9 @@ const navigation = [
   const topbar = document.querySelector('.photo-topbar');
   const heroTopOverlay = document.querySelector('[data-photo-overlay-top]');
   const heroBottomOverlay = document.querySelector('[data-photo-overlay-bottom]');
+  const controller = new AbortController();
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const scrollBehavior = reduceMotion.matches ? 'auto' : 'smooth';
   let lightboxCloseTimer = 0;
   let activePhoto = 1;
   let lightboxIndex = 0;
@@ -1355,6 +1357,7 @@ const navigation = [
   let panStartY = 0;
   let isPanning = false;
   let lightboxReturnFocus = null;
+  let observer = null;
 
   function applyLightboxTransform() {
     if (!lightboxImage) return;
@@ -1376,11 +1379,11 @@ const navigation = [
       link.classList.toggle('is-active', Number(link.getAttribute('data-photo-target')) === index);
     });
     const activeRailLink = photoRailLinks.find((link) => Number(link.getAttribute('data-photo-target')) === index);
-    activeRailLink?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    activeRailLink?.scrollIntoView({ behavior: scrollBehavior, block: 'nearest', inline: 'center' });
   }
 
   if (photoPanels.length && photoRailLinks.length) {
-    const observer = new IntersectionObserver((entries) => {
+    observer = new IntersectionObserver((entries) => {
       const visible = entries
         .filter((entry) => entry.isIntersecting)
         .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
@@ -1395,7 +1398,7 @@ const navigation = [
   }
 
   const activeWorkLink = workLinks.find((link) => link.classList.contains('is-active'));
-  activeWorkLink?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  activeWorkLink?.scrollIntoView({ behavior: scrollBehavior, block: 'nearest', inline: 'center' });
 
   function renderLightbox() {
     if (!photos[lightboxIndex] || !lightbox || !lightboxImage || !lightboxCaption || !lightboxCounter) return;
@@ -1406,26 +1409,62 @@ const navigation = [
     lightboxCounter.textContent = `照片 ${String(lightboxIndex + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}`;
     resetLightboxTransform();
     if (lightboxThumbs) {
-      lightboxThumbs.innerHTML = photos.map((photo, index) => `
-        <button
-          type="button"
-          class="photo-lightbox__thumb ${index === lightboxIndex ? 'is-active' : ''}"
-          data-lightbox-thumb="${index}"
-          aria-label="查看第 ${index + 1} 张照片"
-        >
-          <img src="${photo.src}" alt="${photo.alt || `照片 ${index + 1}`}" />
-        </button>
-      `).join('');
-
-      lightboxThumbs.querySelectorAll('[data-lightbox-thumb]').forEach((thumb) => {
+      lightboxThumbs.replaceChildren();
+      photos.forEach((photo, index) => {
+        const thumb = document.createElement('button');
+        const image = document.createElement('img');
+        thumb.type = 'button';
+        thumb.className = `photo-lightbox__thumb ${index === lightboxIndex ? 'is-active' : ''}`;
+        thumb.dataset.lightboxThumb = String(index);
+        thumb.setAttribute('aria-label', `查看第 ${index + 1} 张照片`);
+        image.src = photo.src;
+        image.alt = photo.alt || `照片 ${index + 1}`;
+        thumb.append(image);
         thumb.addEventListener('click', () => {
-          lightboxIndex = Number(thumb.getAttribute('data-lightbox-thumb') || '0');
+          lightboxIndex = index;
           renderLightbox();
-        });
+        }, { signal: controller.signal });
+        lightboxThumbs.append(thumb);
       });
 
       const activeThumb = lightboxThumbs.querySelector('.photo-lightbox__thumb.is-active');
-      activeThumb?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      activeThumb?.scrollIntoView({ behavior: scrollBehavior, block: 'nearest', inline: 'center' });
+    }
+  }
+
+  function lockPageScroll() {
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function unlockPageScroll() {
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  }
+
+  function focusableLightboxControls() {
+    if (!lightbox) return [];
+    return Array.from(lightbox.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+      .filter((node) => node instanceof HTMLElement && !node.hasAttribute('disabled') && !node.hidden);
+  }
+
+  function trapLightboxFocus(event) {
+    if (event.key !== 'Tab' || !lightbox || lightbox.hidden) return;
+    const focusable = focusableLightboxControls();
+    if (!focusable.length) {
+      event.preventDefault();
+      lightbox.focus();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
     }
   }
 
@@ -1437,7 +1476,7 @@ const navigation = [
     renderLightbox();
     lightbox.hidden = false;
     lightbox.setAttribute('aria-hidden', 'false');
-    document.documentElement.style.overflow = 'hidden';
+    lockPageScroll();
     requestAnimationFrame(() => {
       lightbox.classList.add('is-open');
       lightboxClose?.focus?.();
@@ -1448,7 +1487,7 @@ const navigation = [
     if (!lightbox) return;
     lightbox.classList.remove('is-open');
     lightbox.setAttribute('aria-hidden', 'true');
-    document.documentElement.style.overflow = '';
+    unlockPageScroll();
     resetLightboxTransform();
     window.clearTimeout(lightboxCloseTimer);
     lightboxCloseTimer = window.setTimeout(() => {
@@ -1470,12 +1509,12 @@ const navigation = [
     trigger.addEventListener('click', () => {
       const index = Number(trigger.getAttribute('data-photo-index') || '1') - 1;
       openLightbox(index);
-    });
+    }, { signal: controller.signal });
   });
 
-  lightboxClose?.addEventListener('click', closeLightbox);
-  lightboxPrev?.addEventListener('click', () => stepLightbox(-1));
-  lightboxNext?.addEventListener('click', () => stepLightbox(1));
+  lightboxClose?.addEventListener('click', closeLightbox, { signal: controller.signal });
+  lightboxPrev?.addEventListener('click', () => stepLightbox(-1), { signal: controller.signal });
+  lightboxNext?.addEventListener('click', () => stepLightbox(1), { signal: controller.signal });
   lightboxImage?.addEventListener('dblclick', () => {
     if (lightboxScale > 1) {
       resetLightboxTransform();
@@ -1483,7 +1522,7 @@ const navigation = [
     }
     lightboxScale = 2;
     applyLightboxTransform();
-  });
+  }, { signal: controller.signal });
   lightboxImage?.addEventListener('pointerdown', (event) => {
     if (lightboxScale <= 1) return;
     isPanning = true;
@@ -1491,47 +1530,49 @@ const navigation = [
     panStartY = event.clientY - panY;
     lightboxImage.setPointerCapture?.(event.pointerId);
     applyLightboxTransform();
-  });
+  }, { signal: controller.signal });
   lightboxImage?.addEventListener('pointermove', (event) => {
     if (!isPanning || lightboxScale <= 1) return;
     panX = event.clientX - panStartX;
     panY = event.clientY - panStartY;
     applyLightboxTransform();
-  });
+  }, { signal: controller.signal });
   lightboxImage?.addEventListener('pointerup', () => {
     isPanning = false;
     applyLightboxTransform();
-  });
+  }, { signal: controller.signal });
   lightboxImage?.addEventListener('pointercancel', () => {
     isPanning = false;
     applyLightboxTransform();
-  });
+  }, { signal: controller.signal });
   lightbox?.addEventListener('click', (event) => {
     if (event.target === lightbox) closeLightbox();
-  });
+  }, { signal: controller.signal });
   lightbox?.addEventListener('touchstart', (event) => {
     touchStartX = event.changedTouches[0]?.clientX || 0;
     touchDeltaX = 0;
-  }, { passive: true });
+  }, { passive: true, signal: controller.signal });
   lightbox?.addEventListener('touchmove', (event) => {
     const currentX = event.changedTouches[0]?.clientX || 0;
     touchDeltaX = currentX - touchStartX;
-  }, { passive: true });
+  }, { passive: true, signal: controller.signal });
   lightbox?.addEventListener('touchend', () => {
     if (Math.abs(touchDeltaX) < 48) return;
     if (touchDeltaX > 0) stepLightbox(-1);
     if (touchDeltaX < 0) stepLightbox(1);
     touchStartX = 0;
     touchDeltaX = 0;
-  }, { passive: true });
+  }, { passive: true, signal: controller.signal });
 
   document.addEventListener('keydown', (event) => {
     const isOpen = lightbox && !lightbox.hidden;
     if (!isOpen) return;
+    trapLightboxFocus(event);
+    if (event.defaultPrevented) return;
     if (event.key === 'Escape') closeLightbox();
     if (event.key === 'ArrowLeft') stepLightbox(-1);
     if (event.key === 'ArrowRight') stepLightbox(1);
-  });
+  }, { signal: controller.signal });
 
   function syncTopbarState() {
     if (!topbar) return;
@@ -1542,5 +1583,11 @@ const navigation = [
   }
 
   syncTopbarState();
-  window.addEventListener('scroll', syncTopbarState, { passive: true });
+  window.addEventListener('scroll', syncTopbarState, { passive: true, signal: controller.signal });
+  document.addEventListener('astro:before-swap', () => {
+    window.clearTimeout(lightboxCloseTimer);
+    observer?.disconnect();
+    unlockPageScroll();
+    controller.abort();
+  }, { once: true, signal: controller.signal });
 </script>

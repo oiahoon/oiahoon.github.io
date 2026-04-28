@@ -78,7 +78,7 @@ function photoMeta(photo: typeof photographs[number]) {
                   width={image.width}
                   height={image.height}
                   sizes={index === 0 ? '(min-width: 960px) 54vw, 100vw' : '(min-width: 960px) 28vw, 50vw'}
-                  style={`view-transition-name: photo-cover-${photo.slug};`}
+                  style={index === 0 ? undefined : `view-transition-name: photo-cover-${photo.slug};`}
                 />
               </a>
               <h3><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h3>
