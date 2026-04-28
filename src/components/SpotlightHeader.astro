@@ -94,7 +94,9 @@ const navigation = [
 
   :global(.spotlight-header__nav-icon) {
     opacity: 0.5;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition:
+      opacity var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
   }
 
   .spotlight-header__link:hover :global(.spotlight-header__nav-icon),

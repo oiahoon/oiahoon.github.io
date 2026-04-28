@@ -97,12 +97,19 @@ const placeholderSrc = lowSrc || resolveLowResSource(src);
     filter: blur(16px);
     transform: scale(1.05);
     opacity: 1;
-    transition: opacity 420ms ease;
+    transition: opacity var(--duration-slow) var(--ease-standard);
   }
 
   .progressive-image__high {
     opacity: 0;
-    transition: opacity 420ms ease;
+    transition: opacity var(--duration-slow) var(--ease-standard);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .progressive-image__low,
+    .progressive-image__high {
+      transition: none;
+    }
   }
 
   .progressive-image.is-loaded .progressive-image__high {
