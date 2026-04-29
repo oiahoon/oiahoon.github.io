@@ -66,80 +66,269 @@ const structuredData = generateBlogPostStructuredData({
   </PhotographyLayout>
 ) : (
   <SpotlightLayout title={`${fallbackTitle} | Joey's Notes`} description={description || subtitle || fallbackTitle} image={previewImage || undefined} lang={lang} structuredData={structuredData}>
-    <article class="section-gap">
+    <div class="reading-progress" aria-hidden="true">
+      <span data-reading-progress></span>
+    </div>
+
+    <article class="section-gap" data-article-page>
       <div class="shell">
-        <div class="reading-narrow">
-          <a href="/articles/" class="article-back-link text-sm muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="arrowLeft" size={14} /> <span>Back to notes archive</span></a>
+        <div class="article-layout">
+          <div class="reading-narrow article-primary">
+            <a href="/articles/" class="article-back-link text-sm muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="arrowLeft" size={14} /> <span>Back to notes archive</span></a>
 
-          <header class="mt-8 border-b pb-10" style="border-color: var(--line);">
-            <p class="entry-meta skeleton-text">
-              <UiIcon name="calendar" size={13} />
-              <span>
-                {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-                · {author}
-              </span>
-            </p>
-            <h1
-              class="mt-4 text-4xl font-semibold leading-[1.15] sm:text-5xl skeleton-text"
-              style={slug ? `view-transition-name: article-title-${slug};` : undefined}
-            >
-              {title}
-            </h1>
-            {subtitle && <p class="mt-5 text-lg leading-8 muted skeleton-text">{subtitle}</p>}
-          </header>
-
-          <div class="text-skeleton-stack" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
+            <header class="mt-8 border-b pb-10" style="border-color: var(--line);">
+              <p class="entry-meta skeleton-text">
+                <UiIcon name="calendar" size={13} />
+                <span>
+                  {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                  · {author}
+                </span>
+              </p>
+              <h1
+                class="mt-4 text-4xl font-semibold leading-[1.15] sm:text-5xl skeleton-text"
+                style={slug ? `view-transition-name: article-title-${slug};` : undefined}
+              >
+                {title}
+              </h1>
+              {subtitle && <p class="mt-5 text-lg leading-8 muted skeleton-text">{subtitle}</p>}
+            </header>
           </div>
 
-          <div class="prose prose-lg mt-12 text-content-block">
-            <slot />
-          </div>
-
-          {tags.length > 0 && (
-            <footer class="mt-14 border-t pt-6" style="border-color: var(--line);">
-              <div class="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <a href={`/tags/${encodeURIComponent(tag)}/`} class="article-tag-pill rounded-full border px-2.5 py-1 text-xs muted hover:text-[var(--text)]" style="border-color: var(--line);" data-astro-prefetch>
-                    <UiIcon name="tag" size={12} />
-                    <span>{tag}</span>
-                  </a>
-                ))}
+          <aside class="article-marginalia" aria-label="Article details">
+            <dl>
+              <div>
+                <dt>Published</dt>
+                <dd>
+                  {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </dd>
               </div>
-            </footer>
-          )}
+              <div>
+                <dt>Author</dt>
+                <dd>{author}</dd>
+              </div>
+              {tags.length > 0 && (
+                <div>
+                  <dt>Filed</dt>
+                  <dd>{tags.slice(0, 2).join(' / ')}</dd>
+                </div>
+              )}
+              <div>
+                <dt>Archive</dt>
+                <dd><a href="/articles/" data-astro-prefetch>Notes</a></dd>
+              </div>
+            </dl>
+          </aside>
 
-          <div class="mt-8 flex items-center justify-between border-t pt-6 text-sm" style="border-color: var(--line);">
-            <a href="/articles/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="article" size={14} /> <span>Notes archive</span></a>
-            <a href="/tags/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="tag" size={14} /> <span>All tags</span></a>
+          <div class="reading-narrow article-content">
+            <div class="text-skeleton-stack" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
+
+            <div class="prose prose-lg mt-12 text-content-block" data-article-content>
+              <slot />
+            </div>
+
+            {tags.length > 0 && (
+              <footer class="mt-14 border-t pt-6" style="border-color: var(--line);">
+                <div class="article-tag-list">
+                  {tags.map((tag) => (
+                    <a href={`/tags/${encodeURIComponent(tag)}/`} class="article-tag-link muted hover:text-[var(--text)]" data-astro-prefetch>
+                      <UiIcon name="tag" size={12} />
+                      <span>{tag}</span>
+                    </a>
+                  ))}
+                </div>
+              </footer>
+            )}
+
+            <div class="mt-8 flex items-center justify-between border-t pt-6 text-sm" style="border-color: var(--line);">
+              <a href="/articles/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="article" size={14} /> <span>Notes archive</span></a>
+              <a href="/tags/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="tag" size={14} /> <span>All tags</span></a>
+            </div>
           </div>
         </div>
       </div>
     </article>
     <style>
+    .reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 60;
+      width: 100%;
+      height: 1px;
+      pointer-events: none;
+      background: transparent;
+    }
+
+    .reading-progress span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform: scaleX(0);
+      transform-origin: left center;
+      background: color-mix(in srgb, var(--accent) 62%, transparent);
+    }
+
+    .article-layout {
+      display: grid;
+      gap: 1.8rem;
+    }
+
+    .article-primary,
+    .article-content {
+      width: 100%;
+    }
+
+    .article-marginalia {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 1.2rem;
+    }
+
+    .article-marginalia dl {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 0;
+    }
+
+    .article-marginalia div,
+    .article-marginalia dt,
+    .article-marginalia dd {
+      margin: 0;
+    }
+
+    .article-marginalia dt {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .article-marginalia dd {
+      margin-top: 0.3rem;
+      font-size: 0.84rem;
+      line-height: 1.45;
+      color: color-mix(in srgb, var(--text) 86%, var(--muted));
+      overflow-wrap: anywhere;
+    }
+
+    .article-marginalia a {
+      text-decoration: none;
+    }
+
+    .article-marginalia a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 0.28em;
+    }
+
     .article-back-link,
-    .article-tag-pill {
+    .article-tag-link {
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
     }
 
     .article-back-link :global(.ui-icon),
-    .article-tag-pill :global(.ui-icon) {
+    .article-tag-link :global(.ui-icon) {
       color: color-mix(in srgb, var(--accent) 64%, var(--muted));
       opacity: 0.68;
     }
+
+    .article-tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem 1rem;
+      font-size: 0.86rem;
+    }
+
+    .article-tag-link {
+      text-decoration: none;
+    }
+
+    .article-tag-link:hover {
+      text-decoration: underline;
+      text-underline-offset: 0.3em;
+    }
+
+    @media (min-width: 1024px) {
+      .article-layout {
+        grid-template-columns: minmax(8rem, 12rem) minmax(0, var(--reading-max));
+        justify-content: center;
+        column-gap: clamp(2rem, 5vw, 4rem);
+      }
+
+      .article-primary,
+      .article-content {
+        grid-column: 2;
+      }
+
+      .article-marginalia {
+        position: sticky;
+        top: 2rem;
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        align-self: start;
+        margin-top: 5.3rem;
+        border-right: 1px solid var(--line);
+        border-bottom: 0;
+        padding-right: 1.2rem;
+        padding-bottom: 0;
+      }
+
+      .article-marginalia dl {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
+  <script>
+    (() => {
+      const progress = document.querySelector('[data-reading-progress]');
+      const content = document.querySelector('[data-article-content]');
+      if (!(progress instanceof HTMLElement) || !(content instanceof HTMLElement)) return;
+
+      const controller = new AbortController();
+      let ticking = false;
+
+      function updateProgress() {
+        const start = content.getBoundingClientRect().top + window.scrollY;
+        const end = start + content.offsetHeight - window.innerHeight;
+        const raw = end > start ? (window.scrollY - start) / (end - start) : 1;
+        const value = Math.min(Math.max(raw, 0), 1);
+        progress.style.transform = `scaleX(${value})`;
+      }
+
+      function scheduleUpdate() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(() => {
+          ticking = false;
+          updateProgress();
+        });
+      }
+
+      updateProgress();
+      window.addEventListener('scroll', scheduleUpdate, { passive: true, signal: controller.signal });
+      window.addEventListener('resize', scheduleUpdate, { signal: controller.signal });
+      document.addEventListener('astro:before-swap', () => controller.abort(), { once: true, signal: controller.signal });
+    })();
+  </script>
 </SpotlightLayout>
 )}
