@@ -26,16 +26,16 @@ for (let index = 0; index < tag.length; index += 1) {
 const tagTransitionName = `tag-label-${Math.abs(tagHash).toString(36)}`;
 ---
 
-<SpotlightLayout title={`标签: ${tag} | Joey's Notes`} description={`查看所有标记为 "${tag}" 的文章`}>
-  <section class="section-gap">
+<SpotlightLayout title={`标签: ${tag} | Joey's Notes`} description={`查看所有标记为 "${tag}" 的内容`}>
+  <section class="section-gap tag-detail-page">
     <div class="shell">
-      <div class="hero-intro">
-        <p class="eyebrow section-kicker"><UiIcon name="tag" size={14} /> <span>Tag</span></p>
-        <h1 class="mt-4 text-4xl font-semibold" style={`view-transition-name: ${tagTransitionName};`}>#{tag}</h1>
-        <p class="mt-4 muted">共 {posts.length} 篇相关文章</p>
+      <div class="hero-intro tag-detail-hero">
+        <p class="eyebrow tag-detail-kicker"><UiIcon name="tag" size={14} /> <span>Tag</span></p>
+        <h1 class="tag-detail-title" style={`view-transition-name: ${tagTransitionName};`}>#{tag}</h1>
+        <p class="tag-detail-count">共 {posts.length} 篇相关内容</p>
       </div>
 
-      <div class="entry-stream mt-10">
+      <div class="entry-stream tag-detail-stream">
         {posts.map((post) => (
           <article class="entry-item">
             <time class="entry-meta skeleton-text" datetime={post.data.date.toISOString()}>
@@ -55,22 +55,93 @@ const tagTransitionName = `tag-label-${Math.abs(tagHash).toString(36)}`;
         ))}
       </div>
 
-      <div class="content-narrow mt-10">
-        <a href="/tags/" class="tag-back-link text-sm muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="arrowLeft" size={14} /> <span>查看所有标签</span></a>
+      <div class="content-narrow tag-detail-back">
+        <a href="/tags/" class="tag-back-link" data-astro-prefetch><UiIcon name="arrowLeft" size={14} /> <span>查看所有标签</span></a>
       </div>
     </div>
   </section>
 </SpotlightLayout>
 
 <style>
+  .tag-detail-page {
+    margin-top: clamp(2.8rem, 6vw, 5.2rem);
+  }
+
+  .tag-detail-hero {
+    width: min(56rem, 100%);
+  }
+
+  .tag-detail-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .tag-detail-kicker :global(.ui-icon) {
+    color: color-mix(in srgb, var(--accent) 54%, var(--muted));
+    opacity: 0.62;
+  }
+
+  .tag-detail-title {
+    margin-top: 1rem;
+    overflow-wrap: anywhere;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    line-height: 0.98;
+    font-weight: 600;
+  }
+
+  .tag-detail-count {
+    margin-top: 1.05rem;
+    color: color-mix(in srgb, var(--muted) 88%, var(--text));
+    font-size: clamp(0.98rem, 2.2vw, 1.08rem);
+    line-height: 1.8;
+  }
+
+  .tag-detail-stream {
+    margin-top: clamp(2.2rem, 5vw, 3.4rem);
+  }
+
+  .tag-detail-back {
+    margin-top: 2.25rem;
+  }
+
   .tag-back-link {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
+    color: var(--muted);
+    font-size: 0.92rem;
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .tag-back-link:hover,
+  .tag-back-link:focus-visible {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 0.35em;
   }
 
   .tag-back-link :global(.ui-icon) {
     color: color-mix(in srgb, var(--accent) 64%, var(--muted));
     opacity: 0.68;
+  }
+
+  @media (max-width: 640px) {
+    .tag-detail-page {
+      margin-top: 2.35rem;
+    }
+
+    .tag-detail-title {
+      margin-top: 0.8rem;
+      font-size: clamp(2.45rem, 13vw, 3.8rem);
+    }
+
+    .tag-detail-count {
+      margin-top: 0.85rem;
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
   }
 </style>
