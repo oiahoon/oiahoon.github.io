@@ -146,8 +146,8 @@ const navigation = [
               {(subtitle || heroPhoto.caption) && <p class="photo-hero__subtitle">{subtitle || heroPhoto.caption}</p>}
             </div>
 
-            <details class="photo-hero__info" aria-label="Technical details">
-              <summary><UiIcon name="exif" size={14} /> <span>Technical details</span></summary>
+            <details class="photo-hero__info" aria-label="EXIF details">
+              <summary><UiIcon name="exif" size={14} /> <span>EXIF</span></summary>
               <div class="photo-hero__specs">
                 {exifEntries.length > 0 ? (
                   exifEntries.map((entry) => <p>{entry}</p>)

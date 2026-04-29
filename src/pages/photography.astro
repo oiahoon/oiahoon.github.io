@@ -9,12 +9,12 @@ const selected = sorted.slice(0, 6);
 const archive = sorted.slice(0);
 const filters = [
   { label: 'All', value: 'all' },
-  { label: 'Chengdu', value: 'chengdu' },
-  { label: 'Japan', value: 'japan' },
+  { label: 'Cafe', value: 'cafe' },
+  { label: 'Street', value: 'street' },
+  { label: 'Transit', value: 'transit' },
+  { label: 'Harbour', value: 'harbour' },
+  { label: 'Trees', value: 'trees' },
   { label: 'Film', value: 'film' },
-  { label: 'Digital', value: 'digital' },
-  { label: 'Coffee', value: 'coffee' },
-  { label: 'Cats', value: 'cats' },
 ] as const;
 const years = [...new Set(sorted.map((photo) => photo.data.date.getFullYear()))].sort((a, b) => b - a);
 
@@ -42,26 +42,26 @@ function filterGroups(photo: typeof sorted[number]) {
   ].filter(Boolean).join(' ').toLowerCase();
 
   const groups = new Set<string>(['all']);
-  if (haystack.includes('chengdu') || haystack.includes('成都')) groups.add('chengdu');
-  if (haystack.includes('japan') || haystack.includes('日本')) groups.add('japan');
+  if (haystack.includes('cafe') || haystack.includes('coffee') || haystack.includes('bakery') || haystack.includes('咖啡')) groups.add('cafe');
+  if (haystack.includes('street') || haystack.includes('road') || haystack.includes('taxi') || haystack.includes('motorcycle') || haystack.includes('cyclist') || haystack.includes('街')) groups.add('street');
+  if (haystack.includes('train') || haystack.includes('taxi') || haystack.includes('road') || haystack.includes('车厢') || haystack.includes('出租车')) groups.add('transit');
+  if (haystack.includes('harbour') || haystack.includes('skyline') || haystack.includes('boat') || haystack.includes('海') || haystack.includes('港')) groups.add('harbour');
+  if (haystack.includes('tree') || haystack.includes('canopy') || haystack.includes('flowers') || haystack.includes('树') || haystack.includes('花')) groups.add('trees');
   if (haystack.includes('noritsu') || haystack.includes('film') || haystack.includes('胶片')) groups.add('film');
-  if (photo.data.camera?.model && !groups.has('film')) groups.add('digital');
-  if (haystack.includes('coffee') || haystack.includes('cafe') || haystack.includes('咖啡')) groups.add('coffee');
-  if (haystack.includes('cat') || haystack.includes('猫')) groups.add('cats');
 
   return [...groups].join(' ');
 }
 ---
 
-<SpotlightLayout title="Photographs | Joey's Notes" description="Personal photographs from Chengdu, Japan, cafes, streets, and quiet daily light." lang="zh">
+<SpotlightLayout title="Photographs | Joey's Notes" description="Personal photographs from cafes, streets, transit windows, trees, and quiet daily light." lang="zh">
   <section class="photo-index-page">
     <div class="photo-shell shell">
       <header class="photo-intro">
         <p class="eyebrow">Photography</p>
         <div class="photo-intro__grid">
           <div>
-            <h1>Personal photographs from Chengdu, Japan, and elsewhere.</h1>
-            <p>街头、旅行、咖啡馆、猫与日常生活里的安静片段。使用 Leica、Hasselblad、胶片与数码记录。</p>
+            <h1>Personal photographs from streets, cafes, and elsewhere.</h1>
+            <p>街头、车窗、咖啡馆、树影与水面里的安静片段。使用 Leica、Hasselblad、胶片与数码记录。</p>
           </div>
           <dl class="photo-index-stats" aria-label="摄影归档概览">
             <div>
