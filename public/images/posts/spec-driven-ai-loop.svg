@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Spec implementation test feedback loop</title>
+  <desc id="desc">A low-saturation paper engineering diagram showing a circular development loop.</desc>
+  <defs>
+    <pattern id="paper" width="34" height="34" patternUnits="userSpaceOnUse">
+      <rect width="34" height="34" fill="#f4f1ea" />
+      <path d="M0 33.5H34M33.5 0V34" stroke="#ded7ca" stroke-width="0.5" opacity="0.33" />
+    </pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0l10 5-10 5z" fill="#839694" />
+    </marker>
+  </defs>
+  <rect width="1600" height="900" fill="url(#paper)" />
+  <rect x="120" y="90" width="1360" height="720" rx="34" fill="#faf8f2" stroke="#d0c8b8" stroke-width="3" />
+
+  <g fill="none" stroke="#839694" stroke-width="8" marker-end="url(#arrow)" opacity="0.72">
+    <path d="M640 210C760 145 900 145 1020 210" />
+    <path d="M1160 335C1230 455 1230 565 1160 680" />
+    <path d="M1020 725C900 790 760 790 640 725" />
+    <path d="M450 680C375 565 375 455 450 335" />
+  </g>
+
+  <g>
+    <rect x="465" y="155" width="270" height="150" rx="22" fill="#eef1ed" stroke="#b7c2bc" stroke-width="4" />
+    <g stroke="#7e918f" stroke-width="6" stroke-linecap="round">
+      <path d="M515 202h130M515 235h170M515 268h95" />
+    </g>
+  </g>
+  <g>
+    <rect x="865" y="155" width="270" height="150" rx="22" fill="#f2eee4" stroke="#c8bea9" stroke-width="4" />
+    <rect x="910" y="197" width="180" height="70" rx="10" fill="#e4e9e6" stroke="#b8c4bf" stroke-width="3" />
+    <g stroke="#7d918e" stroke-width="5" stroke-linecap="round">
+      <path d="M935 222h70M935 246h110" />
+    </g>
+  </g>
+  <g>
+    <rect x="865" y="595" width="270" height="150" rx="22" fill="#eef1ed" stroke="#b7c2bc" stroke-width="4" />
+    <g fill="none" stroke="#7e918f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="920" y="638" width="28" height="28" rx="5" />
+      <path d="M926 652l8 8 18-22" />
+      <rect x="920" y="690" width="28" height="28" rx="5" />
+      <path d="M926 704l8 8 18-22" />
+    </g>
+    <g stroke="#a7b4af" stroke-width="5" stroke-linecap="round">
+      <path d="M970 652h100M970 704h78" />
+    </g>
+  </g>
+  <g>
+    <rect x="465" y="595" width="270" height="150" rx="22" fill="#f2eee4" stroke="#c8bea9" stroke-width="4" />
+    <path d="M525 665c45-36 98-36 143 0M525 700c45 36 98 36 143 0" fill="none" stroke="#879996" stroke-width="7" stroke-linecap="round" />
+    <circle cx="518" cy="665" r="8" fill="#879996" />
+    <circle cx="675" cy="700" r="8" fill="#879996" />
+  </g>
+
+  <circle cx="800" cy="450" r="96" fill="#f8f6ef" stroke="#cbd2cc" stroke-width="4" />
+  <path d="M755 448l32 32 65-78" fill="none" stroke="#839694" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

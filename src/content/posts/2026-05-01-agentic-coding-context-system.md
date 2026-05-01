@@ -2,7 +2,7 @@
 title: "我是如何设计一套会自维护的 agentic coding 上下文系统的"
 subtitle: "让 AI 先读地图，而不是每次重新翻世界"
 author: 黄药师
-date: 2026-05-01T00:00:00.000Z
+date: 2026-04-29T00:00:00.000Z
 tags:
   - Notes
   - agentic coding

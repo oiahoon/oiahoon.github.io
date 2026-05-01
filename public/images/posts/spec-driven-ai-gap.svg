@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Human context and AI gaps</title>
+  <desc id="desc">A quiet engineering illustration contrasting human context filling with uncertain AI inference.</desc>
+  <defs>
+    <pattern id="paper" width="36" height="36" patternUnits="userSpaceOnUse">
+      <rect width="36" height="36" fill="#f5f2eb" />
+      <path d="M0 35.5H36M35.5 0V36" stroke="#ded9cf" stroke-width="0.5" opacity="0.34" />
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="url(#paper)" />
+  <line x1="800" y1="120" x2="800" y2="780" stroke="#d5cfc3" stroke-width="3" stroke-dasharray="14 16" />
+
+  <g transform="translate(155 150)">
+    <rect x="0" y="0" width="500" height="600" rx="28" fill="#faf8f2" stroke="#cfc8b8" stroke-width="3" />
+    <circle cx="140" cy="175" r="66" fill="#c7d1ca" stroke="#93a6a1" stroke-width="4" />
+    <path d="M140 245v165M82 310h116M102 540c40-82 112-82 152 0" fill="none" stroke="#8b9e99" stroke-width="16" stroke-linecap="round" opacity="0.7" />
+    <g fill="#eef1eb" stroke="#b8c5be" stroke-width="3">
+      <rect x="285" y="85" width="140" height="88" rx="12" />
+      <rect x="300" y="235" width="130" height="78" rx="12" />
+      <rect x="252" y="405" width="170" height="90" rx="12" />
+    </g>
+    <g stroke="#849893" stroke-width="5" stroke-linecap="round">
+      <path d="M318 120h75M318 145h52M332 270h60M332 293h38M290 438h95M290 464h70" />
+    </g>
+    <g fill="none" stroke="#8fa19d" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 0">
+      <path d="M210 220C250 180 260 145 285 130" />
+      <path d="M205 340C250 315 265 290 300 275" />
+      <path d="M230 440C250 460 260 465 252 456" />
+    </g>
+  </g>
+
+  <g transform="translate(940 150)">
+    <rect x="0" y="0" width="500" height="600" rx="28" fill="#faf8f2" stroke="#cfc8b8" stroke-width="3" />
+    <rect x="175" y="148" width="150" height="150" rx="28" fill="#dce4e1" stroke="#94a7a3" stroke-width="4" />
+    <circle cx="218" cy="207" r="12" fill="#7f9491" />
+    <circle cx="282" cy="207" r="12" fill="#7f9491" />
+    <path d="M215 250h70" stroke="#7f9491" stroke-width="8" stroke-linecap="round" />
+    <g fill="#f0eee7" stroke="#d3ccc1" stroke-width="3" opacity="0.78">
+      <rect x="58" y="92" width="96" height="66" rx="12" />
+      <rect x="350" y="92" width="98" height="66" rx="12" />
+      <rect x="72" y="420" width="120" height="80" rx="12" />
+      <rect x="320" y="420" width="120" height="80" rx="12" />
+    </g>
+    <g fill="none" stroke="#9ca9a6" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 14" opacity="0.75">
+      <path d="M175 190C135 150 120 140 154 125" />
+      <path d="M325 190C365 155 380 140 350 125" />
+      <path d="M190 295C140 350 132 395 150 420" />
+      <path d="M310 295C365 355 380 392 350 420" />
+    </g>
+    <g stroke="#b5bdb9" stroke-width="5" stroke-linecap="round">
+      <path d="M85 122h45M375 122h45M105 452h58M350 452h55" />
+    </g>
+  </g>
+</svg>
