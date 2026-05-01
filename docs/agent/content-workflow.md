@@ -5,7 +5,7 @@ Read this for publishing articles/photos, frontmatter, draft behavior, content h
 ## Content Model
 
 - Content lives in `src/content/posts/`.
-- Schema lives in `src/content/config.ts`.
+- Schema and content loaders live in `src/content.config.ts`.
 - Articles and photography share the same collection.
 - Normal posts are default or `type: article`.
 - Photography posts use `type: photography` and `gallery`.

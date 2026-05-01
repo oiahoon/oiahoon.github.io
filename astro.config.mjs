@@ -1,7 +1,6 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,8 +19,7 @@ export default defineConfig({
       customPages: [
         'https://notes.miaowu.org/about'
       ]
-    }),
-    tailwind()
+    })
   ],
   markdown: {
     shikiConfig: {
@@ -33,16 +31,5 @@ export default defineConfig({
     format: 'directory',
     inlineStylesheets: 'auto'
   },
-  compressHTML: true,
-  vite: {
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            vendor: ['astro']
-          }
-        }
-      }
-    }
-  }
+  compressHTML: true
 });

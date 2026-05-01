@@ -46,7 +46,7 @@ const tagTransitionName = `tag-label-${Math.abs(tagHash).toString(36)}`;
               })}</span>
             </time>
             <h2 class="entry-title skeleton-text">
-              <a href={`/posts/${post.slug}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.slug};`}>
+              <a href={`/posts/${post.id}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.id};`}>
                 {post.data.title}
               </a>
             </h2>

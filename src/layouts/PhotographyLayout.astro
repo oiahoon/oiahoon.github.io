@@ -256,7 +256,7 @@ const navigation = [
           <div class="photo-work-strip__rail" data-work-rail>
             {photoCollection.map((work) => (
               <a
-                href={`/posts/${work.slug}/`}
+                href={`/posts/${work.id}/`}
                 class={`photo-work-strip__item ${work.active ? 'is-active' : ''}`}
                 data-work-link
                 data-astro-prefetch

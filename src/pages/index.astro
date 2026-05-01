@@ -26,7 +26,7 @@ function photoMeta(photo: typeof photographs[number]) {
   <section class="home-hero">
     <div class="shell home-hero__grid">
       {heroPhoto && photoImage(heroPhoto) && (
-        <a href={`/posts/${heroPhoto.slug}/`} class="home-hero__media" data-astro-prefetch aria-label={`查看摄影作品 ${heroPhoto.data.title}`}>
+        <a href={`/posts/${heroPhoto.id}/`} class="home-hero__media" data-astro-prefetch aria-label={`查看摄影作品 ${heroPhoto.data.title}`}>
           <ProgressiveImage
             src={photoImage(heroPhoto)!.src}
             alt={photoImage(heroPhoto)!.alt || heroPhoto.data.title || 'Selected photograph'}
@@ -37,7 +37,7 @@ function photoMeta(photo: typeof photographs[number]) {
             width={photoImage(heroPhoto)!.width}
             height={photoImage(heroPhoto)!.height}
             sizes="(min-width: 960px) 48vw, 100vw"
-            style={`view-transition-name: photo-cover-${heroPhoto.slug};`}
+            style={`view-transition-name: photo-cover-${heroPhoto.id};`}
           />
         </a>
       )}
@@ -68,7 +68,7 @@ function photoMeta(photo: typeof photographs[number]) {
           const sizeClass = index === 0 ? 'selected-card--large' : index === 1 ? 'selected-card--medium' : 'selected-card--small';
           return (
             <article class={`selected-card ${sizeClass}`}>
-              <a href={`/posts/${photo.slug}/`} class="selected-card__media" data-astro-prefetch>
+              <a href={`/posts/${photo.id}/`} class="selected-card__media" data-astro-prefetch>
                 <ProgressiveImage
                   src={image.src}
                   alt={image.alt || photo.data.title || 'Selected photograph'}
@@ -78,10 +78,10 @@ function photoMeta(photo: typeof photographs[number]) {
                   width={image.width}
                   height={image.height}
                   sizes={index === 0 ? '(min-width: 960px) 54vw, 100vw' : '(min-width: 960px) 28vw, 50vw'}
-                  style={index === 0 ? undefined : `view-transition-name: photo-cover-${photo.slug};`}
+                  style={index === 0 ? undefined : `view-transition-name: photo-cover-${photo.id};`}
                 />
               </a>
-              <h3><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h3>
+              <h3><a href={`/posts/${photo.id}/`} data-astro-prefetch>{photo.data.title}</a></h3>
               <p>{photoMeta(photo)}</p>
             </article>
           );
@@ -136,7 +136,7 @@ function photoMeta(photo: typeof photographs[number]) {
             </time>
             <div>
               <h3>
-                <a href={`/posts/${post.slug}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.slug};`}>
+                <a href={`/posts/${post.id}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.id};`}>
                   {post.data.title}
                 </a>
               </h3>

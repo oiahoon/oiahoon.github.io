@@ -41,7 +41,7 @@ const currentPosts = posts.slice(startIndex, endIndex);
               {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
             </time>
             <h2 class="entry-title skeleton-text">
-              <a href={`/posts/${post.slug}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.slug};`}>
+              <a href={`/posts/${post.id}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.id};`}>
                 {post.data.title}
               </a>
             </h2>

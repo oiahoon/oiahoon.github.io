@@ -106,7 +106,7 @@ function filterGroups(photo: typeof sorted[number]) {
             const size = index === 0 ? 'is-lead' : index === 1 || index === 3 ? 'is-medium' : 'is-small';
             return (
               <article class={`photo-tile ${size}`} data-photo-filter-groups={filterGroups(photo)}>
-                <a href={`/posts/${photo.slug}/`} class="photo-tile__media" data-astro-prefetch>
+                <a href={`/posts/${photo.id}/`} class="photo-tile__media" data-astro-prefetch>
                   <ProgressiveImage
                     src={image.src}
                     alt={image.alt || photo.data.title || 'Photograph'}
@@ -116,10 +116,10 @@ function filterGroups(photo: typeof sorted[number]) {
                     width={image.width}
                     height={image.height}
                     sizes={index === 0 ? '(min-width: 960px) 54vw, 100vw' : '(min-width: 960px) 30vw, 50vw'}
-                    style={`view-transition-name: photo-cover-${photo.slug};`}
+                    style={`view-transition-name: photo-cover-${photo.id};`}
                   />
                 </a>
-                <h3><a href={`/posts/${photo.slug}/`} data-astro-prefetch style={`view-transition-name: photo-title-${photo.slug};`}>{photo.data.title}</a></h3>
+                <h3><a href={`/posts/${photo.id}/`} data-astro-prefetch style={`view-transition-name: photo-title-${photo.id};`}>{photo.data.title}</a></h3>
                 <p>{cardMeta(photo, index > 0)}</p>
               </article>
             );
@@ -142,7 +142,7 @@ function filterGroups(photo: typeof sorted[number]) {
             if (!image) return null;
             return (
               <article class="archive-card" data-photo-filter-groups={filterGroups(photo)}>
-                <a href={`/posts/${photo.slug}/`} data-astro-prefetch>
+                <a href={`/posts/${photo.id}/`} data-astro-prefetch>
                   <ProgressiveImage
                     src={image.src}
                     alt={image.alt || photo.data.title || 'Photograph'}
@@ -154,7 +154,7 @@ function filterGroups(photo: typeof sorted[number]) {
                     sizes="(min-width: 960px) 18vw, 45vw"
                   />
                 </a>
-                <h3><a href={`/posts/${photo.slug}/`} data-astro-prefetch>{photo.data.title}</a></h3>
+                <h3><a href={`/posts/${photo.id}/`} data-astro-prefetch>{photo.data.title}</a></h3>
                 <p>{photo.data.location} · {photo.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
               </article>
             );

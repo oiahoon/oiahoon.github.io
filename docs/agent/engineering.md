@@ -20,7 +20,7 @@ Read this for Astro architecture, important files, scripts, dependencies, and im
 - `src/components/SpotlightHeader.astro`: normal header and mobile nav.
 - `src/components/ProgressiveImage.astro`: progressive image loading.
 - `src/components/Icon.astro`: Font Awesome icon wrapper.
-- `src/content/config.ts`: content schema.
+- `src/content.config.ts`: content collection schema and loaders.
 - `scripts/check-content-health.js`: content validation.
 - `scripts/new-content.js`: draft generator.
 - `scripts/sync-photos.js`: photo import and EXIF workflow.
