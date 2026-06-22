@@ -63,6 +63,9 @@
 - 进行：Round 15 覆盖摄影标签、普通标签、分页归档、文章归档和首页，定位到长标签详情列表可减少离屏渲染成本。
 - 完成：标签详情条目增加原生 `content-visibility: auto` 与 `contain-intrinsic-size`，版本号提升到 `0.0.16`，并补充长列表设计上下文。
 - 验证：Round 15 `/tags/摄影/` 109 项与 `/tags/Notes/` 11 项保持稳定，390px 与 1440px 下无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
+- 进行：Round 16 基于文章归档桌面与手机截图，定位到 archive hero 仍过于居中和展示化。
+- 完成：文章归档 hero、lede 和主题链接改为左对齐，并降低标题比例，版本号提升到 `0.0.17`。
+- 验证：Round 16 文章首条在 390px 下提前到 `510px`、桌面提前到 `535px`，8 个主题链接保留；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -86,5 +89,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.45s`，`content health: 0 errors / 0 warnings`，`tag entries use content-visibility containment`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.43s`，`content health: 0 errors / 0 warnings`，`article archive first entry at 510px mobile and 535px desktop`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23

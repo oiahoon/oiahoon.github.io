@@ -2,6 +2,41 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 16 - 2026-06-23 - Article Archive Index Rhythm
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-15/articles-390x844.png`, `/private/tmp/oiahoon-uiux-round-15/articles-1440x900.png`
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-16-after/`
+- Reviewed route: `/articles/`
+- Viewports: `390x844`, `1440x900`
+
+Findings:
+
+- The article archive had no horizontal overflow.
+- Desktop article archive still felt too much like a centered hero page, with the first article starting at `561px`.
+- Articles should stay text-first and scannable, visually quieter than photography-led pages.
+
+Changes:
+
+- Left-aligned the article archive hero, lede, and topic-link row.
+- Reduced article archive title scale, especially on desktop and long mobile wraps.
+- Preserved the 8 topic links and the existing article stream content.
+- Bumped the app version to `0.0.17`.
+- Added an agent design-system note that article archive headings should stay quieter than photography and support quick list scanning.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-16-after/`
+- First article now starts at `510px` on `390x844` and `535px` on `1440x900`.
+- All 8 topic links remain visible, and no horizontal overflow or offscreen offenders were detected.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.43s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 15 - 2026-06-23 - Tag List Rendering Containment
 
 Evidence:

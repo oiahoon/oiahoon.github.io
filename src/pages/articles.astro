@@ -74,24 +74,25 @@ const shouldShowTopicLinks = topTags.length >= 3;
   }
 
   .articles-hero {
-    width: min(58rem, 100%);
+    width: min(52rem, 100%);
+    text-align: left;
   }
 
   .articles-kicker {
     display: block;
-    text-align: center;
+    text-align: left;
   }
 
   .articles-title {
     margin-top: 1rem;
-    font-size: clamp(3rem, 8vw, 5.5rem);
-    line-height: 0.98;
+    font-size: clamp(2.75rem, 5.6vw, 4.4rem);
+    line-height: 1.05;
     font-weight: 600;
   }
 
   .articles-lede {
-    width: min(40rem, 100%);
-    margin: 1.05rem auto 0;
+    width: min(38rem, 100%);
+    margin: 1rem 0 0;
     color: color-mix(in srgb, var(--muted) 88%, var(--text));
     font-size: clamp(0.98rem, 2.2vw, 1.08rem);
     line-height: 1.8;
@@ -100,7 +101,7 @@ const shouldShowTopicLinks = topTags.length >= 3;
   .articles-topic-links {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.5rem 1rem;
     margin-top: 1.45rem;
   }
@@ -164,8 +165,8 @@ const shouldShowTopicLinks = topTags.length >= 3;
 
     .articles-title {
       margin-top: 0.65rem;
-      font-size: clamp(2.18rem, 11.2vw, 3.15rem);
-      line-height: 1;
+      font-size: clamp(2rem, 9.4vw, 2.8rem);
+      line-height: 1.08;
     }
 
     .articles-lede {
