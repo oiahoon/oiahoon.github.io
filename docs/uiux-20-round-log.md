@@ -2,6 +2,40 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 13 - 2026-06-23 - About Page Scale
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-13/`
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-13-after/`
+- Reviewed routes: `/`, `/articles/`, `/tags/`, `/about/`, `/portfolio/`, `/offline/`, `/photography/`, `/posts/2026-05-01-agentic-coding-context-system/`
+- Viewports: `390x844`, `1440x900`
+
+Findings:
+
+- The checked routes had no horizontal overflow.
+- `/about/` used a much larger identity title than the rest of the normal text-first pages.
+- On desktop, the About title measured `213px` tall and made the page feel more like a poster than a readable personal information page.
+
+Changes:
+
+- Reduced About page title scale, lede scale, and top rhythm while preserving the portrait and all profile content.
+- Slightly rebalanced the desktop grid so the image column remains present without overpowering the profile rows.
+- Bumped the app version to `0.0.14`.
+- Added an agent design-system note that About should remain personal and readable rather than more dominant than article or photography surfaces.
+
+Validation plan:
+
+Results:
+
+- About final screenshots: `/private/tmp/oiahoon-uiux-round-13-after/`
+- About desktop title height dropped from `213px` to `86px`; mobile title height is `52px`.
+- `/about/` has no horizontal overflow at `390x844` or `1440x900`; no offscreen offenders were detected.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.36s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 12 - 2026-06-23 - Portfolio Theme Cohesion
 
 Evidence:

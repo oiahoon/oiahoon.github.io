@@ -9,6 +9,7 @@ Read this for visual design, spacing, theme behavior, icons, animation, and UI c
 - Typography, spacing, rhythm, and image hierarchy matter more than decorative UI.
 - Icons should be subtle, small, and supportive. They must not compete with reading.
 - Non-core utility pages such as Portfolio should use the same semantic theme variables as the rest of the normal site.
+- About should feel personal and readable, not more visually dominant than the article archive or photography surfaces.
 
 ## Copy Rules
 

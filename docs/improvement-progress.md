@@ -54,6 +54,9 @@
 - 进行：Round 12 基于普通页面深色主题截图，定位到 Portfolio 仍使用独立 Tailwind zinc 色层，和站点变量体系不一致。
 - 完成：Portfolio 页面迁移到本地语义类和站点设计变量，版本号提升到 `0.0.13`。
 - 验证：Round 12 Portfolio 深色主题在 390px 与 1440px 下无横向溢出，保留 2 个项目卡与 3 个站点链接；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
+- 进行：Round 13 覆盖首页、文章、标签、About、Portfolio、离线页、摄影页和文章详情，定位到 About 桌面姓名标题过重。
+- 完成：收敛 About 标题、引导和桌面网格比例，版本号提升到 `0.0.14`，并补充 About 设计上下文。
+- 验证：Round 13 About 桌面标题高度从 `213px` 降到 `86px`，390px 与 1440px 下无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -77,5 +80,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.36s`，`content health: 0 errors / 0 warnings`，`portfolio semantic theme variables applied`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.36s`，`content health: 0 errors / 0 warnings`，`about title scale reduced`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23
