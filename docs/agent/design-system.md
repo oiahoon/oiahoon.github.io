@@ -8,6 +8,7 @@ Read this for visual design, spacing, theme behavior, icons, animation, and UI c
 - Deep, image-led, immersive for photography pages.
 - Typography, spacing, rhythm, and image hierarchy matter more than decorative UI.
 - Icons should be subtle, small, and supportive. They must not compete with reading.
+- Non-core utility pages such as Portfolio should use the same semantic theme variables as the rest of the normal site.
 
 ## Copy Rules
 

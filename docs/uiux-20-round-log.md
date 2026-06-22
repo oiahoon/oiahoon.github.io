@@ -2,6 +2,39 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 12 - 2026-06-23 - Portfolio Theme Cohesion
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-12/`, `/private/tmp/oiahoon-uiux-round-12-browser/`
+- Reviewed routes: `/`, `/articles/`, `/tags/`, `/portfolio/`
+- Viewports: `390x844`, `1440x900`
+
+Findings:
+
+- Ordinary dark theme pages had no horizontal overflow.
+- `/portfolio/` still used a separate Tailwind zinc color layer and card styling instead of the site's design variables.
+- The route felt slightly detached from the rest of the calm paper/dark theme system.
+
+Changes:
+
+- Reworked `/portfolio/` onto local semantic classes backed by `var(--text)`, `var(--muted)`, `var(--surface)`, `var(--line)`, and `var(--accent)`.
+- Preserved the existing project content, external links, and two-card structure.
+- Bumped the app version to `0.0.13`.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-12-after/`
+- Portfolio dark theme: no horizontal overflow at `390x844` or `1440x900`; `scrollWidth` equals `clientWidth` in both viewports.
+- Project structure stayed intact with 2 external project cards and 3 site links.
+- Portfolio cards now render from site semantic variables, with dark card background `color(srgb 0.0980392 0.0941176 0.0862745 / 0.68)` and no offscreen offenders.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.36s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 11 - 2026-06-22 - Lightbox Dynamic Thumbnail Styling
 
 Evidence:
