@@ -1039,7 +1039,7 @@ const navigation = [
     display: none;
   }
 
-  .photo-lightbox__thumb {
+  :global(.photo-lightbox__thumb) {
     width: 3.9rem;
     height: 4.9rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1053,13 +1053,13 @@ const navigation = [
     transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
   }
 
-  .photo-lightbox__thumb.is-active {
+  :global(.photo-lightbox__thumb.is-active) {
     border-color: rgba(255, 255, 255, 0.34);
     opacity: 1;
     transform: translateY(-1px);
   }
 
-  .photo-lightbox__thumb img {
+  :global(.photo-lightbox__thumb img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -1215,7 +1215,7 @@ const navigation = [
       max-height: 72vh;
     }
 
-    .photo-lightbox__thumb {
+    :global(.photo-lightbox__thumb) {
       width: 3.5rem;
       height: 4.35rem;
     }
@@ -1295,7 +1295,7 @@ const navigation = [
       width: 100%;
     }
 
-    .photo-lightbox__thumb {
+    :global(.photo-lightbox__thumb) {
       width: 3.2rem;
       height: 4rem;
     }

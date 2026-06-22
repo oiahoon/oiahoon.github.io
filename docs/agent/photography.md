@@ -38,6 +38,7 @@ Photography should feel like an immersive portfolio, not a blog article with a p
 - Restore focus to the opener when it closes.
 - Lock body/background scrolling while open and release it after close.
 - Support Esc and close button.
+- Dynamically created lightbox thumbnails must use global CSS selectors or otherwise receive the scoped attributes needed for sizing.
 - Keep swipe/keyboard behavior stable on mobile.
 - Avoid controls that obscure the photo more than necessary.
 

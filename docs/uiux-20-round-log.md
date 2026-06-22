@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 11 - 2026-06-22 - Lightbox Dynamic Thumbnail Styling
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-11/`
+- Reviewed route: `/posts/2024-03-14-photography-uingbcmkfbq/`
+- Viewports: `1440x900`, `390x844`
+
+Findings:
+
+- Lightbox open/close behavior, focus restore, Esc close, and scroll locking worked.
+- On mobile, the dynamically created lightbox thumbnail was unstyled and appeared as a second large duplicate image.
+- The thumb nodes are created by client script, so scoped Astro selectors did not apply to them.
+
+Changes:
+
+- Converted lightbox thumbnail selectors to `:global(...)` so dynamically inserted thumb buttons and images receive size, crop, and active-state styling.
+- Preserved the existing lightbox interaction model and multi-photo thumbnail support.
+- Bumped the app version to `0.0.12`.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-11-after/`
+- Lightbox thumbnail styling: mobile thumb is `51x64`, desktop thumb is `62x78`, and the duplicate large thumbnail image is gone.
+- Lightbox still focuses the close button, locks page scroll while open, restores focus to the opener after Esc, and keeps page `scrollWidth` equal to viewport width.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.37s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 10 - 2026-06-22 - Photography Detail Load Position
 
 Evidence:
