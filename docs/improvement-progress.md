@@ -27,6 +27,9 @@
 - 进行：Round 3 基于标签详情截图，定位到 `#摄影` 将 109 个摄影条目纯文字化，弱化了摄影观看路径。
 - 完成：标签详情页对摄影条目增加轻量缩略图行，普通文章标签继续保持文本列表，版本号提升到 `0.0.4`。
 - 验证：Round 3 `/tags/摄影/` 桌面与移动无横向溢出且 109 行均有紧凑缩略图；`/tags/Sublime%20Text/` 保持 0 缩略图文本列表。`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
+- 进行：Round 4 基于移动菜单交互截图，定位到普通首页菜单层级低于 hero photograph，导致菜单项被遮挡。
+- 完成：移动菜单 shell 与菜单面板增加明确 z-index，版本号提升到 `0.0.5`。
+- 验证：Round 4 首页与摄影页移动菜单三项链接均可见、无横向溢出；摄影页继续隐藏主题切换。`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -50,5 +53,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.52s`，`content health: 0 errors / 0 warnings`，`photography tag thumbnails: verified`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.44s`，`content health: 0 errors / 0 warnings`，`mobile menu stacking: verified`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-22

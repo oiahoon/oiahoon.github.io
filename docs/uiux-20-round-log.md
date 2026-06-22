@@ -2,6 +2,37 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 4 - 2026-06-22 - Mobile Menu Stacking
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-04/`
+- Reviewed routes: `/`, `/photography/`
+- Viewport: `390x844`
+
+Findings:
+
+- Homepage mobile menu opened behind the hero photograph, so only the first menu row was visibly clear.
+- Photography archive mobile menu rendered above the dark page correctly and kept the photography page active state.
+- Photography pages correctly hide the theme toggle because they are locked dark.
+
+Changes:
+
+- Added an explicit stacking layer to the mobile menu shell and menu panel.
+- Bumped the app version to `0.0.5`.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-04-after/`
+- Homepage and photography mobile menus: all three links visible, menu z-index `50`, no horizontal overflow.
+- Photography archive still hides the theme toggle while normal pages keep it.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.44s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 3 - 2026-06-22 - Photography Tag Discovery
 
 Evidence:

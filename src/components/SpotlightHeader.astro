@@ -47,7 +47,7 @@ const navigation = [
           </button>
         )}
 
-        <details class="relative md:hidden">
+        <details class="spotlight-header__menu-shell relative md:hidden">
           <summary class="spotlight-header__button spotlight-header__menu-toggle cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium" style="border-color: var(--line); color: var(--text);" aria-label="导航">
             <UiIcon name="menu" size={16} />
           </summary>
@@ -161,5 +161,13 @@ const navigation = [
 
   .spotlight-header__menu-toggle::-webkit-details-marker {
     display: none;
+  }
+
+  .spotlight-header__menu-shell {
+    z-index: 50;
+  }
+
+  .spotlight-header__menu {
+    z-index: 50;
   }
 </style>
