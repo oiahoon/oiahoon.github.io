@@ -34,6 +34,7 @@ Read this for Astro architecture, important files, scripts, dependencies, and im
 - Preserve static-site behavior and simple deployment.
 - If touching shared layout/theme code, regression-test normal pages and photography pages.
 - Do not overwrite unrelated user changes.
+- Offline fallback pages should remain quiet status surfaces: no feature-tour cards, automatic polling loops, or explanatory design copy.
 
 ## Common Commands
 

@@ -33,6 +33,9 @@
 - 进行：Round 5 基于摄影详情桌面截图，定位到作品 strip 为缺图作品渲染空白缩略卡。
 - 完成：摄影详情作品 strip 仅渲染有图片的作品，并同步显示计数，版本号提升到 `0.0.6`。
 - 验证：Round 5 摄影详情 strip 首屏观察卡片均有图片、无空白缩略卡、无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
+- 进行：Round 6 覆盖作品集、离线页、分页归档、文章归档和摄影标签页，定位到离线页仍像功能说明卡片。
+- 完成：离线页收敛为安静状态页，移除大图标、功能清单和 30 秒轮询，版本号提升到 `0.0.7`。
+- 验证：Round 6 离线页在桌面与 390px 下无横向溢出，旧功能卡、列表和轮询脚本均已移除；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -56,5 +59,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.60s`，`content health: 0 errors / 0 warnings`，`photo detail strip blanks: fixed`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.60s`，`content health: 0 errors / 0 warnings`，`offline shell simplified`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-22

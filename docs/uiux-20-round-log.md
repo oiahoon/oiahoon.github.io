@@ -2,6 +2,37 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 6 - 2026-06-22 - Offline State Simplification
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-06/`
+- Reviewed routes: `/portfolio/`, `/offline/`, `/page/2/`, `/articles/`, `/tags/摄影/`
+- Viewports: `1440x900`, `390x844`
+
+Findings:
+
+- The checked edge pages had no horizontal overflow.
+- The offline page was the weakest fit for the site identity because it used a large feature card, oversized icon, and explanatory feature list.
+- The offline shell should behave like a quiet status page, not an onboarding or product feature surface.
+
+Changes:
+
+- Simplified `/offline/` to a centered status, short recovery note, and two direct actions.
+- Removed the large icon panel, feature list, and 30-second retry interval.
+- Bumped the app version to `0.0.7`.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-06-after/`
+- Offline page: no horizontal overflow at `1440x900` or `390x844`; no soft panel, feature list, or retry interval remains.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.60s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 5 - 2026-06-22 - Photography Detail Strip Blanks
 
 Evidence:

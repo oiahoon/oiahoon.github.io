@@ -6,38 +6,22 @@ import BlogLayout from '../layouts/BlogLayout.astro';
   title="离线模式 | Joey's Notes"
   description="您当前处于离线状态"
 >
-  <section class="section-gap">
+  <section class="section-gap offline-page">
     <div class="shell">
-      <div class="content-narrow text-center">
+      <div class="content-narrow offline-state">
         <p class="eyebrow">Offline</p>
-        <h1 class="mt-4 text-4xl font-semibold sm:text-5xl">您当前处于离线状态</h1>
-        <p class="muted mx-auto mt-5 max-w-xl text-lg">
-          当前无法连接网络，但你仍可以浏览此前访问并缓存过的内容。
+        <h1>您当前处于离线状态</h1>
+        <p class="muted">
+          网络恢复后可以继续访问；此前缓存过的页面仍可能打开。
         </p>
 
-        <div class="soft-panel mt-10 p-8">
-          <svg class="mx-auto mb-5 h-16 w-16 muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 109.75 9.75A9.75 9.75 0 0012 2.25z" />
-          </svg>
-          <h2 class="text-xl font-semibold">离线可用功能</h2>
-          <ul class="mx-auto mt-4 max-w-sm space-y-2 text-left muted">
-            <li>浏览已访问过的文章</li>
-            <li>查看缓存的页面内容</li>
-            <li>使用基础导航继续阅读</li>
-          </ul>
-        </div>
-
-        <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <div class="offline-actions">
           <button
             onclick="window.location.reload()"
-            class="rounded-full px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90"
-            style="background: var(--accent);"
           >
             重新连接
           </button>
-          <a href="/" class="rounded-full border px-5 py-2.5 text-sm font-medium muted transition hover:text-[var(--text)]" style="border-color: var(--line);">
-            返回首页
-          </a>
+          <a href="/">返回首页</a>
         </div>
       </div>
     </div>
@@ -45,7 +29,6 @@ import BlogLayout from '../layouts/BlogLayout.astro';
 </BlogLayout>
 
 <script>
-  // Check online status
   function updateOnlineStatus() {
     if (navigator.onLine) {
       window.location.reload();
@@ -53,11 +36,74 @@ import BlogLayout from '../layouts/BlogLayout.astro';
   }
 
   window.addEventListener('online', updateOnlineStatus);
-  
-  // Auto-retry connection every 30 seconds
-  setInterval(() => {
-    if (navigator.onLine) {
-      updateOnlineStatus();
-    }
-  }, 30000);
 </script>
+
+<style>
+  .offline-page {
+    min-height: clamp(28rem, 58vh, 42rem);
+    display: flex;
+    align-items: center;
+  }
+
+  .offline-state {
+    text-align: center;
+  }
+
+  .offline-state h1 {
+    margin-top: 1rem;
+    font-family: var(--font-serif);
+    font-size: clamp(2.4rem, 7vw, 4.5rem);
+    line-height: 1.05;
+    font-weight: 650;
+    letter-spacing: 0;
+  }
+
+  .offline-state p {
+    max-width: 32rem;
+    margin: 1.3rem auto 0;
+    font-size: 1.08rem;
+    line-height: 1.8;
+  }
+
+  .offline-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2.3rem;
+  }
+
+  .offline-actions button,
+  .offline-actions a {
+    min-height: 2.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    padding: 0.68rem 1.15rem;
+    font-size: 0.92rem;
+    font-weight: 560;
+    transition:
+      color 160ms ease,
+      background 160ms ease,
+      border-color 160ms ease;
+  }
+
+  .offline-actions button {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: white;
+  }
+
+  .offline-actions a {
+    color: var(--muted);
+  }
+
+  .offline-actions button:hover,
+  .offline-actions a:hover {
+    border-color: var(--text);
+    color: var(--text);
+  }
+
+  .offline-actions button:hover {
+    background: transparent;
+  }
+</style>
