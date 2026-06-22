@@ -2,6 +2,41 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 18 - 2026-06-23 - Mobile Header Touch Targets
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-18/articles-menu-open-390x844.png`
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-18-after/`
+- Reviewed route: `/articles/` with the mobile navigation menu open
+- Viewport: `390x844`
+
+Findings:
+
+- The mobile menu opened without horizontal overflow.
+- Header controls were slightly undersized for touch: theme toggle was `70x30`, menu toggle was `42x40`, and menu links were `142x36`.
+- The fix should improve touch comfort without adding visible instruction copy or heavier navigation behavior.
+
+Changes:
+
+- Increased mobile header theme toggle height to `44px`.
+- Increased menu toggle and menu item heights to `44px`.
+- Preserved the existing details/summary menu behavior and static link structure.
+- Bumped the app version to `0.0.19`.
+- Added an agent design-system note for comfortable mobile header touch targets.
+
+Validation plan:
+
+Results:
+
+- Final screenshot: `/private/tmp/oiahoon-uiux-round-18-after/articles-menu-open-390x844.png`
+- Theme button is now `73x44`, menu toggle is `44x44`, and all three menu links are `142x44`.
+- Menu-open state still has no horizontal overflow or offscreen offenders.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.42s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 17 - 2026-06-23 - Offline State Position
 
 Evidence:

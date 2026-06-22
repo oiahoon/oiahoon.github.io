@@ -42,6 +42,7 @@ Read this for visual design, spacing, theme behavior, icons, animation, and UI c
 - Screenshot-led UIUX rounds should protect first-viewport content entry, especially mobile homepage and desktop photography archive rhythm.
 - Article archive headings should stay quieter than photography and support scanning the list quickly.
 - Offline and status pages should surface the state promptly instead of centering it deep in the viewport.
+- Mobile header controls and menu items should keep comfortable touch targets without adding explanatory UI copy.
 - Mobile menus must stack above photography and homepage media in both normal and locked-dark pages.
 - Long archive and tag lists should use native browser containment or lazy media loading before adding client-side behavior.
 
