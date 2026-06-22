@@ -39,6 +39,9 @@
 - 进行：Round 7 基于 390px 分页归档截图，定位到 20 个页码全部展开导致分页控件过密。
 - 完成：分页归档改为首页、当前邻近页、末页和省略号的紧凑窗口，版本号提升到 `0.0.8`。
 - 验证：Round 7 `/page/2/` 在桌面与 390px 下无横向溢出，当前页有 `aria-current="page"`；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
+- 进行：Round 8 覆盖 About、Portfolio、Tags、Articles 和 Home，定位到 Tags 移动端 hero/统计区过重，标签列表进入视口偏晚。
+- 完成：Tags 移动端压缩标题、引导、统计和列表入口间距，版本号提升到 `0.0.9`。
+- 验证：Round 8 Tags 首条标签在 390px 下 `y=314px` 进入视口，42 个标签保留，桌面与移动端无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -62,5 +65,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.48s`，`content health: 0 errors / 0 warnings`，`compact pagination verified`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.48s`，`content health: 0 errors / 0 warnings`，`tags mobile entry verified`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-22

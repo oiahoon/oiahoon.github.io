@@ -2,6 +2,37 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 8 - 2026-06-22 - Tags Mobile Entry Density
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-08/`
+- Reviewed routes: `/about/`, `/portfolio/`, `/tags/`, `/articles/`, `/`
+- Viewports: `1440x900`, `390x844`
+
+Findings:
+
+- The checked routes had no horizontal overflow.
+- The Tags index mobile hero and summary occupied too much vertical space before the actual tag list.
+- Tags should stay static and scannable, with the list entering the viewport earlier on phones.
+
+Changes:
+
+- Reduced Tags index mobile hero top margin, title scale, lede spacing, summary size, and list entry gap.
+- Kept desktop two-column tag rhythm and static weighted rows intact.
+- Bumped the app version to `0.0.9`.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-08-after/`
+- Tags index: first tag row enters at `y=314px` on `390x844`, 42 tag rows remain present, and there is no horizontal overflow at desktop or mobile widths.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.48s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 7 - 2026-06-22 - Compact Pagination
 
 Evidence:
