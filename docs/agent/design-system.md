@@ -43,6 +43,7 @@ Read this for visual design, spacing, theme behavior, icons, animation, and UI c
 - Article archive headings should stay quieter than photography and support scanning the list quickly.
 - Offline and status pages should surface the state promptly instead of centering it deep in the viewport.
 - Mobile header controls and menu items should keep comfortable touch targets without adding explanatory UI copy.
+- Inline utility links on mobile should have a larger hit area while retaining the quiet text style.
 - Mobile menus must stack above photography and homepage media in both normal and locked-dark pages.
 - Long archive and tag lists should use native browser containment or lazy media loading before adding client-side behavior.
 

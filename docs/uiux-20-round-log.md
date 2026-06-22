@@ -2,6 +2,40 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 19 - 2026-06-23 - About Utility Link Hit Areas
+
+Evidence:
+
+- Baseline measurement: `/about/` mobile Elsewhere links measured `18px` high.
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-19-after/`
+- Reviewed route: `/about/`
+- Viewports: `390x844`, `1440x900`
+
+Findings:
+
+- About page layout had no horizontal overflow.
+- The Elsewhere links were quiet and readable, but their hit areas were only normal text height on mobile.
+- The links should be easier to tap without turning the row into buttons or adding explanatory copy.
+
+Changes:
+
+- Made About row links inline-flex with a `2rem` minimum height.
+- Preserved the existing text style, separators, labels, and link destinations.
+- Bumped the app version to `0.0.20`.
+- Added an agent design-system note for larger mobile hit areas on quiet inline utility links.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-19-after/`
+- GitHub, Weibo, RSS, and Email links now measure `32px` high on both mobile and desktop checks.
+- No horizontal overflow or offscreen offenders at `390x844` or `1440x900`.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.36s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 18 - 2026-06-23 - Mobile Header Touch Targets
 
 Evidence:
