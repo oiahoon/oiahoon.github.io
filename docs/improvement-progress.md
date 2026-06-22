@@ -36,6 +36,9 @@
 - 进行：Round 6 覆盖作品集、离线页、分页归档、文章归档和摄影标签页，定位到离线页仍像功能说明卡片。
 - 完成：离线页收敛为安静状态页，移除大图标、功能清单和 30 秒轮询，版本号提升到 `0.0.7`。
 - 验证：Round 6 离线页在桌面与 390px 下无横向溢出，旧功能卡、列表和轮询脚本均已移除；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
+- 进行：Round 7 基于 390px 分页归档截图，定位到 20 个页码全部展开导致分页控件过密。
+- 完成：分页归档改为首页、当前邻近页、末页和省略号的紧凑窗口，版本号提升到 `0.0.8`。
+- 验证：Round 7 `/page/2/` 在桌面与 390px 下无横向溢出，当前页有 `aria-current="page"`；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -59,5 +62,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.60s`，`content health: 0 errors / 0 warnings`，`offline shell simplified`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.48s`，`content health: 0 errors / 0 warnings`，`compact pagination verified`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-22

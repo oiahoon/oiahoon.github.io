@@ -27,6 +27,7 @@ Articles should feel like a quiet paper archive and readable stream, not a card-
 
 - `/articles/` currently lists all non-photography articles while content volume is acceptable.
 - Static pagination exists elsewhere in the project.
+- Static pagination should stay compact on mobile; avoid rendering every page number when the archive spans many pages.
 - Reassess when non-photography articles exceed about 30 posts.
 - Do not use infinite scroll.
 

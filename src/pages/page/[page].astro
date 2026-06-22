@@ -24,6 +24,15 @@ const { posts, currentPage, totalPages, POSTS_PER_PAGE } = Astro.props;
 const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
 const endIndex = startIndex + POSTS_PER_PAGE;
 const currentPosts = posts.slice(startIndex, endIndex);
+
+const visiblePageNumbers = Array.from(
+  new Set([1, currentPage - 1, currentPage, currentPage + 1, totalPages].filter((page) => page >= 1 && page <= totalPages)),
+).sort((a, b) => a - b);
+
+const compactPages = visiblePageNumbers.flatMap((page, index) => {
+  const previous = visiblePageNumbers[index - 1];
+  return index > 0 && previous && page - previous > 1 ? [`gap-${previous}-${page}`, page] : [page];
+});
 ---
 
 <SpotlightLayout title={`文章 | 第${currentPage}页`} description="随便聊聊的分页归档" lang="zh">
@@ -50,25 +59,32 @@ const currentPosts = posts.slice(startIndex, endIndex);
         ))}
       </div>
 
-      <nav class="pager">
+      <nav class="pager archive-pager" aria-label="分页归档">
         {currentPage > 1 && (
-          <a href={currentPage === 2 ? '/' : `/page/${currentPage - 1}/`} class="pager-link" data-astro-prefetch>
+          <a href={currentPage === 2 ? '/' : `/page/${currentPage - 1}/`} class="pager-link archive-pager__link" data-astro-prefetch>
             上一页
           </a>
         )}
 
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-          <a
-            href={page === 1 ? '/' : `/page/${page}/`}
-            class={`pager-link ${page === currentPage ? 'current' : ''}`}
-            data-astro-prefetch
-          >
-            {page}
-          </a>
-        ))}
+        {compactPages.map((item) => {
+          if (typeof item === 'string') {
+            return <span class="archive-pager__gap" aria-hidden="true">…</span>;
+          }
+
+          return (
+            <a
+              href={item === 1 ? '/' : `/page/${item}/`}
+              class={`pager-link archive-pager__link ${item === currentPage ? 'current' : ''}`}
+              aria-current={item === currentPage ? 'page' : undefined}
+              data-astro-prefetch
+            >
+              {item}
+            </a>
+          );
+        })}
 
         {currentPage < totalPages && (
-          <a href={`/page/${currentPage + 1}/`} class="pager-link" data-astro-prefetch>
+          <a href={`/page/${currentPage + 1}/`} class="pager-link archive-pager__link" data-astro-prefetch>
             下一页
           </a>
         )}
@@ -76,3 +92,40 @@ const currentPosts = posts.slice(startIndex, endIndex);
     </div>
   </section>
 </SpotlightLayout>
+
+<style>
+  .archive-pager {
+    gap: 0.45rem;
+  }
+
+  .archive-pager__gap {
+    display: inline-flex;
+    min-width: 2.1rem;
+    min-height: 2.3rem;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+  }
+
+  .archive-pager__link {
+    min-width: 2.3rem;
+  }
+
+  @media (max-width: 560px) {
+    .archive-pager {
+      justify-content: flex-start;
+      gap: 0.38rem;
+    }
+
+    .archive-pager__link {
+      min-width: 2.2rem;
+      min-height: 2.45rem;
+      padding-inline: 0.78rem;
+    }
+
+    .archive-pager__gap {
+      min-width: 1.4rem;
+      min-height: 2.45rem;
+    }
+  }
+</style>

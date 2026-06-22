@@ -2,6 +2,36 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 7 - 2026-06-22 - Compact Pagination
+
+Evidence:
+
+- Baseline screenshot: `/private/tmp/oiahoon-uiux-round-06/page-2-390x844.png`
+- Reviewed route: `/page/2/`
+- Viewport: `390x844`
+
+Findings:
+
+- The paginated archive rendered every page number on mobile, creating a dense cluster of 20 circular controls.
+- The page had no overflow, but the control surface was visually heavier than the quiet text archive around it.
+
+Changes:
+
+- Replaced the full page-number list with a compact window: first page, current-neighbor pages, last page, and ellipsis gaps.
+- Preserved previous/next links and static direct links for the visible page numbers.
+- Bumped the app version to `0.0.8`.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-07-after/`
+- Pagination at `/page/2/`: renders `上一页 1 2 3 … 20 下一页`, marks page `2` with `aria-current="page"`, and has no horizontal overflow at `1440x900` or `390x844`.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.48s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 6 - 2026-06-22 - Offline State Simplification
 
 Evidence:
