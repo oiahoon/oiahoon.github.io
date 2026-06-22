@@ -36,6 +36,7 @@ Read this for visual design, spacing, theme behavior, icons, animation, and UI c
 - Keep pages horizontally centered and professional.
 - No horizontal overflow at desktop, iPad, or phone widths.
 - Mobile navigation must remain reachable.
+- Screenshot-led UIUX rounds should protect first-viewport content entry, especially mobile homepage and desktop photography archive rhythm.
 
 ## Icons
 

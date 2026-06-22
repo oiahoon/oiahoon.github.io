@@ -174,14 +174,25 @@ const shouldShowTopicLinks = topTags.length >= 3;
     }
 
     .articles-topic-links {
-      justify-content: flex-start;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      justify-content: stretch;
+      gap: 0.35rem 1rem;
       margin-top: 1.2rem;
     }
 
     .articles-topic-link {
-      min-height: 2.75rem;
-      padding-inline: 0.85rem 0.7rem;
+      min-width: 0;
+      min-height: 2.2rem;
+      justify-content: space-between;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+      padding-block: 0.25rem;
       font-size: 0.88rem;
+    }
+
+    .articles-topic-link span:first-child {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .articles-stream {

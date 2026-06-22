@@ -14,6 +14,14 @@
 
 ## 执行日志
 
+### 2026-06-22
+- 进行：UIUX 20 轮改进流程启动，Round 1 基于 `/`、`/articles/`、`/photography/`、`/tags/` 的 `1440x900` 与 `390x844` 截图证据。
+- 完成：收紧首页移动首屏照片高度与标题节奏，让内容入口更早出现。
+- 完成：降低摄影归档桌面首屏标题占用，保留固定深色摄影体验但减少空白。
+- 完成：将文章归档移动端高频标签改为更稳定的两列索引。
+- 完成：版本号提升到 `0.0.2`，详见 `docs/uiux-20-round-log.md`。
+- 验证：`npm run check:content-health`、`npm run build`、`git diff --check` 通过；`npm run check:security` 经非强制修复后仍剩余 5 个需要 breaking `--force` 的依赖漏洞。
+
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
 - 完成：新增本进度文档，作为改进过程唯一追踪入口。
@@ -36,5 +44,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`66 page(s) built in 2.97s`，`content health: invalid dates = 0`，`audit vulnerabilities = 0`
-- 最近验证日期：2026-02-26
+- 最近结果：`189 page(s) built in 1.79s`，`content health: 0 errors / 0 warnings`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近验证日期：2026-06-22
