@@ -57,6 +57,9 @@
 - 进行：Round 13 覆盖首页、文章、标签、About、Portfolio、离线页、摄影页和文章详情，定位到 About 桌面姓名标题过重。
 - 完成：收敛 About 标题、引导和桌面网格比例，版本号提升到 `0.0.14`，并补充 About 设计上下文。
 - 验证：Round 13 About 桌面标题高度从 `213px` 降到 `86px`，390px 与 1440px 下无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
+- 进行：Round 14 基于文章详情手机截图，定位到标题和元信息块让正文进入偏晚。
+- 完成：增加移动端文章头部压缩规则，保留出版上下文但降低标题、header、marginalia 和正文入口间距，版本号提升到 `0.0.15`。
+- 验证：Round 14 文章正文在 390px 下从首屏更早进入，`proseTop=596px`，桌面布局保持稳定；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -80,5 +83,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.36s`，`content health: 0 errors / 0 warnings`，`about title scale reduced`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.38s`，`content health: 0 errors / 0 warnings`，`mobile article body enters at 596px`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23

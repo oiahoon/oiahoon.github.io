@@ -38,6 +38,7 @@ Read this for visual design, spacing, theme behavior, icons, animation, and UI c
 - Keep pages horizontally centered and professional.
 - No horizontal overflow at desktop, iPad, or phone widths.
 - Mobile navigation must remain reachable.
+- Article detail mobile headers should let body text enter quickly without removing the publication context.
 - Screenshot-led UIUX rounds should protect first-viewport content entry, especially mobile homepage and desktop photography archive rhythm.
 - Mobile menus must stack above photography and homepage media in both normal and locked-dark pages.
 

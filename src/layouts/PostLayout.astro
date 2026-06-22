@@ -285,6 +285,50 @@ const structuredData = generateBlogPostStructuredData({
       text-underline-offset: 0.3em;
     }
 
+    @media (max-width: 640px) {
+      .article-layout {
+        gap: 1.1rem;
+      }
+
+      .article-primary header {
+        margin-top: 1.35rem;
+        padding-bottom: 1.7rem;
+      }
+
+      .article-primary h1 {
+        margin-top: 1rem;
+        font-size: clamp(1.95rem, 8vw, 2.25rem);
+        line-height: 1.16;
+      }
+
+      .article-primary header > p:not(.entry-meta) {
+        margin-top: 1rem;
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+
+      .article-marginalia {
+        padding-bottom: 0.95rem;
+      }
+
+      .article-marginalia dl {
+        gap: 0.8rem 0.9rem;
+      }
+
+      .article-marginalia dt {
+        font-size: 0.64rem;
+      }
+
+      .article-marginalia dd {
+        margin-top: 0.22rem;
+        font-size: 0.8rem;
+      }
+
+      .article-content .prose {
+        margin-top: 2rem;
+      }
+    }
+
     @media (min-width: 1024px) {
       .article-layout {
         grid-template-columns: minmax(8rem, 12rem) minmax(0, var(--reading-max));

@@ -2,6 +2,41 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 14 - 2026-06-23 - Mobile Article Header Density
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-13/article-detail-390x844.png`, `/private/tmp/oiahoon-uiux-round-13/article-detail-1440x900.png`
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-14-after/`
+- Reviewed route: `/posts/2026-05-01-agentic-coding-context-system/`
+- Viewports: `390x844`, `1440x900`
+
+Findings:
+
+- Article detail pages had no horizontal overflow.
+- On mobile, the article header and marginalia pushed the body text too far down the first screen.
+- The first tuning pass made the long Chinese/English mixed title wrap into too many lines, so title scale needed to be reduced as part of the density fix.
+
+Changes:
+
+- Added mobile-only article header rules for tighter header spacing, marginalia spacing, and prose entry spacing.
+- Reduced mobile article title scale for long mixed-language titles while leaving desktop article layout unchanged.
+- Preserved the back link, date, author, filed tags, archive link, and reading progress.
+- Bumped the app version to `0.0.15`.
+- Added an agent design-system note that mobile article headers should let body text enter quickly without removing publication context.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-14-after/`
+- Mobile article body now starts at `596px`; title height is `109px`, and all 4 marginalia items remain visible.
+- Desktop article metrics stayed stable, with `proseTop=555px` and no horizontal overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.38s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 13 - 2026-06-23 - About Page Scale
 
 Evidence:
