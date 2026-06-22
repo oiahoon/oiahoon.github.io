@@ -45,6 +45,9 @@
 - 进行：Round 9 基于文章归档移动端截图，定位到大标题三行换行导致文章入口偏低。
 - 完成：文章归档仅压缩移动端 hero 标题、引导、主题链接和列表入口间距，版本号提升到 `0.0.10`。
 - 验证：Round 9 文章首条在 390px 下 `y=562px` 进入视口，主题链接保留，桌面与移动端无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
+- 进行：Round 10 基于摄影详情多视口截图，定位到 active work strip 的 `scrollIntoView` 会在页面加载后把整页滚到 strip 附近。
+- 完成：摄影详情横向 rail/strip 居中改为只调整容器 `scrollLeft`，版本号提升到 `0.0.11`。
+- 验证：Round 10 摄影详情在桌面、iPad 和 390px 下均以 `scrollY=0` 加载，active strip 横向居中保持 `activeCenterDelta=0`；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -68,5 +71,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.49s`，`content health: 0 errors / 0 warnings`，`articles mobile hero verified`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.74s`，`content health: 0 errors / 0 warnings`，`photography detail load position fixed`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-22

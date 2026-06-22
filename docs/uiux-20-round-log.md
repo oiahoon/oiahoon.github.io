@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 10 - 2026-06-22 - Photography Detail Load Position
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-10/`
+- Reviewed route: `/posts/2024-03-14-photography-uingbcmkfbq/`
+- Viewports: `1440x900`, `768x1024`, `390x844`
+
+Findings:
+
+- Photography detail pages loaded with `window.scrollY` shifted down toward the work strip.
+- The active work strip centering used `scrollIntoView`, which centered the horizontal rail item but also moved the whole page vertically.
+- On mobile this skipped the natural top of the photography detail and created a large blank dark band before the site bar.
+
+Changes:
+
+- Replaced `scrollIntoView` for photo rails and work strips with a horizontal-only container `scrollLeft` helper.
+- Kept active rail centering behavior without changing page scroll position.
+- Bumped the app version to `0.0.11`.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-10-after/`
+- Photography detail now loads at `scrollY=0` on `1440x900`, `768x1024`, and `390x844`.
+- Active work strip item remains horizontally centered with `activeCenterDelta=0`; page `scrollWidth` still equals viewport width.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.74s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 9 - 2026-06-22 - Articles Mobile Hero Density
 
 Evidence:

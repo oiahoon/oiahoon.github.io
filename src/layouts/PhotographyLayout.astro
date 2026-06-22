@@ -1358,6 +1358,15 @@ const navigation = [
   let lightboxReturnFocus = null;
   let observer = null;
 
+  function centerInlineItem(item) {
+    const container = item?.parentElement;
+    if (!item || !container) return;
+    const itemRect = item.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const offset = itemRect.left - containerRect.left - (containerRect.width - itemRect.width) / 2;
+    container.scrollTo({ left: container.scrollLeft + offset, behavior: scrollBehavior });
+  }
+
   function applyLightboxTransform() {
     if (!lightboxImage) return;
     lightboxImage.style.transform = `translate(${panX}px, ${panY}px) scale(${lightboxScale})`;
@@ -1378,7 +1387,7 @@ const navigation = [
       link.classList.toggle('is-active', Number(link.getAttribute('data-photo-target')) === index);
     });
     const activeRailLink = photoRailLinks.find((link) => Number(link.getAttribute('data-photo-target')) === index);
-    activeRailLink?.scrollIntoView({ behavior: scrollBehavior, block: 'nearest', inline: 'center' });
+    centerInlineItem(activeRailLink);
   }
 
   if (photoPanels.length && photoRailLinks.length) {
@@ -1397,7 +1406,7 @@ const navigation = [
   }
 
   const activeWorkLink = workLinks.find((link) => link.classList.contains('is-active'));
-  activeWorkLink?.scrollIntoView({ behavior: scrollBehavior, block: 'nearest', inline: 'center' });
+  centerInlineItem(activeWorkLink);
 
   function renderLightbox() {
     if (!photos[lightboxIndex] || !lightbox || !lightboxImage || !lightboxCaption || !lightboxCounter) return;

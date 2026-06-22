@@ -30,6 +30,7 @@ Photography should feel like an immersive portfolio, not a blog article with a p
 - Same-work multi-photo browsing should support thumbnails and lightbox behavior.
 - Untitled photography is valid. Metadata, SEO, and visible UI must never show `undefined`, `null`, or forced `未命名作品`.
 - Photography detail work strips must not render blank thumbnail cards for works without image data.
+- Horizontal rail centering must not use page-scrolling APIs that change the detail page's initial `scrollY`.
 
 ## Lightbox Rules
 
