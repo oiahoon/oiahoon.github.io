@@ -40,9 +40,10 @@ import BlogLayout from '../layouts/BlogLayout.astro';
 
 <style>
   .offline-page {
-    min-height: clamp(28rem, 58vh, 42rem);
     display: flex;
-    align-items: center;
+    min-height: clamp(24rem, 52vh, 36rem);
+    align-items: flex-start;
+    padding-top: clamp(4.6rem, 11vh, 7rem);
   }
 
   .offline-state {
@@ -70,7 +71,7 @@ import BlogLayout from '../layouts/BlogLayout.astro';
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.75rem;
-    margin-top: 2.3rem;
+    margin-top: 2rem;
   }
 
   .offline-actions button,

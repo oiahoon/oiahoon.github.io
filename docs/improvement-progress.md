@@ -66,6 +66,9 @@
 - 进行：Round 16 基于文章归档桌面与手机截图，定位到 archive hero 仍过于居中和展示化。
 - 完成：文章归档 hero、lede 和主题链接改为左对齐，并降低标题比例，版本号提升到 `0.0.17`。
 - 验证：Round 16 文章首条在 390px 下提前到 `510px`、桌面提前到 `535px`，8 个主题链接保留；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
+- 进行：Round 17 基于离线页手机和桌面截图，定位到状态块偏深，首屏空等感略重。
+- 完成：离线页状态块上移并微调动作间距，版本号提升到 `0.0.18`，保持简洁状态页结构。
+- 验证：Round 17 手机状态块顶部为 `263px`，动作按钮底部为 `514px`，390px 与 1440px 下无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -89,5 +92,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.43s`，`content health: 0 errors / 0 warnings`，`article archive first entry at 510px mobile and 535px desktop`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.45s`，`content health: 0 errors / 0 warnings`，`offline actions bottom at 514px mobile`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23

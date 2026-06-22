@@ -2,6 +2,41 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 17 - 2026-06-23 - Offline State Position
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-13/offline-390x844.png`, `/private/tmp/oiahoon-uiux-round-13/offline-1440x900.png`
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-17-after/`
+- Reviewed route: `/offline/`
+- Viewports: `390x844`, `1440x900`
+
+Findings:
+
+- The offline page was already simple and had no horizontal overflow.
+- On phones, the state block sat a little too deep in the viewport, adding empty waiting space before the actual offline message.
+- The status page should surface the state promptly without becoming a card or feature explanation.
+
+Changes:
+
+- Moved the offline state block slightly upward with a lighter section height and top padding.
+- Tightened action spacing while preserving the reload and home actions.
+- Bumped the app version to `0.0.18`.
+- Added an agent design-system note that status pages should surface state promptly.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-17-after/`
+- Mobile offline state top is `263px`; action controls remain fully in the first viewport with `actionsBottom=514px`.
+- Desktop state also moves upward and keeps 2 actions visible.
+- No horizontal overflow or offscreen offenders at `390x844` or `1440x900`.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.45s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 16 - 2026-06-23 - Article Archive Index Rhythm
 
 Evidence:
