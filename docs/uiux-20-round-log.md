@@ -2,6 +2,36 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 5 - 2026-06-22 - Photography Detail Strip Blanks
+
+Evidence:
+
+- Baseline screenshot: `/private/tmp/oiahoon-uiux-round-02/photo-detail-1440x900.png`
+- Reviewed route: `/posts/2024-03-14-photography-uingbcmkfbq/`
+- Viewport: `1440x900`
+
+Findings:
+
+- The photography detail "Continue browsing photographs" strip rendered blank thumbnail cards for collection items without `image`.
+- Blank cards weakened the immersive photography detail experience and looked like unloaded media.
+
+Changes:
+
+- Filtered the work strip to render only collection items with an image.
+- Updated the strip active index and total count to match the rendered thumbnail set.
+- Bumped the app version to `0.0.6`.
+
+Validation plan:
+
+Results:
+
+- Final screenshot: `/private/tmp/oiahoon-uiux-round-05-after/photo-detail-strip-1440x900.png`
+- Work strip: first 8 observed cards all had images, no blank thumbnail cards, no horizontal overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.60s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 4 - 2026-06-22 - Mobile Menu Stacking
 
 Evidence:

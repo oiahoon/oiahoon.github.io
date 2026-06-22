@@ -38,8 +38,9 @@ const exifEntries = [
 ].filter(Boolean);
 const photoTransitionName = slug ? `photo-cover-${slug}` : undefined;
 const fallbackTitle = title || `摄影作品 · ${date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}`;
-const activeWorkIndex = Math.max(photoCollection.findIndex((work) => work.active), 0);
-const totalWorks = photoCollection.length;
+const visiblePhotoCollection = photoCollection.filter((work) => Boolean(work.image));
+const activeWorkIndex = Math.max(visiblePhotoCollection.findIndex((work) => work.active), 0);
+const totalWorks = visiblePhotoCollection.length;
 
 const navigation = [
   { name: 'Photographs', href: '/photography/', icon: 'camera' },
@@ -235,7 +236,7 @@ const navigation = [
         </div>
       </section>
 
-      {photoCollection.length > 1 && (
+      {visiblePhotoCollection.length > 1 && (
         <section class="photo-work-strip" aria-label="更多摄影作品">
           <div class="photo-work-strip__head">
             <div>
@@ -254,22 +255,20 @@ const navigation = [
           </div>
 
           <div class="photo-work-strip__rail" data-work-rail>
-            {photoCollection.map((work) => (
+            {visiblePhotoCollection.map((work) => (
               <a
                 href={`/posts/${work.id}/`}
                 class={`photo-work-strip__item ${work.active ? 'is-active' : ''}`}
                 data-work-link
                 data-astro-prefetch
               >
-                {work.image && (
-                  <img
-                    src={work.image}
-                    alt={work.title || '摄影作品预览'}
-                    class="photo-work-strip__thumb"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                )}
+                <img
+                  src={work.image}
+                  alt={work.title || '摄影作品预览'}
+                  class="photo-work-strip__thumb"
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div class="photo-work-strip__copy">
                   <p class="photo-work-strip__date">{work.date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}</p>
                   {work.title && <p class="photo-work-strip__name">{work.title}</p>}

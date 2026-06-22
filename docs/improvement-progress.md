@@ -30,6 +30,9 @@
 - 进行：Round 4 基于移动菜单交互截图，定位到普通首页菜单层级低于 hero photograph，导致菜单项被遮挡。
 - 完成：移动菜单 shell 与菜单面板增加明确 z-index，版本号提升到 `0.0.5`。
 - 验证：Round 4 首页与摄影页移动菜单三项链接均可见、无横向溢出；摄影页继续隐藏主题切换。`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
+- 进行：Round 5 基于摄影详情桌面截图，定位到作品 strip 为缺图作品渲染空白缩略卡。
+- 完成：摄影详情作品 strip 仅渲染有图片的作品，并同步显示计数，版本号提升到 `0.0.6`。
+- 验证：Round 5 摄影详情 strip 首屏观察卡片均有图片、无空白缩略卡、无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -53,5 +56,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.44s`，`content health: 0 errors / 0 warnings`，`mobile menu stacking: verified`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.60s`，`content health: 0 errors / 0 warnings`，`photo detail strip blanks: fixed`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-22
