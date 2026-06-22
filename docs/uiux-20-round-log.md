@@ -2,6 +2,41 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 15 - 2026-06-23 - Tag List Rendering Containment
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-15/`
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-15-after/`
+- Reviewed routes: `/tags/摄影/`, `/tags/Notes/`, `/page/2/`, `/articles/`, `/`
+- Viewports: `390x844`, `1440x900`
+
+Findings:
+
+- The checked list and index routes had no horizontal overflow.
+- Photography tag detail is a long normal-page list with 109 entries and thumbnail media.
+- The visual layout was already stable, so the best improvement was to reduce offscreen rendering work without adding client-side behavior.
+
+Changes:
+
+- Added native `content-visibility: auto` and `contain-intrinsic-size` to tag detail entries.
+- Preserved the existing static HTML, progressive image markup, row layout, and tag counts.
+- Bumped the app version to `0.0.16`.
+- Added an agent design-system note to prefer native containment or lazy media for long lists before client-side behavior.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-15-after/`
+- `/tags/摄影/` still renders 109 entries and `/tags/Notes/` still renders 11 entries.
+- `content-visibility: auto` and `contain-intrinsic-size: auto 128px` are active on tag entries.
+- No horizontal overflow or offscreen offenders at `390x844` or `1440x900`.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.45s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 14 - 2026-06-23 - Mobile Article Header Density
 
 Evidence:

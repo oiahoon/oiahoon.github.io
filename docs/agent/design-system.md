@@ -41,6 +41,7 @@ Read this for visual design, spacing, theme behavior, icons, animation, and UI c
 - Article detail mobile headers should let body text enter quickly without removing the publication context.
 - Screenshot-led UIUX rounds should protect first-viewport content entry, especially mobile homepage and desktop photography archive rhythm.
 - Mobile menus must stack above photography and homepage media in both normal and locked-dark pages.
+- Long archive and tag lists should use native browser containment or lazy media loading before adding client-side behavior.
 
 ## Icons
 
