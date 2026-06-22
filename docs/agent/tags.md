@@ -13,6 +13,7 @@ Tags should help discovery without becoming a performance-heavy visual toy.
 - Avoid heavy client-side animation or collision logic.
 - Tag links must support Chinese, spaces, and special characters via URL encoding.
 - Tags should remain scannable on mobile.
+- Photography-heavy tag pages may use compact thumbnails, but should remain static lists rather than dense card grids or animated galleries.
 
 ## Content Rules
 

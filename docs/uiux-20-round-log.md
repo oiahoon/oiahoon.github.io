@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 3 - 2026-06-22 - Photography Tag Discovery
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-02/tag-cn-1440x900.png`, `/private/tmp/oiahoon-uiux-round-02/tag-spaces-1440x900.png`
+- Reviewed routes: `/tags/摄影/`, `/tags/Sublime%20Text/`
+- Viewports: `1440x900`, plus follow-up mobile capture planned for `/tags/摄影/`
+
+Findings:
+
+- Sparse article tags worked well as text-first lists.
+- The photography-heavy `#摄影` tag showed 109 photography entries as plain text rows, which made a viewing-oriented path feel like an article archive.
+
+Changes:
+
+- Kept the tag detail page as a static list, but added compact thumbnails for photography entries.
+- Preserved text-first rows for normal article tags.
+- Added mobile wrapping constraints for long mixed-language photo titles.
+- Bumped the app version to `0.0.4`.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-03-final-check/`
+- `/tags/摄影/`: 109 rows, compact thumbnails present, no horizontal overflow at `1440x900` or `390x844`.
+- `/tags/Sublime%20Text/`: 2 rows, 0 thumbnails, no horizontal overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.52s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 2 - 2026-06-22 - Article Detail Mobile Width
 
 Evidence:
