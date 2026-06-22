@@ -2,6 +2,36 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 9 - 2026-06-22 - Articles Mobile Hero Density
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-08/articles-390x844.png`, `/private/tmp/oiahoon-uiux-round-08/articles-1440x900.png`
+- Reviewed route: `/articles/`
+- Viewports: `1440x900`, `390x844`
+
+Findings:
+
+- The article archive is correctly text-first and has no horizontal overflow.
+- On mobile, the large English hero title wrapped into multiple lines and pushed topic links and the first article lower than necessary.
+
+Changes:
+
+- Reduced mobile-only article archive top margin, title scale, lede spacing, topic-link gap, and stream entry gap.
+- Kept the desktop article archive, text stream, and tag-link structure unchanged.
+- Bumped the app version to `0.0.10`.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-09-after/`
+- Articles archive: first article enters at `y=562px` on `390x844`, topic links remain available, and there is no horizontal overflow at desktop or mobile widths.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.49s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 8 - 2026-06-22 - Tags Mobile Entry Density
 
 Evidence:

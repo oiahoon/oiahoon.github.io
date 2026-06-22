@@ -18,6 +18,7 @@ Articles should feel like a quiet paper archive and readable stream, not a card-
 - Do not rename the page back to `技术文章` unless explicitly requested.
 - Do not convert the article archive into a dense card grid.
 - Keep title, date, description hierarchy clear.
+- On mobile article archives, keep the hero compact enough that topic links and the first article enter early.
 - Long Chinese titles, English technical terms, and identifiers like `use_case` must wrap naturally.
 - Code blocks and inline code must be readable without looking accidentally selected.
 - If editing shared `.entry-*` styles, regression-test homepage, tag results, pagination, and article detail pages.
