@@ -75,6 +75,9 @@
 - 进行：Round 19 基于 About 手机外链指标，定位到 Elsewhere 链接命中高度只有 `18px`。
 - 完成：About 行内工具链接增加 `2rem` 最小高度，版本号提升到 `0.0.20`，保持安静文字样式。
 - 验证：Round 19 GitHub、Weibo、RSS、Email 链接命中高度提升到 `32px`，390px 与 1440px 下无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
+- 进行：Round 20 基于文章详情工具链接指标，定位到顶部返回链接命中高度只有 `20px`。
+- 完成：文章返回链接和标签工具链接增加 `2rem` 最小高度，版本号提升到 `0.0.21`，保留安静内联样式。
+- 验证：Round 20 文章返回链接为 `159x32`，标签链接高度为 `32px`，正文入口仍保持在手机 `605px`；`npm run check:content-health`、`npm run build`、`git diff --check` 通过。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -98,5 +101,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.36s`，`content health: 0 errors / 0 warnings`，`about utility links at 32px hit height`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.36s`，`content health: 0 errors / 0 warnings`，`article utility links at 32px hit height`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23

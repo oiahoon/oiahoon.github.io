@@ -2,6 +2,40 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 20 - 2026-06-23 - Article Utility Link Hit Areas
+
+Evidence:
+
+- Baseline measurement: article detail top back link measured `20px` high on mobile.
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-20-after/`
+- Reviewed route: `/posts/2026-05-01-agentic-coding-context-system/`
+- Viewports: `390x844`, `1440x900`
+
+Findings:
+
+- Article detail layout had no horizontal overflow after the earlier header-density work.
+- The top back link and article tag utility links used quiet inline sizing that was smaller than the recent mobile target improvements.
+- These utility links should remain understated but easier to tap.
+
+Changes:
+
+- Added a `2rem` minimum height to article back links and article tag links.
+- Preserved existing labels, icons, spacing rhythm, and article body layout.
+- Bumped the app version to `0.0.21`.
+- Added an agent design-system note for practical tap areas on article utility navigation.
+
+Validation plan:
+
+Results:
+
+- Final screenshots: `/private/tmp/oiahoon-uiux-round-20-after/`
+- Top article back link now measures `159x32`; article tag links also measure `32px` high.
+- Mobile article body still enters at `proseTop=605px`; no horizontal overflow or offscreen offenders at `390x844` or `1440x900`.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.36s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 19 - 2026-06-23 - About Utility Link Hit Areas
 
 Evidence:
