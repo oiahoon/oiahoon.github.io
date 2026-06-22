@@ -21,6 +21,9 @@
 - 完成：将文章归档移动端高频标签改为更稳定的两列索引。
 - 完成：版本号提升到 `0.0.2`，详见 `docs/uiux-20-round-log.md`。
 - 验证：`npm run check:content-health`、`npm run build`、`git diff --check` 通过；`npm run check:security` 经非强制修复后仍剩余 5 个需要 breaking `--force` 的依赖漏洞。
+- 进行：Round 2 基于 about、文章详情、标签详情、摄影详情截图，定位到文章详情 `390px` 移动宽度横向溢出。
+- 完成：文章详情布局子项增加移动安全宽度和长标题/正文自然换行，版本号提升到 `0.0.3`。
+- 验证：Round 2 文章详情移动端 `scrollWidth === clientWidth === 390`，`npm run check:content-health`、`npm run build`、`git diff --check` 通过；安全审计仍剩余同一组 breaking `--force` 依赖项。
 
 ### 2026-02-26
 - 完成：建立执行版改进计划，按“文档基线 -> 技术债 -> UI/UX”重排优先级。
@@ -44,5 +47,5 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.79s`，`content health: 0 errors / 0 warnings`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：`189 page(s) built in 1.56s`，`content health: 0 errors / 0 warnings`，`article detail mobile overflow: fixed`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-22

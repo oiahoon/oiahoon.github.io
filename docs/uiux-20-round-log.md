@@ -2,6 +2,36 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 2 - 2026-06-22 - Article Detail Mobile Width
+
+Evidence:
+
+- Baseline screenshots: `/private/tmp/oiahoon-uiux-round-02/`
+- Reviewed routes: `/about/`, `/posts/2026-05-01-agentic-coding-context-system/`, `/tags/Sublime%20Text/`, `/tags/摄影/`, `/posts/2024-03-14-photography-uingbcmkfbq/`
+- Viewports: `1440x900`, `390x844`
+
+Findings:
+
+- Article detail mobile had horizontal overflow at `390px`; the long mixed Chinese/English title widened the reading column to `414px`.
+- About, tag detail, and photography detail pages stayed within viewport width in this screenshot pass.
+
+Changes:
+
+- Added mobile-safe width constraints to article detail grid children, header, prose, and metadata.
+- Added natural wrapping for long article title/subtitle/content text.
+- Bumped the app version to `0.0.3`.
+
+Validation plan:
+
+Results:
+
+- Final screenshot: `/private/tmp/oiahoon-uiux-round-02-after/article-detail-mobile-390x844.png`
+- Mobile article detail width: `scrollWidth === clientWidth === 390`, with 0 overflow offenders.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.56s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 1 - 2026-06-22 - Mobile Entry Density
 
 Evidence:

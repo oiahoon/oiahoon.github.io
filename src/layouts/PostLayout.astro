@@ -188,14 +188,31 @@ const structuredData = generateBlogPostStructuredData({
     .article-layout {
       display: grid;
       gap: 1.8rem;
+      min-width: 0;
     }
 
     .article-primary,
     .article-content {
       width: 100%;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .article-primary header,
+    .article-content .prose {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .article-primary h1,
+    .article-primary p,
+    .article-content {
+      overflow-wrap: anywhere;
     }
 
     .article-marginalia {
+      min-width: 0;
+      max-width: 100%;
       border-bottom: 1px solid var(--line);
       padding-bottom: 1.2rem;
     }

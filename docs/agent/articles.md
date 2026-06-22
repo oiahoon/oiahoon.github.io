@@ -21,6 +21,7 @@ Articles should feel like a quiet paper archive and readable stream, not a card-
 - Long Chinese titles, English technical terms, and identifiers like `use_case` must wrap naturally.
 - Code blocks and inline code must be readable without looking accidentally selected.
 - If editing shared `.entry-*` styles, regression-test homepage, tag results, pagination, and article detail pages.
+- Article detail pages must keep reading columns at or below viewport width on `390px`; mixed Chinese/English titles should not widen grid columns.
 
 ## Pagination
 
