@@ -2,6 +2,35 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 26 - 2026-06-23 - Header Brand Home Target
+
+Evidence:
+
+- Browser review: `/articles/` at `390x844` and `1440x900`.
+- Baseline measurement: the header brand home link measured `28px` high on both mobile and desktop.
+
+Findings:
+
+- Header navigation and controls were now consistently easier to target.
+- The brand link remained slightly smaller than the rest of the header hit areas despite being the primary home affordance.
+- The fix should keep the brand visually unchanged while aligning its practical target height.
+
+Changes:
+
+- Added a `2rem` minimum height to `.spotlight-header__brand`.
+- Preserved icon size, text styling, spacing, and site-brand view transition name.
+- Bumped the app version to `0.0.27`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: header brand home link now measures `32px` high at both `390x844` and `1440x900`, with no horizontal overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.66s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 25 - 2026-06-23 - Desktop Header Navigation Targets
 
 Evidence:
