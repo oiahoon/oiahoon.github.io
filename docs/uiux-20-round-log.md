@@ -2,6 +2,37 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 21 - 2026-06-23 - Photography Filter Hit Areas
+
+Evidence:
+
+- Browser review: in-app Browser opened the local site and inspected `/`, `/articles/`, `/tags/`, `/about/`, `/portfolio/`, `/offline/`, `/photography/`, a normal article detail, and a photography detail page.
+- Browser viewport pass: `390x844` and `1440x900`.
+- Browser screenshot fallback note: the Browser route/DOM pass worked, but the current tab wrapper did not expose a screenshot method, so this round used Browser measurements for the decision and kept Playwright/Chrome screenshot fallback available for later rounds.
+
+Findings:
+
+- The photography archive had no horizontal overflow and kept its locked-dark identity.
+- The filter index on `/photography/` measured around `26px` high and read like loose inline text, making the mobile filter affordance weaker than the rest of the refined navigation.
+- The filter should remain quiet and static, but needs a practical hit area, visible active state, and mobile overflow protection.
+
+Changes:
+
+- Reworked the photography filter index into low-contrast rounded filter chips with a `2.5rem` minimum height.
+- Added hover, focus-visible, and active states without adding explanatory copy or heavier client behavior.
+- Added mobile horizontal overflow handling for the filter row so all categories remain reachable at `390px`.
+- Bumped the app version to `0.0.22`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: mobile filter links now measure `44px` high; desktop filter links measure `40px`; no horizontal page overflow at `390x844` or `1440x900`.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.68s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 20 - 2026-06-23 - Article Utility Link Hit Areas
 
 Evidence:

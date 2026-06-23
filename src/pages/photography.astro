@@ -270,22 +270,41 @@ function filterGroups(photo: typeof sorted[number]) {
   .filter-index {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.55rem 1rem;
-    margin-top: 1.4rem;
+    gap: 0.45rem;
+    max-width: 100%;
+    margin-top: 1.25rem;
   }
 
   .filter-index a {
+    display: inline-flex;
+    min-height: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(238, 231, 220, 0.13);
+    border-radius: 999px;
+    padding: 0.44rem 0.78rem;
     color: #aaa197;
-    font-size: 0.95rem;
+    background: rgba(255, 255, 255, 0.025);
+    font-size: 0.88rem;
+    line-height: 1;
     text-decoration: none;
-    transition: color var(--duration-fast) var(--ease-standard);
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard),
+      background var(--duration-fast) var(--ease-standard);
   }
 
   .filter-index a:hover,
+  .filter-index a:focus-visible,
   .filter-index a[aria-current='page'] {
+    border-color: rgba(238, 231, 220, 0.34);
     color: #eee7dc;
-    text-decoration: underline;
-    text-underline-offset: 0.35em;
+    background: rgba(238, 231, 220, 0.07);
+  }
+
+  .filter-index a:focus-visible {
+    outline: 2px solid rgba(238, 231, 220, 0.34);
+    outline-offset: 3px;
   }
 
   .selected-photo-grid,
@@ -391,6 +410,28 @@ function filterGroups(photo: typeof sorted[number]) {
 
     .photo-tile.is-small {
       grid-column: span 4;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .filter-index {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      margin-inline: -1rem;
+      padding-inline: 1rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .filter-index::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-index a {
+      flex: 0 0 auto;
+      min-height: 2.75rem;
+      padding-inline: 0.9rem;
     }
   }
 

@@ -101,5 +101,11 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：`189 page(s) built in 1.36s`，`content health: 0 errors / 0 warnings`，`article utility links at 32px hit height`，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：Round 21 摄影筛选手机命中高度 `44px`、桌面 `40px`，`189 page(s) built in 1.68s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23
+
+## 2026-06-23 Continued UIUX Rounds
+
+- 进行：Round 21 基于 Browser 对首页、文章、标签、About、Portfolio、离线、摄影列表、文章详情和摄影详情的移动/桌面审阅，定位到摄影筛选行命中高度偏低且像普通文字。
+- 完成：摄影筛选改为低对比度 chips，增加 `2.5rem` 最小高度、焦点态、活动态与移动横向滚动保护，版本号提升到 `0.0.22`。
+- 验证：Round 21 Browser 回归显示手机筛选链接 `44px`、桌面 `40px`，无横向页面溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
