@@ -2,6 +2,36 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 23 - 2026-06-23 - Portfolio Site Link Targets
+
+Evidence:
+
+- Browser review: `/portfolio/` at `390x844` and `1440x900`.
+- Baseline measurement: the two project cards were already full-card links, but the three "Joey's Notes" auxiliary links measured `26px` high.
+
+Findings:
+
+- The Portfolio page matched the calmer semantic theme and had no horizontal overflow.
+- The secondary site links were useful but still used plain text-height targets, unlike the freshly improved footer and utility links.
+- These links should remain quiet supporting navigation, not become prominent buttons.
+
+Changes:
+
+- Added inline-flex alignment and `2rem` minimum height to `.portfolio-site__links a`.
+- Added subtle underline/focus states with the existing accent variable.
+- Preserved Portfolio copy, project card behavior, and layout hierarchy.
+- Bumped the app version to `0.0.24`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: Portfolio site links now measure `32px` high at both `390x844` and `1440x900`, with no horizontal overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.60s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 22 - 2026-06-23 - Footer Link Tap Areas
 
 Evidence:

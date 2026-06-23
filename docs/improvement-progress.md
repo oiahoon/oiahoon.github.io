@@ -101,7 +101,7 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：Round 22 页脚链接手机命中高度 `32px`，摄影页 `scrollWidth === clientWidth === 390`，`189 page(s) built in 1.64s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：Round 23 Portfolio 站点辅助链接在手机和桌面均为 `32px`，`189 page(s) built in 1.60s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23
 
 ## 2026-06-23 Continued UIUX Rounds
@@ -112,3 +112,6 @@
 - 进行：Round 22 基于 Browser 审阅 `/tags/`、`/about/`、`/offline/`、`/portfolio/`、`/articles/` 的手机页脚，定位到共享页脚链接高度均为 `20px`。
 - 完成：页脚导航与订阅链接增加 `.footer-link` 命中区、安静 underline/focus 状态，版本号提升到 `0.0.23`。
 - 验证：Round 22 共享页脚链接在 390px 下均为 `32px`，摄影页筛选行保持内部滚动且整页无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
+- 进行：Round 23 基于 Browser 审阅 `/portfolio/` 移动端和桌面端，定位到站点辅助链接高度为 `26px`，和新的工具链接触控节奏不一致。
+- 完成：Portfolio 站点辅助链接增加 `2rem` 最小高度、安静 underline/focus 状态，版本号提升到 `0.0.24`。
+- 验证：Round 23 Portfolio 站点辅助链接在手机和桌面均为 `32px`，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。

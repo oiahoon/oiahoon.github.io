@@ -287,13 +287,24 @@ const projects = [
   }
 
   .portfolio-site__links a {
+    display: inline-flex;
+    min-height: 2rem;
+    align-items: center;
     color: var(--muted);
+    text-decoration: none;
     transition: color var(--duration-fast) var(--ease-standard);
   }
 
   .portfolio-site__links a:hover,
   .portfolio-site__links a:focus-visible {
     color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+
+  .portfolio-site__links a:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+    outline-offset: 3px;
   }
 
   @media (min-width: 640px) {
