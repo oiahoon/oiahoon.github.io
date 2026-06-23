@@ -2,6 +2,35 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 25 - 2026-06-23 - Desktop Header Navigation Targets
+
+Evidence:
+
+- Browser review: `/`, `/articles/`, `/tags/`, `/about/`, and `/portfolio/` at `1440x900`.
+- Baseline measurement: desktop header navigation links measured `20px` high while the brand measured `28px`.
+
+Findings:
+
+- The desktop header had no horizontal overflow and active states were visually clear.
+- Main navigation was still using raw text-height targets, while mobile header controls and lower-page utilities had already been improved.
+- Desktop navigation should remain quiet text, but with a more practical click height.
+
+Changes:
+
+- Added a `2rem` minimum height to `.spotlight-header__link`.
+- Preserved the existing active underline, icon treatment, spacing, mobile menu, and theme toggle behavior.
+- Bumped the app version to `0.0.26`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: desktop header navigation links now measure `32px` high across `/`, `/articles/`, `/tags/`, `/about/`, `/portfolio/`, and `/photography/`, with no horizontal overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.66s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 24 - 2026-06-23 - Article Metadata Archive Link
 
 Evidence:
