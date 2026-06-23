@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 22 - 2026-06-23 - Footer Link Tap Areas
+
+Evidence:
+
+- Browser review: `/tags/`, `/about/`, `/offline/`, `/portfolio/`, and `/articles/` at `390x844`.
+- Baseline measurement: all shared footer navigation and subscription links measured `20px` high.
+
+Findings:
+
+- The footer already uses a quiet text-first layout and did not overflow horizontally.
+- Its repeated links were visually readable but still smaller than the improved mobile utility link target used elsewhere.
+- This shared component should be easier to tap while staying typographic rather than becoming a button block.
+
+Changes:
+
+- Added a shared `.footer-link` style with `2rem` minimum height and inline-flex alignment.
+- Added subtle underline/focus states using existing semantic accent variables.
+- Preserved footer copy, IA, layout, and inverse photography footer behavior.
+- Tightened the photography filter row containment after the Browser pass caught a mobile horizontal overflow from the previous round's scroll row.
+- Bumped the app version to `0.0.23`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: shared footer links now measure `32px` high across `/tags/`, `/about/`, `/offline/`, `/portfolio/`, `/articles/`, and `/photography/` at `390x844`.
+- Browser verification: `/photography/` now reports `scrollWidth === clientWidth === 390`; the filter row keeps its own internal scroll width without page overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.64s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 21 - 2026-06-23 - Photography Filter Hit Areas
 
 Evidence:

@@ -254,6 +254,10 @@ function filterGroups(photo: typeof sorted[number]) {
     align-items: start;
   }
 
+  .photo-section__head > * {
+    min-width: 0;
+  }
+
   .photo-section h2 {
     margin: 0;
     font-size: clamp(2.1rem, 5vw, 3.5rem);
@@ -417,8 +421,7 @@ function filterGroups(photo: typeof sorted[number]) {
     .filter-index {
       flex-wrap: nowrap;
       justify-content: flex-start;
-      margin-inline: -1rem;
-      padding-inline: 1rem;
+      width: 100%;
       overflow-x: auto;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
