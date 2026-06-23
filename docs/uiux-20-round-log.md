@@ -2,6 +2,35 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 31 - 2026-06-23 - Articles Archive Title Targets
+
+Evidence:
+
+- Browser review: `/articles/` at `390x844` and `1440x900`.
+- Baseline measurement: several mobile article-title links measured `29px` high; desktop title links were already `41px`.
+
+Findings:
+
+- Article archive had no horizontal overflow and retained its quiet text-first layout.
+- Single-line mobile titles were below the `2rem` target used by other archive/list surfaces.
+- The change should stay local to `/articles/` and not alter global entry styles.
+
+Changes:
+
+- Made `.articles-entry-title a` inline-flex with a `2rem` minimum height.
+- Preserved article archive hierarchy, topic links, descriptions, and desktop rhythm.
+- Bumped the app version to `0.0.32`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: `/articles/` title links now have a `32px` minimum height on mobile and at least `38px` on desktop, with no horizontal overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.59s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 30 - 2026-06-23 - Tag Detail Back Link Target
 
 Evidence:

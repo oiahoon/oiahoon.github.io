@@ -101,7 +101,7 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：Round 30 标签详情返回链接在手机和桌面均为 `32px`，`189 page(s) built in 1.63s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：Round 31 文章归档标题链接手机最小高度 `32px`，桌面最小高度 `38px`，`189 page(s) built in 1.59s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23
 
 ## 2026-06-23 Continued UIUX Rounds
@@ -136,3 +136,6 @@
 - 进行：Round 30 基于 Browser 审阅标签详情底部返回链接，定位到 `查看所有标签` 高度为 `25px`。
 - 完成：标签详情返回链接增加 `2rem` 最小高度，版本号提升到 `0.0.31`。
 - 验证：Round 30 标签详情返回链接在手机和桌面均为 `32px`，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
+- 进行：Round 31 基于 Browser 审阅 `/articles/`，定位到移动端单行标题链接高度为 `29px`。
+- 完成：文章归档标题链接增加 `2rem` 最小高度，版本号提升到 `0.0.32`。
+- 验证：Round 31 文章归档标题链接手机最小高度 `32px`，桌面最小高度 `38px`，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
