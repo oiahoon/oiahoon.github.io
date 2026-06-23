@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 37 - 2026-06-23 - Home Legacy Note Title Targets
+
+Evidence:
+
+- Browser review: `/` cross-route link audit after the homepage text-link fixes.
+- Baseline measurement: legacy note title links measured about `26px` high.
+- Baseline state: selected photography titles and homepage text links were already corrected to `32px`.
+
+Findings:
+
+- The legacy archive is a compact text-first list, but title links are still primary entry points.
+- Single-line legacy note titles were below the shared `2rem` target.
+- The fix should not increase row padding or make the archive feel card-like.
+
+Changes:
+
+- Made `.legacy-row h3 a` inline-flex.
+- Added a `2rem` minimum height to homepage legacy note title links.
+- Preserved legacy row density, metadata placement, and text-first archive treatment.
+- Bumped the app version to `0.0.38`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: homepage legacy note title links now have a `32px` minimum height, with long titles naturally wrapping taller.
+- Browser verification: `/` has no horizontal overflow after the change.
+- `npm run check:content-health` passed with `120 post(s) checked`, `0 error(s)`, and `0 warning(s)`.
+- `npm run build` passed with `189 page(s) built in 1.65s`.
+- `git diff --check` passed.
+- `npm run check:security` still reports the known 5 vulnerabilities requiring breaking `npm audit fix --force` dependency changes.
+
 ## Round 36 - 2026-06-23 - Home Text Link Targets
 
 Evidence:

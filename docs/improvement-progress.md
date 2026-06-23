@@ -101,7 +101,7 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：Round 36 首页文字型导航链接实际高度为 `32px`，`189 page(s) built in 1.69s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：Round 37 首页 legacy note 标题链接最小高度为 `32px`，`189 page(s) built in 1.65s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23
 
 ## 2026-06-23 Continued UIUX Rounds
@@ -154,3 +154,6 @@
 - 进行：Round 36 基于 Browser 继续审阅首页，定位到 `Read about Joey`、`All photographs`、`About Joey` 等文字链接约 `27px`。
 - 完成：首页文字型导航链接增加 `2rem` 最小高度，版本号提升到 `0.0.37`。
 - 验证：Round 36 首页文字型导航链接实际高度均为 `32px`，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
+- 进行：Round 37 基于 Browser 继续审阅首页 legacy archive，定位到旧文章标题链接约 `26px`。
+- 完成：首页 legacy note 标题链接增加 `2rem` 最小高度，版本号提升到 `0.0.38`。
+- 验证：Round 37 首页 legacy note 标题链接最小高度为 `32px`，长标题自然换行到 `58px`，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
