@@ -2,6 +2,35 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 24 - 2026-06-23 - Article Metadata Archive Link
+
+Evidence:
+
+- Browser review: `/posts/issues-on-macos-gem-rmagick/` at `390x844` and `1440x900`.
+- Baseline measurement: the article marginalia `Archive -> Notes` link measured `15px` on mobile and `16px` on desktop.
+
+Findings:
+
+- Article detail had no horizontal overflow and the primary reading flow remained stable.
+- The marginalia archive link was visually quiet but too close to raw text height.
+- This supporting link should align with the practical hit area applied to other article utility links.
+
+Changes:
+
+- Added inline-flex alignment and `2rem` minimum height to `.article-marginalia a`.
+- Preserved article metadata layout, labels, typography, and body spacing.
+- Bumped the app version to `0.0.25`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: article marginalia `Notes` archive link now measures `32px` high at both `390x844` and `1440x900`, with no horizontal overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 2.26s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 23 - 2026-06-23 - Portfolio Site Link Targets
 
 Evidence:
