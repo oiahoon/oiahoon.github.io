@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 38 - 2026-06-23 - Photography Footer Link Targets
+
+Evidence:
+
+- Browser review: `/posts/2024-03-14-photography-uingbcmkfbq/` after cross-route link audit.
+- Baseline measurement: photography detail footer links measured `27px` high.
+- Baseline state: regular shared footer links had already been corrected to `32px`.
+
+Findings:
+
+- Photography detail uses a custom fixed-dark footer that does not inherit the shared footer target sizing.
+- Footer links are full-width visually on the dark page, but their actual text boxes were below the practical `2rem` target.
+- The fix should keep the footer calm and text-first.
+
+Changes:
+
+- Made `.photo-footer__links a` inline-flex.
+- Added a `2rem` minimum height and centered alignment to photography footer links.
+- Preserved the dark photography footer layout, grouping, and link labels.
+- Bumped the app version to `0.0.39`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: all photography footer links now compute to `min-height: 32px` and actual `32px` height.
+- Browser verification: the photography detail page has no horizontal overflow after the change.
+- `npm run check:content-health` passed with `120 post(s) checked`, `0 error(s)`, and `0 warning(s)`.
+- `npm run build` passed with `189 page(s) built in 1.65s`.
+- `git diff --check` passed.
+- `npm run check:security` still reports the known 5 vulnerabilities requiring breaking `npm audit fix --force` dependency changes.
+
 ## Round 37 - 2026-06-23 - Home Legacy Note Title Targets
 
 Evidence:
