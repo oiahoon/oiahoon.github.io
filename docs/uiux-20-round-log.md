@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 39 - 2026-06-23 - Article Tag Minimum Width
+
+Evidence:
+
+- Browser review: `/posts/2026-05-01-agentic-coding-context-system/` after cross-route link audit.
+- Baseline measurement: the short `AI` tag link measured `31px` wide and `32px` high.
+- Baseline state: article tag links already had a `2rem` minimum height.
+
+Findings:
+
+- Very short tag labels can fall just below the practical `2rem` width target.
+- Tags are small secondary navigation chips, so the fix should be invisible for longer labels and not introduce a pill/button restyle.
+- The change should stay local to article detail metadata.
+
+Changes:
+
+- Added a `2rem` minimum width to `.article-tag-link`.
+- Kept existing inline-flex alignment, icon gap, muted color, and hover underline.
+- Preserved article text-first layout and marginalia rhythm.
+- Bumped the app version to `0.0.40`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the short `AI` article tag now measures `32px` wide and `32px` high.
+- Browser verification: all article tag links on the sampled article meet the `32px` minimum width and height.
+- `npm run check:content-health` passed with `120 post(s) checked`, `0 error(s)`, and `0 warning(s)`.
+- `npm run build` passed with `189 page(s) built in 1.55s`.
+- `git diff --check` passed.
+- `npm run check:security` still reports the known 5 vulnerabilities requiring breaking `npm audit fix --force` dependency changes.
+
 ## Round 38 - 2026-06-23 - Photography Footer Link Targets
 
 Evidence:

@@ -101,7 +101,7 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：Round 38 摄影详情 footer 链接实际高度均为 `32px`，`189 page(s) built in 1.65s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：Round 39 文章短标签 `AI` 为 `32px` 宽、`32px` 高，`189 page(s) built in 1.55s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23
 
 ## 2026-06-23 Continued UIUX Rounds
@@ -160,3 +160,6 @@
 - 进行：Round 38 基于 Browser 跨页面审阅摄影详情，定位到自定义摄影 footer 链接高度为 `27px`。
 - 完成：摄影详情 footer 链接增加 `2rem` 最小高度，版本号提升到 `0.0.39`。
 - 验证：Round 38 摄影详情 footer 全部链接实际高度均为 `32px`，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
+- 进行：Round 39 基于 Browser 跨页面审阅文章详情，定位到短标签 `AI` 虽高 `32px` 但宽度只有 `31px`。
+- 完成：文章 tag link 增加 `2rem` 最小宽度，版本号提升到 `0.0.40`。
+- 验证：Round 39 `AI` 标签为 `32px` 宽、`32px` 高，示例文章全部 tag 均满足 `32px` 最小宽高，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
