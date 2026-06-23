@@ -101,7 +101,7 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：Round 32 摄影详情 work strip 链接已从 `/posts/undefined/` 修为真实 slug，返回链接手机/桌面均为 `32px`，`189 page(s) built in 1.60s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：Round 33 摄影详情 topbar 品牌入口和导航链接均为 `32px`，`189 page(s) built in 1.59s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23
 
 ## 2026-06-23 Continued UIUX Rounds
@@ -142,3 +142,6 @@
 - 进行：Round 32 基于 Browser 审阅摄影详情，定位到 work strip 链接均为 `/posts/undefined/`，顶部返回链接高度为 `26px`。
 - 完成：work strip href 改用 `work.slug`，摄影详情返回链接增加 `2rem` 最小高度，版本号提升到 `0.0.33`。
 - 验证：Round 32 摄影详情返回链接手机/桌面均为 `32px`，work strip 链接均为真实 slug 且没有 `/posts/undefined/`，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
+- 进行：Round 33 基于 Browser 审阅摄影详情独立 topbar，定位到品牌入口 `29px`、导航链接 `26px`。
+- 完成：摄影 topbar 品牌与导航链接增加 `2rem` 最小高度，版本号提升到 `0.0.34`。
+- 验证：Round 33 摄影 topbar 品牌和导航链接均为 `32px`，work strip 仍为 `0` 个 `/posts/undefined/` 链接，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。

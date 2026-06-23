@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 33 - 2026-06-23 - Photography Topbar Targets
+
+Evidence:
+
+- Browser review: `/posts/2024-03-14-photography-uingbcmkfbq/` at `390x844`.
+- Baseline measurement: `.photo-topbar__brand` measured `29px` high.
+- Baseline measurement: photography topbar nav links measured `26px` high.
+
+Findings:
+
+- Photography detail uses a separate dark topbar, so the shared header target improvements do not apply there.
+- The hero back link was already corrected to `32px`, leaving the topbar actions visually adjacent but harder to tap.
+- The fix should preserve the fixed dark photography identity and not add explanatory copy or extra controls.
+
+Changes:
+
+- Added a `2rem` minimum height to `.photo-topbar__brand`.
+- Added a `2rem` minimum height to `.photo-topbar__link`.
+- Preserved the existing typography, spacing, active underline, and mobile menu.
+- Bumped the app version to `0.0.34`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: photography topbar brand and nav links now measure `32px` high, with no horizontal overflow.
+- Browser verification: the corrected work strip still has `0` `/posts/undefined/` links.
+- `npm run check:content-health` passed with `120 post(s) checked`, `0 error(s)`, and `0 warning(s)`.
+- `npm run build` passed with `189 page(s) built in 1.59s`.
+- `git diff --check` passed.
+- `npm run check:security` still reports the known 5 vulnerabilities requiring breaking `npm audit fix --force` dependency changes.
+
 ## Round 32 - 2026-06-23 - Photography Detail Work Strip Links
 
 Evidence:
