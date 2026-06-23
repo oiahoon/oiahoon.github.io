@@ -2,6 +2,35 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 29 - 2026-06-23 - Tag Detail Title Targets
+
+Evidence:
+
+- Browser review: `/tags/摄影/` and `/tags/Sublime%20Text/` at `390x844`.
+- Baseline measurement: several tag-detail title links measured `30px` high while longer wrapped titles were already taller.
+
+Findings:
+
+- Tag detail pages had no horizontal overflow and preserved their article/photo distinction.
+- Single-line title links were slightly below the `2rem` target now used across archive-style navigation.
+- The fix should be scoped to tag detail rows and avoid global entry-style churn.
+
+Changes:
+
+- Made `.tag-entry__body .entry-title a` inline-flex with a `2rem` minimum height.
+- Preserved photography thumbnails, ordinary article rows, and tag detail hierarchy.
+- Bumped the app version to `0.0.30`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: `/tags/摄影/` and `/tags/Sublime%20Text/` title links now have a `32px` minimum height on mobile, with no horizontal overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.76s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 28 - 2026-06-23 - Paged Archive Title Targets
 
 Evidence:
