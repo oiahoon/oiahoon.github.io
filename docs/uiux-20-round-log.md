@@ -2,6 +2,39 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 40 - 2026-06-23 - Article Metadata Focus Ring
+
+Evidence:
+
+- Browser review: `/posts/2026-05-01-agentic-coding-context-system/` after the final cross-route link audit.
+- Code review: article tag links had hover underline behavior but no local `:focus-visible` treatment.
+- Baseline state: article back/tag links already met the `32px` minimum target size after Round 39.
+
+Findings:
+
+- Keyboard users need a visible focus state on compact metadata navigation, especially near article marginalia.
+- The focus treatment should remain quiet and match the low-saturation article identity.
+- The change should not add client-side behavior or explanatory copy.
+
+Changes:
+
+- Added `:focus-visible` outline treatment for `.article-back-link` and `.article-tag-link`.
+- Used the existing accent color through `color-mix` with a small radius and offset.
+- Preserved article text-first layout, tag sizing, and hover underline.
+- Bumped the app version to `0.0.41`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the `:focus-visible` CSS rule is loaded for article back/tag metadata links.
+- Browser verification: the final sampled 11-route link audit found `0` links below `32px` in width or height.
+- Browser verification: sampled article tag links still meet the `32px` minimum width and height after the focus treatment.
+- `npm run check:content-health` passed with `120 post(s) checked`, `0 error(s)`, and `0 warning(s)`.
+- `npm run build` passed with `189 page(s) built in 1.76s`.
+- `git diff --check` passed.
+- `npm run check:security` still reports the known 5 vulnerabilities requiring breaking `npm audit fix --force` dependency changes.
+
 ## Round 39 - 2026-06-23 - Article Tag Minimum Width
 
 Evidence:

@@ -290,6 +290,13 @@ const structuredData = generateBlogPostStructuredData({
       text-underline-offset: 0.3em;
     }
 
+    .article-back-link:focus-visible,
+    .article-tag-link:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 58%, transparent);
+      outline-offset: 3px;
+      border-radius: 0.35rem;
+    }
+
     @media (max-width: 640px) {
       .article-layout {
         gap: 1.1rem;
