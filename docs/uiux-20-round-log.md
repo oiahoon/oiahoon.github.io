@@ -2,6 +2,35 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 30 - 2026-06-23 - Tag Detail Back Link Target
+
+Evidence:
+
+- Browser review: `/tags/Sublime%20Text/` at `390x844` and `1440x900`.
+- Baseline measurement: the `查看所有标签` back link measured `25px` high.
+
+Findings:
+
+- Tag detail title rows were improved in the previous round and the page had no horizontal overflow.
+- The bottom back link remained a smaller plain-text action.
+- It should match the practical target height used by other quiet navigation links.
+
+Changes:
+
+- Added a `2rem` minimum height to `.tag-back-link`.
+- Preserved icon, label, color, hover/focus behavior, and page hierarchy.
+- Bumped the app version to `0.0.31`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: `查看所有标签` now measures `32px` high at both `390x844` and `1440x900`, with no horizontal overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.63s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 29 - 2026-06-23 - Tag Detail Title Targets
 
 Evidence:
