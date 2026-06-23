@@ -101,7 +101,7 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：Round 27 About `RSS` 链接为 `32x32`，`189 page(s) built in 1.52s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：Round 28 分页归档标题链接手机最小高度 `32px`，桌面最小高度 `38px`，`189 page(s) built in 1.79s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23
 
 ## 2026-06-23 Continued UIUX Rounds
@@ -127,3 +127,6 @@
 - 进行：Round 27 基于 Browser 审阅 About Elsewhere 链接，定位到 `RSS` 虽有 `32px` 高度但宽度只有 `30px`。
 - 完成：About 行内链接增加 `2rem` 最小宽度和居中对齐，版本号提升到 `0.0.28`。
 - 验证：Round 27 About `RSS` 链接为 `32x32`，手机与桌面无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
+- 进行：Round 28 基于 Browser 审阅 `/page/2/`，定位到移动端归档标题链接多项为 `29px`，分页控件本身正常。
+- 完成：分页归档列表局部增加 `.archive-stream`，标题链接提升到 `2rem` 最小高度，版本号提升到 `0.0.29`。
+- 验证：Round 28 分页归档标题链接手机最小高度 `32px`，桌面最小高度 `38px`，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。

@@ -2,6 +2,36 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 28 - 2026-06-23 - Paged Archive Title Targets
+
+Evidence:
+
+- Browser review: `/page/2/` at `390x844` and `1440x900`.
+- Baseline measurement: pagination controls were healthy at `37-39px`, but several mobile archive title links measured `29px` high.
+
+Findings:
+
+- The paged archive had no horizontal overflow and compact pagination stayed usable.
+- Mobile post-title links in the archive stream were still slightly below the practical `2rem` target.
+- The change should stay local to the paged archive to avoid touching global entry styles or unrelated user changes.
+
+Changes:
+
+- Added a local `.archive-stream` class to the paged archive list.
+- Made `.archive-stream .entry-title a` inline-flex with a `2rem` minimum height.
+- Preserved pagination, entry copy, and global entry styling elsewhere.
+- Bumped the app version to `0.0.29`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: `/page/2/` archive title links now have a `32px` minimum height on mobile and at least `38px` on desktop, with no horizontal overflow.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.79s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 27 - 2026-06-23 - About Short Link Width
 
 Evidence:

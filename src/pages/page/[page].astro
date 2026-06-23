@@ -43,7 +43,7 @@ const compactPages = visiblePageNumbers.flatMap((page, index) => {
         <h1 class="mt-4 text-4xl font-semibold">随便聊聊 · 第 {currentPage} 页</h1>
       </div>
 
-      <div class="entry-stream mt-10">
+      <div class="entry-stream archive-stream mt-10">
         {currentPosts.map((post) => (
           <article class="entry-item">
             <time class="entry-meta skeleton-text" datetime={post.data.date.toISOString()}>
@@ -96,6 +96,12 @@ const compactPages = visiblePageNumbers.flatMap((page, index) => {
 <style>
   .archive-pager {
     gap: 0.45rem;
+  }
+
+  .archive-stream .entry-title a {
+    display: inline-flex;
+    min-height: 2rem;
+    align-items: center;
   }
 
   .archive-pager__gap {
