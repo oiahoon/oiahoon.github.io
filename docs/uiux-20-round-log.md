@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 34 - 2026-06-23 - Photography Card Title Targets
+
+Evidence:
+
+- Browser review: `/photography/`.
+- Baseline measurement: selected photography card title links measured `22px` high.
+- Baseline state: filter chips and full image cards already had practical target sizes.
+
+Findings:
+
+- The photography grid relies on immersive image cards, but title links remain useful secondary entry points.
+- Single-line title links were below the `2rem` target now used across archive and tag listing titles.
+- The fix should not change the image rhythm, masonry-like hierarchy, or dark photography palette.
+
+Changes:
+
+- Made `.photo-tile h3 a` and `.archive-card h3 a` inline-flex.
+- Added a `2rem` minimum height to photography card title links.
+- Preserved card imagery, archive grid, metadata, and filter behavior.
+- Bumped the app version to `0.0.35`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: selected and archive photography card title links now have a `32px` minimum height.
+- Browser verification: `/photography/` has no horizontal overflow after the change.
+- `npm run check:content-health` passed with `120 post(s) checked`, `0 error(s)`, and `0 warning(s)`.
+- `npm run build` passed with `189 page(s) built in 1.70s`.
+- `git diff --check` passed.
+- `npm run check:security` still reports the known 5 vulnerabilities requiring breaking `npm audit fix --force` dependency changes.
+
 ## Round 33 - 2026-06-23 - Photography Topbar Targets
 
 Evidence:

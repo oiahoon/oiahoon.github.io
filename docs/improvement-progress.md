@@ -101,7 +101,7 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：Round 33 摄影详情 topbar 品牌入口和导航链接均为 `32px`，`189 page(s) built in 1.59s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：Round 34 摄影列表卡片标题链接最小高度为 `32px`，`189 page(s) built in 1.70s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23
 
 ## 2026-06-23 Continued UIUX Rounds
@@ -145,3 +145,6 @@
 - 进行：Round 33 基于 Browser 审阅摄影详情独立 topbar，定位到品牌入口 `29px`、导航链接 `26px`。
 - 完成：摄影 topbar 品牌与导航链接增加 `2rem` 最小高度，版本号提升到 `0.0.34`。
 - 验证：Round 33 摄影 topbar 品牌和导航链接均为 `32px`，work strip 仍为 `0` 个 `/posts/undefined/` 链接，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
+- 进行：Round 34 基于 Browser 审阅 `/photography/`，定位到摄影卡片标题链接高度为 `22px`。
+- 完成：摄影精选与归档卡片标题链接增加 `2rem` 最小高度，版本号提升到 `0.0.35`。
+- 验证：Round 34 摄影列表精选与归档标题链接最小高度为 `32px`，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
