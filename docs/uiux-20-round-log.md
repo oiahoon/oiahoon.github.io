@@ -2,6 +2,35 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 27 - 2026-06-23 - About Short Link Width
+
+Evidence:
+
+- Browser review: `/about/` at `390x844` and `1440x900`.
+- Baseline measurement: Elsewhere links measured `32px` high, but the short `RSS` link measured only `30px` wide.
+
+Findings:
+
+- About page had no horizontal overflow and the Elsewhere row kept its quiet inline rhythm.
+- Short labels were still slightly narrow as tap/click targets even after the height improvement.
+- The row should keep its text-separated style while giving short labels a practical minimum width.
+
+Changes:
+
+- Added a `2rem` minimum width and centered content to `.about-row a`.
+- Preserved existing text, separators, link destinations, and row layout.
+- Bumped the app version to `0.0.28`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: `RSS` now measures `32x32`; other About links remain at least `32px` high, with no horizontal overflow at `390x844` or `1440x900`.
+- `npm run check:content-health`: passed, 120 posts scanned, 0 errors, 0 warnings.
+- `npm run build`: passed, 189 pages built in 1.52s.
+- `git diff --check`: passed.
+- `npm run check:security`: still reports the same 5 remaining vulnerabilities that require breaking `npm audit fix --force`.
+
 ## Round 26 - 2026-06-23 - Header Brand Home Target
 
 Evidence:
