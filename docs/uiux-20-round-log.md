@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 35 - 2026-06-23 - Home Photography Title Targets
+
+Evidence:
+
+- Browser review: `/` cross-route link audit.
+- Baseline measurement: homepage selected photography title links measured `22px` high.
+- Baseline state: `/photography/` card title links were already corrected to `32px`.
+
+Findings:
+
+- The homepage reuses the same photography entry pattern, but its selected-card title links were still below the target size.
+- The large image remains the primary target, while the title is a secondary but visible route to the same detail page.
+- The fix should align the homepage with the photography archive without changing the calm homepage hierarchy.
+
+Changes:
+
+- Made `.selected-card h3 a` inline-flex.
+- Added a `2rem` minimum height to homepage selected photography title links.
+- Preserved homepage selected photo grid, imagery, metadata, and section order.
+- Bumped the app version to `0.0.36`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: homepage selected photography title links now compute to `inline-flex`, `min-height: 32px`, and an actual `32px` height.
+- Browser verification: `/` has no horizontal overflow after the change.
+- `npm run check:content-health` passed with `120 post(s) checked`, `0 error(s)`, and `0 warning(s)`.
+- `npm run build` passed with `189 page(s) built in 1.71s`.
+- `git diff --check` passed.
+- `npm run check:security` still reports the known 5 vulnerabilities requiring breaking `npm audit fix --force` dependency changes.
+
 ## Round 34 - 2026-06-23 - Photography Card Title Targets
 
 Evidence:
