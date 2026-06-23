@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 36 - 2026-06-23 - Home Text Link Targets
+
+Evidence:
+
+- Browser review: `/` cross-route link audit.
+- Baseline measurement: `Read about Joey`, `All photographs`, and `About Joey` text links measured about `27px` high.
+- Baseline state: primary homepage button and photography title links already had practical target sizes.
+
+Findings:
+
+- Homepage quiet text links are important navigation exits but were smaller than the `2rem` target used elsewhere.
+- These links should remain text-first and calm rather than becoming filled buttons.
+- The fix should cover the shared homepage text-link pattern without changing article or photography content.
+
+Changes:
+
+- Made `.home-text-link`, `.home-section__head a`, and `.home-about a` inline-flex.
+- Added a `2rem` minimum height and centered alignment to those homepage text links.
+- Preserved underline styling, section hierarchy, and homepage layout.
+- Bumped the app version to `0.0.37`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: homepage text links now compute to `min-height: 32px` and actual `32px` height.
+- Browser verification: `/` has no horizontal overflow after the change.
+- `npm run check:content-health` passed with `120 post(s) checked`, `0 error(s)`, and `0 warning(s)`.
+- `npm run build` passed with `189 page(s) built in 1.69s`.
+- `git diff --check` passed.
+- `npm run check:security` still reports the known 5 vulnerabilities requiring breaking `npm audit fix --force` dependency changes.
+
 ## Round 35 - 2026-06-23 - Home Photography Title Targets
 
 Evidence:
