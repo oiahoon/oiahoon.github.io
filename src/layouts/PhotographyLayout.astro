@@ -257,7 +257,7 @@ const navigation = [
           <div class="photo-work-strip__rail" data-work-rail>
             {visiblePhotoCollection.map((work) => (
               <a
-                href={`/posts/${work.id}/`}
+                href={`/posts/${work.slug}/`}
                 class={`photo-work-strip__item ${work.active ? 'is-active' : ''}`}
                 data-work-link
                 data-astro-prefetch
@@ -566,6 +566,7 @@ const navigation = [
 
   .photo-hero__back {
     display: inline-flex;
+    min-height: 2rem;
     align-items: center;
     gap: 0.42rem;
     color: rgba(245, 247, 250, 0.92);

@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 32 - 2026-06-23 - Photography Detail Work Strip Links
+
+Evidence:
+
+- Browser review: `/posts/2024-03-14-photography-uingbcmkfbq/` at `390x844`.
+- Baseline measurement: the hero back link measured `26px` high.
+- Baseline functional finding: the "More from this series" work-strip links rendered as `/posts/undefined/`.
+
+Findings:
+
+- Photography detail page had no horizontal overflow and the work strip was visually present.
+- The work strip used `work.id` even though `photoCollection` provides `slug`, causing continuation links to break.
+- The top back action also needed the same practical `2rem` target as other quiet navigation links.
+
+Changes:
+
+- Switched work-strip item hrefs from `work.id` to `work.slug`.
+- Added a `2rem` minimum height to `.photo-hero__back`.
+- Preserved immersive dark photography layout, rail behavior, and existing labels.
+- Bumped the app version to `0.0.33`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: photography detail back link is `32px` high on mobile and desktop; work-strip links use real post slugs and no longer include `/posts/undefined/`.
+- Browser verification: `/posts/2024-03-14-photography-uingbcmkfbq/` has no horizontal overflow after the change.
+- `npm run check:content-health` passed with `120 post(s) checked`, `0 error(s)`, and `0 warning(s)`.
+- `npm run build` passed with `189 page(s) built in 1.60s`.
+- `git diff --check` passed.
+- `npm run check:security` still reports the known 5 vulnerabilities requiring breaking `npm audit fix --force` dependency changes.
+
 ## Round 31 - 2026-06-23 - Articles Archive Title Targets
 
 Evidence:

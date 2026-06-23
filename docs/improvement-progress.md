@@ -101,7 +101,7 @@
 - 质量校验命令：`npm run check:docs-baseline`
 - 内容治理命令：`npm run check:content-health`
 - 安全校验命令：`npm run check:security`
-- 最近结果：Round 31 文章归档标题链接手机最小高度 `32px`，桌面最小高度 `38px`，`189 page(s) built in 1.59s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
+- 最近结果：Round 32 摄影详情 work strip 链接已从 `/posts/undefined/` 修为真实 slug，返回链接手机/桌面均为 `32px`，`189 page(s) built in 1.60s`，`content health: 0 errors / 0 warnings`，`git diff --check` 通过，`audit: 5 remaining vulnerabilities requiring breaking --force fixes`
 - 最近验证日期：2026-06-23
 
 ## 2026-06-23 Continued UIUX Rounds
@@ -139,3 +139,6 @@
 - 进行：Round 31 基于 Browser 审阅 `/articles/`，定位到移动端单行标题链接高度为 `29px`。
 - 完成：文章归档标题链接增加 `2rem` 最小高度，版本号提升到 `0.0.32`。
 - 验证：Round 31 文章归档标题链接手机最小高度 `32px`，桌面最小高度 `38px`，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
+- 进行：Round 32 基于 Browser 审阅摄影详情，定位到 work strip 链接均为 `/posts/undefined/`，顶部返回链接高度为 `26px`。
+- 完成：work strip href 改用 `work.slug`，摄影详情返回链接增加 `2rem` 最小高度，版本号提升到 `0.0.33`。
+- 验证：Round 32 摄影详情返回链接手机/桌面均为 `32px`，work strip 链接均为真实 slug 且没有 `/posts/undefined/`，无横向溢出；`npm run check:content-health`、`npm run build`、`git diff --check` 通过，安全审计仍剩同一组 breaking `--force` 依赖项。
