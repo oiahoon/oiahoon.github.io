@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 56 - 2026-07-10 - Tag Summary Language
+
+Evidence:
+
+- Browser review: `/tags/` at `390x844` and `1440x900`.
+- Baseline screenshot: `/tmp/oiahoon-uiux-rounds/baseline-mobile-tags.png`.
+- Baseline copy: the summary displayed `Tags`, `Posts`, and `Uses`, with `Uses` representing total tag assignments.
+
+Findings:
+
+- `Uses` is ambiguous: it can sound like page views, features, or user actions.
+- The number actually counts how often tags are mentioned across published content.
+- The clearer label should fit the existing compact metric row without extra explanatory copy.
+
+Changes:
+
+- Renamed the third tag summary metric from `Uses` to `Mentions`.
+- Preserved the value, data source, three-column layout, and accessible summary label.
+- Added no tooltip or design explanation.
+- Bumped the app version to `0.0.57`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the summary now reads `Tags`, `Posts`, and `Mentions` with the same values.
+- Browser verification: the longer label fits at `390px` without wrapping or overflow.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 55 - 2026-07-10 - Notes Archive Voice
 
 Evidence:
