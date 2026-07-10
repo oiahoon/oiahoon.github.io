@@ -2,6 +2,39 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 41 - 2026-07-10 - Inline Code Legibility
+
+Evidence:
+
+- Browser review: Chinese article detail at `390x844`, scrolled to the first inline code sample.
+- Screenshot: `/tmp/oiahoon-uiux-rounds/round41-after-inline-code-mobile.png`.
+- Baseline code review: inline code used a neutral line-colored fill without a dedicated foreground or border token.
+
+Findings:
+
+- Inline code could look like selected text in long mixed Chinese/English paragraphs.
+- Dark mode needed a warmer, higher-contrast code treatment without turning each fragment into a loud badge.
+- Wrapped inline code should keep its background and border on every rendered line.
+
+Changes:
+
+- Added theme-aware inline-code background, foreground, and border tokens.
+- Added a quiet one-pixel border and cloned box decoration for wrapped fragments.
+- Preserved article typography, spacing, and the low-saturation palette.
+- Bumped the app version to `0.0.42`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: `draft: true` is visually distinct in the mobile article without interrupting paragraph rhythm.
+- Browser verification: computed inline-code styles include the dedicated foreground, background, border, and radius.
+- Browser verification: the article remains at `390px` document width with no horizontal overflow.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the available full fix requires a breaking Astro upgrade.
+
 ## Round 40 - 2026-06-23 - Article Metadata Focus Ring
 
 Evidence:
