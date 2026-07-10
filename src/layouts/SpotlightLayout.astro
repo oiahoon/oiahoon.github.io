@@ -17,8 +17,9 @@ const isPhotoArchive = Astro.url.pathname === '/photography/';
 
 <BaseLayout {...props} themeMode={isPhotoArchive ? 'locked-dark' : 'system'}>
   <div class={`min-h-screen w-full ${isPhotoArchive ? 'spotlight-layout--photo' : ''}`}>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
     <SpotlightHeader />
-    <main class={isPhotoArchive ? 'pb-0' : 'pb-24'}>
+    <main id="main-content" class={isPhotoArchive ? 'pb-0' : 'pb-24'}>
       <slot />
     </main>
     <SpotlightFooter />

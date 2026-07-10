@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 48 - 2026-07-10 - Skip To Main Content
+
+Evidence:
+
+- Browser review: standard mobile headers and DOM snapshots across home, articles, tags, photography archive, and about.
+- Baseline screenshot: `/tmp/oiahoon-uiux-rounds/round47-after-mobile-menu-active.png`.
+- Baseline DOM: the site began keyboard navigation at header controls with no direct route to the page's main landmark.
+
+Findings:
+
+- Repeated header controls add avoidable Tab presses for keyboard and switch-device readers.
+- The shortcut should stay invisible during normal pointer use and become obvious on focus.
+- Normal pages and the photography archive share layout shells, so the behavior should be implemented at that level.
+
+Changes:
+
+- Added a focused-only `跳到主要内容` link to both shared page layouts.
+- Added stable `main-content` targets to their main landmarks.
+- Styled the shortcut with existing surface, line, text, motion, and focus tokens.
+- Bumped the app version to `0.0.49`.
+
+Validation plan:
+
+Results:
+
+- Browser DOM verification: the skip link is the first interactive element and its `href` resolves to the shared `main-content` target.
+- Browser verification: the target exists on sampled standard routes without changing layout width.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 47 - 2026-07-10 - Mobile Navigation Orientation
 
 Evidence:
