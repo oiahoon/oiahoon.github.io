@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 55 - 2026-07-10 - Notes Archive Voice
+
+Evidence:
+
+- Browser review: `/articles/` at `390x844` and `1440x900`.
+- Baseline screenshot: `/tmp/oiahoon-uiux-rounds/baseline-mobile-articles.png`.
+- Context review: the article product context defines the archive title as `随便聊聊` with a short, informal description.
+
+Findings:
+
+- `Engineering notes kept for reference.` sounds formal and product-like compared with the personal archive's intended voice.
+- The long status explanation pushes topic links and the first article lower on mobile.
+- The visual page should match the documented content identity without changing archive behavior.
+
+Changes:
+
+- Restored the intended `随便聊聊` page title.
+- Replaced the long status paragraph with the approved concise archive description.
+- Preserved the archive kicker, topic links, entries, typography system, and SEO title.
+- Bumped the app version to `0.0.56`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the documented title and description render in the first mobile viewport.
+- Browser verification: topic links and the first article enter earlier with no horizontal overflow.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 54 - 2026-07-10 - Homepage Series Simplification
 
 Evidence:
