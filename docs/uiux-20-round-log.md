@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 44 - 2026-07-10 - Code Block Boundary
+
+Evidence:
+
+- Browser review: legacy setup article at `390x844` with shell commands inside quoted sections.
+- Screenshot: `/tmp/oiahoon-uiux-rounds/round43-after-blockquote-mobile.png`.
+- Baseline measurement: Shiki code blocks relied on background contrast alone to separate commands from surrounding quoted prose.
+
+Findings:
+
+- Long legacy articles frequently place code blocks inside blockquotes, creating several nearby dark surfaces.
+- The block boundary should stay visible when background colors are close in dark mode.
+- A quiet border is enough; extra controls or framed card chrome would distract from reading.
+
+Changes:
+
+- Added a low-contrast border blended from the existing accent and slate code palette.
+- Preserved Shiki's existing wrapping behavior, padding, radius, and syntax colors.
+- Kept code blocks native, lightweight, and readable inside quoted content.
+- Bumped the app version to `0.0.45`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: sampled code blocks retain `pre-wrap` behavior and receive the new one-pixel border.
+- Browser verification: nested commands and the document remain inside the `390px` viewport.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 43 - 2026-07-10 - Blockquote Reading Hierarchy
 
 Evidence:

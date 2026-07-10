@@ -367,6 +367,7 @@
     @apply overflow-x-auto rounded-xl p-4;
     background: #0f1720;
     color: #e7edf5;
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, #334155);
   }
 
   .prose :not(pre) > code {
