@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 60 - 2026-07-10 - Photography Archive Deduplication
+
+Evidence:
+
+- Browser review: `/photography/` selected and archive sections at `768x1024`.
+- Baseline screenshot: `/tmp/oiahoon-uiux-rounds/round59-after-photo-archive-ipad.png`.
+- Baseline measurement: all six selected works appeared again as the first six of `109` archive cards.
+
+Findings:
+
+- Repeating the same works makes the archive opening feel longer without increasing discovery.
+- The archive heading said `2025` because it mirrored the full collection, even though the selected set already owned that opening.
+- The two sections should have distinct jobs: curation first, chronological continuation second.
+
+Changes:
+
+- Started the archive after the six selected works, reducing it from `109` to `103` unique continuation cards.
+- Derived the archive heading year from the first remaining archive item.
+- Added the no-duplication rule to the photography agent context for future work.
+- Bumped the app version to `0.0.61`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: selected and archive title sets have zero overlap.
+- Browser verification: the archive begins with the next chronological work and its heading year matches that work.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 59 - 2026-07-10 - Photography Archive Focus
 
 Evidence:

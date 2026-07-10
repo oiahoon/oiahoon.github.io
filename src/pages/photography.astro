@@ -6,7 +6,7 @@ import ProgressiveImage from '../components/ProgressiveImage.astro';
 const photos = await getCollection('posts', ({ data }) => !data.draft && data.type === 'photography');
 const sorted = photos.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 const selected = sorted.slice(0, 6);
-const archive = sorted.slice(0);
+const archive = sorted.slice(selected.length);
 const filters = [
   { label: 'All', value: 'all' },
   { label: 'Cafe', value: 'cafe' },
@@ -17,6 +17,7 @@ const filters = [
   { label: 'Film', value: 'film' },
 ] as const;
 const years = [...new Set(sorted.map((photo) => photo.data.date.getFullYear()))].sort((a, b) => b - a);
+const archiveStartYear = archive[0]?.data.date.getFullYear() ?? years[0];
 
 function firstImage(photo: typeof sorted[number]) {
   return photo.data.gallery?.[0];
@@ -130,7 +131,7 @@ function filterGroups(photo: typeof sorted[number]) {
         <div class="photo-section__head">
           <div>
             <p class="eyebrow">Archive</p>
-            <h2 id="archive-title">Archive · {years[0]}</h2>
+            <h2 id="archive-title">Archive · {archiveStartYear}</h2>
           </div>
         </div>
 

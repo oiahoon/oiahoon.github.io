@@ -20,6 +20,7 @@ Photography should feel like an immersive portfolio, not a blog article with a p
 - Dates should appear once per card and use semantic `<time datetime="...">` where relevant.
 - EXIF details should be minimal on the list page; details belong on the detail page.
 - Card heights should feel stable on mobile and desktop.
+- Selected works should not be repeated again at the top of the archive; the archive begins after the selected set.
 
 ## Detail Page Rules
 
