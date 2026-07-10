@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 51 - 2026-07-10 - Progressive Image Reveal
+
+Evidence:
+
+- Browser review: mobile homepage and photography-tag entry during initial image loading.
+- Baseline screenshot: `/tmp/oiahoon-uiux-rounds/baseline-mobile-home.png`.
+- Baseline visual: the 16px blur and 1.05 scale made the eager hero look indistinct for the full slow transition.
+
+Findings:
+
+- The placeholder should signal the photo composition without looking like a broken or censored image.
+- Large mobile media makes a long, heavy blur more noticeable than on small thumbnails.
+- A faster, lighter reveal can improve perceived quality without removing progressive loading.
+
+Changes:
+
+- Reduced placeholder blur from `16px` to `10px` and overscale from `1.05` to `1.025`.
+- Shortened both placeholder and full-image fades to the existing base duration.
+- Preserved reduced-motion handling and the same image loading order.
+- Bumped the app version to `0.0.52`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the low-resolution layer computes to the lighter blur and smaller overscale.
+- Browser verification: eager hero media still resolves to the full image without layout shift at `390px`.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 50 - 2026-07-10 - Progressive Image Request Discipline
 
 Evidence:
