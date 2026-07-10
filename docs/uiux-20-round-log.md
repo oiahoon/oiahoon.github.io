@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 53 - 2026-07-10 - Homepage Content-First Opening
+
+Evidence:
+
+- Browser review: homepage at `390x844` after the progressive image reveal.
+- Screenshot: `/tmp/oiahoon-uiux-rounds/round51-after-progressive-reveal-mobile.png`.
+- Baseline visual: `Photography-first personal site` sat above the real site title as a design-positioning label.
+
+Findings:
+
+- The eyebrow explains the design strategy rather than the author's content.
+- On mobile it adds another uppercase line between the photograph and the actual title.
+- The photograph, title, and introduction already establish the site's two content modes.
+
+Changes:
+
+- Removed the design-explaining homepage eyebrow.
+- Let the main title begin the copy column without inherited empty top spacing.
+- Preserved the hero photograph, actions, description, palette, and responsive grid.
+- Bumped the app version to `0.0.54`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the homepage opens with photograph, title, introduction, and actions only.
+- Browser verification: the mobile H1 enters earlier without changing the `390px` document width.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 52 - 2026-07-10 - iPad Photography Archive Density
 
 Evidence:
