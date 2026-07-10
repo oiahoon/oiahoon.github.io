@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 49 - 2026-07-10 - Footer Landmark Structure
+
+Evidence:
+
+- Browser review: `/about/` footer at `390x844`.
+- Screenshot: `/tmp/oiahoon-uiux-rounds/round49-before-footer-mobile.png`.
+- Baseline DOM measurement: the footer contained three visual sections but zero headings and zero navigation landmarks.
+
+Findings:
+
+- The footer looks orderly, but assistive technology could not use the visual labels to navigate its groups.
+- The navigation group should be a real navigation landmark with a stable accessible name.
+- Semantic improvement must preserve the current compact typography and spacing.
+
+Changes:
+
+- Promoted the three visual labels to real second-level headings.
+- Converted the destination group into a labelled navigation landmark.
+- Labelled the remaining footer sections while preserving the existing visual classes.
+- Bumped the app version to `0.0.50`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the footer exposes three headings and one labelled navigation landmark.
+- Browser verification: the footer retains its mobile spacing, text scale, and `390px` width.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 48 - 2026-07-10 - Skip To Main Content
 
 Evidence:
