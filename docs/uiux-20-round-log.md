@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 58 - 2026-07-10 - Selected Photography Focus
+
+Evidence:
+
+- Browser review: `/photography/` selected section across phone, iPad, and desktop.
+- Baseline screenshot: `/tmp/oiahoon-uiux-rounds/round52-before-photo-archive-ipad.png`.
+- Baseline copy: the section explained that the works were not the newest, but the author's preferred starting point.
+
+Findings:
+
+- The paragraph explains the curation strategy instead of presenting photography or navigation.
+- `Selected photographs` already communicates intentional curation.
+- Removing the explanation gives the heading, filters, and images more authority.
+
+Changes:
+
+- Removed the design-explaining paragraph beside the selected photography heading.
+- Preserved the section title, filter controls, photo order, and open two-column desktop rhythm.
+- Added no replacement badge, subtitle, or helper copy.
+- Bumped the app version to `0.0.59`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the selected section now moves directly from heading and filters into photographs.
+- Browser verification: phone, iPad, and desktop layouts retain their established widths and grid breakpoints.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 57 - 2026-07-10 - About Portrait Restraint
 
 Evidence:
