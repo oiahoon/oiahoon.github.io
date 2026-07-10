@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: light;
+
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   --font-serif: "Iowan Old Style", "Palatino Linotype", "Times New Roman",
@@ -32,6 +34,8 @@
 }
 
 .dark {
+  color-scheme: dark;
+
   --bg: #11100e;
   --surface: #191816;
   --text: #eee7dc;

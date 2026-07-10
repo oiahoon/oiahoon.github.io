@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 45 - 2026-07-10 - Native Theme Integration
+
+Evidence:
+
+- Browser review: homepage header at `390x844` in saved dark mode.
+- Screenshot: `/tmp/oiahoon-uiux-rounds/round45-before-theme-mobile.png`.
+- Baseline measurement: the page theme was `dark`, while the browser computed `color-scheme: normal`.
+
+Findings:
+
+- The site already persists light and dark themes, but native browser surfaces were not told which palette was active.
+- Scrollbars, form controls, and browser-provided UI should harmonize with the selected theme.
+- The fix should use CSS platform behavior rather than custom-skinned controls.
+
+Changes:
+
+- Declared light color scheme for the root theme and dark color scheme for `.dark`.
+- Kept the existing palette, toggle behavior, and locked-dark photography rules.
+- Avoided new JavaScript or custom browser chrome.
+- Bumped the app version to `0.0.46`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: dark mode computes `color-scheme: dark` and light mode computes `color-scheme: light`.
+- Browser verification: theme switching still updates the visible page with no horizontal overflow.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 44 - 2026-07-10 - Code Block Boundary
 
 Evidence:
