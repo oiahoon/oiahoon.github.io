@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 42 - 2026-07-10 - Article Link Focus Clarity
+
+Evidence:
+
+- Browser review: `/posts/set-up-your-own-elk/` at `390x844`, scrolled to the first external resource links.
+- Screenshot: `/tmp/oiahoon-uiux-rounds/round42-before-prose-link-mobile.png`.
+- Baseline measurement: the link was color-only at rest and relied on the global outline for keyboard focus.
+
+Findings:
+
+- Accent color distinguishes links visually, but a text-level focus cue improves clarity inside dense Chinese/English paragraphs.
+- The focus treatment should not permanently underline every link or change reading rhythm.
+- The change belongs in shared article typography so older notes receive the same behavior.
+
+Changes:
+
+- Added a visible underline for focused article-body links.
+- Tuned underline thickness and offset to remain quiet beside the existing outline.
+- Preserved the current hover state, accent color, and text-first reading layout.
+- Bumped the app version to `0.0.43`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: article-body links retain their existing accent color and gain a dedicated `:focus-visible` underline rule.
+- Browser verification: the sampled legacy article remains within the `390px` viewport.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 41 - 2026-07-10 - Inline Code Legibility
 
 Evidence:

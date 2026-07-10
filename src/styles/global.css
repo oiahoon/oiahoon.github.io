@@ -357,6 +357,12 @@
     text-decoration: underline;
   }
 
+  .prose a:focus-visible {
+    text-decoration: underline;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.22em;
+  }
+
   .prose pre {
     @apply overflow-x-auto rounded-xl p-4;
     background: #0f1720;
