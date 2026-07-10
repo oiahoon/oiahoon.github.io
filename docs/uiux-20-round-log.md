@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 50 - 2026-07-10 - Progressive Image Request Discipline
+
+Evidence:
+
+- Browser review: `/photography/` at `390x844`.
+- Screenshot: `/tmp/oiahoon-uiux-rounds/round50-before-progressive-loading-mobile.png`.
+- Baseline measurement: all `115` low-resolution placeholders loaded eagerly, while only `2` full images were intentionally eager.
+
+Findings:
+
+- The archive's progressive placeholders defeated native lazy loading by requesting every low-resolution image immediately.
+- On mobile networks, 113 unnecessary first-load requests compete with the opening text and selected works.
+- Above-the-fold images still need eager placeholders, so the placeholder should follow each image's existing loading policy.
+
+Changes:
+
+- Made low-resolution placeholders inherit the component's `eager` or `lazy` loading mode.
+- Preserved eager loading for the two priority photographs.
+- Kept the existing progressive transition, dimensions, and alt-text behavior.
+- Bumped the app version to `0.0.51`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the archive now renders `2` eager and `113` lazy placeholders, matching the full images.
+- Browser verification: the photography first viewport remains stable at `390px` with the same opening composition.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 49 - 2026-07-10 - Footer Landmark Structure
 
 Evidence:

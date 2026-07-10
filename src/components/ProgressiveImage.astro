@@ -60,7 +60,7 @@ const placeholderSrc = lowSrc || resolveLowResSource(src);
 ---
 
 <span class={`progressive-image ${className}`} data-progressive-image>
-  <img src={placeholderSrc} alt="" aria-hidden="true" class="progressive-image__low" loading="eager" decoding="async" />
+  <img src={placeholderSrc} alt="" aria-hidden="true" class="progressive-image__low" loading={loading} decoding="async" />
   <img
     src={src}
     alt={alt}
