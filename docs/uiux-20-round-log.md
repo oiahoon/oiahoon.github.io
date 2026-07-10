@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 52 - 2026-07-10 - iPad Photography Archive Density
+
+Evidence:
+
+- Browser review: `/photography/` archive at `768x1024`.
+- Screenshot: `/tmp/oiahoon-uiux-rounds/round52-before-photo-archive-ipad.png`.
+- Baseline measurement: the archive switched to five columns at `760px`, producing `131.6px` cards and frequent title wrapping.
+
+Findings:
+
+- Five columns make photographs and metadata too small at the narrow edge of the iPad breakpoint.
+- The dense grid weakens image-led browsing and makes adjacent cards harder to distinguish.
+- Desktop can keep five columns, but tablet needs a distinct intermediate rhythm.
+
+Changes:
+
+- Changed the tablet archive to three equal columns.
+- Moved the five-column archive breakpoint to `1100px`.
+- Preserved two columns on phones and the existing desktop grid.
+- Bumped the app version to `0.0.53`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: archive cards at `768px` expand from about `132px` to about `230px`.
+- Browser verification: the grid remains inside the viewport with clearer photo and title hierarchy.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 51 - 2026-07-10 - Progressive Image Reveal
 
 Evidence:

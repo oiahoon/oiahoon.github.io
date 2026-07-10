@@ -392,6 +392,12 @@ function filterGroups(photo: typeof sorted[number]) {
     }
 
     .archive-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .archive-grid {
       grid-template-columns: repeat(5, minmax(0, 1fr));
     }
   }
