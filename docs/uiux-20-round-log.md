@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 46 - 2026-07-10 - Theme Toggle State Announcement
+
+Evidence:
+
+- Browser review: mobile homepage header in both saved dark and switched light states.
+- Screenshots: `/tmp/oiahoon-uiux-rounds/round45-before-theme-mobile.png` and `/tmp/oiahoon-uiux-rounds/round45-after-theme-light-mobile.png`.
+- Baseline DOM snapshot: the control was always announced as `切换主题`, regardless of the active theme.
+
+Findings:
+
+- The visible label communicates the destination theme, but the accessible name did not.
+- Assistive technology also needs a programmatic state for the two-state control.
+- State and action wording must update together after navigation and reload.
+
+Changes:
+
+- Added `aria-pressed` to expose the active dark-theme state.
+- Updated the accessible label to announce `切换到浅色主题` or `切换到深色主题`.
+- Reused the existing theme update path so state stays correct after Astro page swaps.
+- Bumped the app version to `0.0.47`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: light mode exposes `aria-pressed=false` and the dark-theme action label.
+- Browser verification: clicking the control changes both visual theme and accessible state.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 45 - 2026-07-10 - Native Theme Integration
 
 Evidence:

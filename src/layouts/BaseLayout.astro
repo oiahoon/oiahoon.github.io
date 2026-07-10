@@ -138,6 +138,10 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
         document.querySelectorAll('[data-theme-toggle-label]').forEach((node) => {
           node.textContent = theme === 'dark' ? '浅色' : '深色';
         });
+        document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+          button.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+          button.setAttribute('aria-label', theme === 'dark' ? '切换到浅色主题' : '切换到深色主题');
+        });
       }
 
       function currentTheme() {
