@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 47 - 2026-07-10 - Mobile Navigation Orientation
+
+Evidence:
+
+- Browser review: `/articles/` at `390x844` with the mobile navigation open.
+- Screenshot: `/tmp/oiahoon-uiux-rounds/round47-before-mobile-menu-active.png`.
+- Baseline measurement: the active `Notes` link had `aria-current=page` but the same muted color, transparent background, and regular weight as other links.
+
+Findings:
+
+- The menu exposed active state to assistive technology but not to sighted mobile users.
+- A reader opening the menu should be able to confirm the current section before choosing a destination.
+- The state should remain subtle and use existing theme tokens.
+
+Changes:
+
+- Added a quiet accent-tinted background to the active mobile menu item.
+- Promoted the active link to the primary text color and semibold weight.
+- Kept the same menu geometry, icons, touch targets, and native `details` behavior.
+- Bumped the app version to `0.0.48`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the active `Notes` item is visibly differentiated while retaining `aria-current=page`.
+- Browser verification: the menu remains contained within the `390px` viewport and above page content.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 46 - 2026-07-10 - Theme Toggle State Announcement
 
 Evidence:

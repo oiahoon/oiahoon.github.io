@@ -179,4 +179,10 @@ const navigation = [
   .spotlight-header__menu-link {
     min-height: 2.75rem;
   }
+
+  .spotlight-header__menu-link[aria-current='page'] {
+    color: var(--text);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    font-weight: 600;
+  }
 </style>
