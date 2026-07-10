@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 57 - 2026-07-10 - About Portrait Restraint
+
+Evidence:
+
+- Browser review: `/about/` at `1440x900` and `390x844`.
+- Baseline screenshot: `/tmp/oiahoon-uiux-rounds/baseline-desktop-about.png`.
+- Baseline copy: the portrait caption ended with `Kept personal, not corporate.`, explaining the intended visual tone.
+
+Findings:
+
+- The sentence describes a design decision rather than giving readers new information.
+- The nearby biography and the portrait itself already communicate the personal context.
+- Removing the caption lets the image and equipment notes form a quieter right column.
+
+Changes:
+
+- Removed the explanatory portrait caption and its unused style block.
+- Kept the image's descriptive alt text, dimensions, crop, and eager loading.
+- Preserved the about-page content, layout, and personal tone.
+- Bumped the app version to `0.0.58`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the portrait flows directly into the `Uses` and `Focus` rows without design commentary.
+- Browser verification: desktop and mobile columns retain their existing width and spacing.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 56 - 2026-07-10 - Tag Summary Language
 
 Evidence:
