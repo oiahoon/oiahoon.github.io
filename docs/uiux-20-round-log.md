@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 59 - 2026-07-10 - Photography Archive Focus
+
+Evidence:
+
+- Browser review: `/photography/` archive at `768x1024` after the tablet grid correction.
+- Baseline screenshot: `/tmp/oiahoon-uiux-rounds/round52-after-photo-archive-ipad.png`.
+- Baseline copy: the archive heading was paired with a sentence explaining efficient browsing and retained metadata.
+
+Findings:
+
+- The sentence describes the layout implementation rather than the photographs.
+- The visible cards already demonstrate that titles and locations remain available.
+- Removing it creates a cleaner entry into the larger tablet cards.
+
+Changes:
+
+- Removed the design-explaining paragraph from the archive header.
+- Preserved the archive eyebrow, year, card metadata, responsive grid, and dark photography palette.
+- Added no replacement helper copy or decorative element.
+- Bumped the app version to `0.0.60`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the archive moves directly from its title into photographs and metadata.
+- Browser verification: the three-column iPad layout remains inside `768px` with unchanged card widths.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 58 - 2026-07-10 - Selected Photography Focus
 
 Evidence:
