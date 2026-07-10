@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 43 - 2026-07-10 - Blockquote Reading Hierarchy
+
+Evidence:
+
+- Browser review: `/posts/initial-mac-develop-enviroment/` at `390x844` around command and resource quotations.
+- Screenshot: `/tmp/oiahoon-uiux-rounds/round43-before-blockquote-mobile.png`.
+- Baseline measurement: the quote rail used the same low-contrast line token as ordinary separators.
+
+Findings:
+
+- Long legacy notes use quotes for commands, links, images, and prose, so their left rail must separate them from surrounding paragraphs.
+- The existing neutral rail became difficult to track beside dark code panels.
+- A restrained accent mix can improve hierarchy without turning quotes into cards.
+
+Changes:
+
+- Mixed the existing accent into the blockquote rail.
+- Increased the inner offset slightly so code, images, and prose do not crowd the rail.
+- Preserved open typography and the article's borderless reading model.
+- Bumped the app version to `0.0.44`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: the sampled command quote has a clearer rail while retaining the same content width.
+- Browser verification: nested code and image content remains inside the `390px` viewport.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 42 - 2026-07-10 - Article Link Focus Clarity
 
 Evidence:

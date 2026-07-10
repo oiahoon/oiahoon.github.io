@@ -385,9 +385,9 @@
   }
 
   .prose blockquote {
-    border-left: 2px solid var(--line);
+    border-left: 2px solid color-mix(in srgb, var(--accent) 46%, var(--line));
     margin-inline: 0;
-    padding-left: 1rem;
+    padding-left: 1.1rem;
     color: var(--muted);
   }
 
