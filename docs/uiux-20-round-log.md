@@ -2,6 +2,38 @@
 
 This log tracks the repeated screenshot-led UI/UX improvement rounds for Joey's Notes.
 
+## Round 54 - 2026-07-10 - Homepage Series Simplification
+
+Evidence:
+
+- Browser review: homepage at `390x844`, between selected photographs and the about section.
+- Screenshot: `/tmp/oiahoon-uiux-rounds/round54-before-home-series-mobile.png`.
+- Baseline measurement: the three `Recent series` rows contained zero links and were not generated from current content.
+
+Findings:
+
+- The rows look like discovery controls but cannot be opened or filtered.
+- Static series names add a full mobile screen of content without advancing the main photography or notes journeys.
+- Selected photographs already provide the stronger, real entry into visual work.
+
+Changes:
+
+- Removed the inert `Recent series` section and its unused styles.
+- Connected selected photography directly to the concise author introduction.
+- Kept real navigation and content sections unchanged.
+- Bumped the app version to `0.0.55`.
+
+Validation plan:
+
+Results:
+
+- Browser verification: no inert series grid remains and selected photography flows directly into the author section.
+- Browser verification: the homepage stays within `390px` and all remaining sections have working destinations or real content.
+- `npm run check:content-health` passed.
+- `npm run build` passed.
+- `git diff --check` passed.
+- `npm run check:security` reports the known `4 vulnerabilities (3 low, 1 moderate)`; the full fix requires a breaking Astro upgrade.
+
 ## Round 53 - 2026-07-10 - Homepage Content-First Opening
 
 Evidence:

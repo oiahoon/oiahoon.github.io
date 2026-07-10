@@ -90,29 +90,6 @@ function photoMeta(photo: typeof photographs[number]) {
   </section>
 
   <section class="home-section">
-    <div class="shell">
-      <div class="home-section__head">
-        <h2>Recent series</h2>
-      </div>
-
-      <div class="series-grid">
-        <article>
-          <p class="series-grid__title">Street Motion</p>
-          <p>Taxis · roads · 2024</p>
-        </article>
-        <article>
-          <p class="series-grid__title">Cafe Windows</p>
-          <p>Glass · handwritten signs</p>
-        </article>
-        <article>
-          <p class="series-grid__title">Quiet Canopies</p>
-          <p>Trees · harbour haze</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="home-section">
     <div class="shell home-about">
       <h2>Joey Huang</h2>
       <p>Software engineer by trade, photographer by curiosity. 拍拍街头、咖啡馆、旅行和安静日常，也把早年的工程笔记留作可查阅的 archive。</p>
@@ -293,7 +270,6 @@ function photoMeta(photo: typeof photographs[number]) {
   }
 
   .selected-card p,
-  .series-grid p,
   .home-about p,
   .legacy-row p {
     color: var(--muted);
@@ -302,27 +278,6 @@ function photoMeta(photo: typeof photographs[number]) {
   .selected-card p {
     margin: 0.18rem 0 0;
     font-size: 0.92rem;
-  }
-
-  .series-grid {
-    display: grid;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  .series-grid article {
-    border-top: 1px solid var(--line);
-    padding-top: 1rem;
-  }
-
-  .series-grid__title {
-    margin: 0;
-    color: var(--text) !important;
-    font-weight: 700;
-  }
-
-  .series-grid p:last-child {
-    margin: 0.35rem 0 0;
   }
 
   .home-about {
@@ -382,9 +337,6 @@ function photoMeta(photo: typeof photographs[number]) {
       grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.42fr);
     }
 
-    .series-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
   }
 
   @media (max-width: 640px) {
