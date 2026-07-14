@@ -111,8 +111,9 @@ function filterGroups(photo: typeof sorted[number]) {
                     src={image.src}
                     alt={image.alt || photo.data.title || 'Photograph'}
                     class="photo-tile__image"
-                    loading={index < 2 ? 'eager' : 'lazy'}
+                    loading={index === 0 ? 'eager' : 'lazy'}
                     decoding="async"
+                    fetchpriority={index === 0 ? 'high' : 'low'}
                     width={image.width}
                     height={image.height}
                     sizes={index === 0 ? '(min-width: 960px) 54vw, 100vw' : '(min-width: 960px) 30vw, 50vw'}
@@ -167,7 +168,7 @@ function filterGroups(photo: typeof sorted[number]) {
 <style>
   .photo-index-page {
     margin-top: 0;
-    padding-block: clamp(2.8rem, 6vw, 5rem) clamp(4rem, 8vw, 7rem);
+    padding-block: clamp(2rem, 4vw, 3.5rem) clamp(4rem, 8vw, 7rem);
     background:
       radial-gradient(circle at top, rgba(208, 138, 114, 0.08), transparent 24%),
       linear-gradient(180deg, #11100e 0%, #141210 54%, #11100e 100%);
@@ -189,7 +190,7 @@ function filterGroups(photo: typeof sorted[number]) {
   }
 
   .photo-intro {
-    padding-top: clamp(1rem, 2vw, 2rem);
+    padding-top: clamp(0.5rem, 1.5vw, 1.25rem);
   }
 
   .photo-intro__grid {
@@ -353,9 +354,9 @@ function filterGroups(photo: typeof sorted[number]) {
     aspect-ratio: 1 / 1;
   }
 
-  .photo-tile:hover .photo-tile__image,
-  .archive-card:hover .archive-card__image {
-    transform: scale(1.018);
+  .archive-card {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 18rem;
   }
 
   .photo-tile h3,
@@ -385,13 +386,15 @@ function filterGroups(photo: typeof sorted[number]) {
   }
 
   @media (min-width: 760px) {
+    .archive-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 900px) {
     .photo-intro__grid,
     .photo-section__head {
       grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
-    }
-
-    .archive-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
@@ -403,8 +406,8 @@ function filterGroups(photo: typeof sorted[number]) {
 
   @media (min-width: 960px) {
     .photo-intro h1 {
-      max-width: 13ch;
-      font-size: clamp(3.3rem, 5.8vw, 4.6rem);
+      max-width: 17ch;
+      font-size: clamp(3.3rem, 5.25vw, 4.45rem);
     }
 
     .photo-section {
@@ -430,6 +433,18 @@ function filterGroups(photo: typeof sorted[number]) {
   }
 
   @media (max-width: 640px) {
+    .photo-index-page {
+      padding-top: 1.65rem;
+    }
+
+    .photo-intro {
+      padding-top: 0.35rem;
+    }
+
+    .photo-section {
+      margin-top: 3.35rem;
+    }
+
     .filter-index {
       flex-wrap: nowrap;
       justify-content: flex-start;
@@ -447,6 +462,15 @@ function filterGroups(photo: typeof sorted[number]) {
       flex: 0 0 auto;
       min-height: 2.75rem;
       padding-inline: 0.9rem;
+    }
+  }
+
+  @media (hover: hover) {
+    .photo-tile:hover .photo-tile__image,
+    .photo-tile:focus-within .photo-tile__image,
+    .archive-card:hover .archive-card__image,
+    .archive-card:focus-within .archive-card__image {
+      transform: scale(1.018);
     }
   }
 

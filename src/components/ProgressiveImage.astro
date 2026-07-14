@@ -11,6 +11,7 @@ export interface Props {
   height?: number | string;
   style?: string;
   fetchpriority?: 'high' | 'low' | 'auto';
+  srcset?: string;
 }
 
 const {
@@ -25,6 +26,7 @@ const {
   height,
   style,
   fetchpriority,
+  srcset,
 } = Astro.props;
 
 function resolveLowResSource(imageSrc: string) {
@@ -57,12 +59,42 @@ function resolveLowResSource(imageSrc: string) {
 }
 
 const placeholderSrc = lowSrc || resolveLowResSource(src);
+
+function resolveResponsiveSrcSet(imageSrc: string) {
+  try {
+    const parsed = new URL(imageSrc);
+    const widths = [480, 768, 1200, 1600];
+
+    if (parsed.hostname.includes('images.unsplash.com')) {
+      return widths.map((candidateWidth) => {
+        const candidate = new URL(parsed);
+        candidate.searchParams.set('w', String(candidateWidth));
+        candidate.searchParams.set('q', candidateWidth <= 768 ? '76' : '80');
+        candidate.searchParams.set('auto', 'format');
+        return `${candidate.toString()} ${candidateWidth}w`;
+      }).join(', ');
+    }
+
+    if (parsed.hostname.includes('res.cloudinary.com') && imageSrc.includes('/upload/')) {
+      return widths.map((candidateWidth) => (
+        `${imageSrc.replace('/upload/', `/upload/f_auto,q_auto,w_${candidateWidth}/`)} ${candidateWidth}w`
+      )).join(', ');
+    }
+  } catch {
+    // Local assets and unrecognized remote sources use the original URL.
+  }
+
+  return undefined;
+}
+
+const responsiveSrcSet = srcset || resolveResponsiveSrcSet(src);
 ---
 
 <span class={`progressive-image ${className}`} data-progressive-image>
-  <img src={placeholderSrc} alt="" aria-hidden="true" class="progressive-image__low" loading={loading} decoding="async" />
+  <img src={placeholderSrc} alt="" aria-hidden="true" class="progressive-image__low" loading={loading} decoding="async" fetchpriority="low" />
   <img
     src={src}
+    srcset={responsiveSrcSet}
     alt={alt}
     class="progressive-image__high"
     loading={loading}

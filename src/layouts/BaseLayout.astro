@@ -31,7 +31,12 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
 ---
 
 <!DOCTYPE html>
-<html lang={lang} class="h-full antialiased" data-theme-mode={themeMode}>
+<html
+  lang={lang}
+  class="h-full antialiased"
+  data-theme-mode={themeMode}
+  data-service-worker={import.meta.env.PROD ? 'enabled' : 'disabled'}
+>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -91,6 +96,10 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
         : (savedTheme || (darkQuery.matches ? 'dark' : 'light'));
       document.documentElement.dataset.theme = theme;
       document.documentElement.classList.toggle('dark', theme === 'dark');
+      document.querySelector('meta[name="theme-color"]')?.setAttribute(
+        'content',
+        theme === 'dark' ? '#11100e' : '#f7f3ec',
+      );
 
       const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
       if (!connection) return;
@@ -127,6 +136,21 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
       }
 
       function updateThemeUi(theme) {
+        const isChinese = document.documentElement.lang.toLowerCase().startsWith('zh');
+        const labels = isChinese
+          ? {
+              light: '浅色',
+              dark: '深色',
+              switchToLight: '切换到浅色主题',
+              switchToDark: '切换到深色主题',
+            }
+          : {
+              light: 'Light',
+              dark: 'Dark',
+              switchToLight: 'Switch to light theme',
+              switchToDark: 'Switch to dark theme',
+            };
+
         document.documentElement.dataset.theme = theme;
         document.documentElement.classList.toggle('dark', theme === 'dark');
         if ((document.documentElement.dataset.themeMode || 'system') !== 'locked-dark') {
@@ -136,11 +160,11 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
           themeColorMeta.setAttribute('content', theme === 'dark' ? '#11100e' : '#f7f3ec');
         }
         document.querySelectorAll('[data-theme-toggle-label]').forEach((node) => {
-          node.textContent = theme === 'dark' ? '浅色' : '深色';
+          node.textContent = theme === 'dark' ? labels.light : labels.dark;
         });
         document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
           button.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
-          button.setAttribute('aria-label', theme === 'dark' ? '切换到浅色主题' : '切换到深色主题');
+          button.setAttribute('aria-label', theme === 'dark' ? labels.switchToLight : labels.switchToDark);
         });
       }
 
@@ -166,7 +190,16 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
       document.addEventListener('astro:page-load', bindThemeToggles);
     })();
 
-    if ('serviceWorker' in navigator) {
+    const shouldRegisterServiceWorker = document.documentElement.dataset.serviceWorker === 'enabled';
+
+    if (!shouldRegisterServiceWorker && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations?.().then((registrations) => {
+        registrations.forEach((registration) => registration.unregister());
+      });
+      window.addEventListener('load', () => {
+        document.documentElement.classList.remove('content-pending');
+      });
+    } else if ('serviceWorker' in navigator) {
       let refreshing = false;
 
       window.addEventListener('load', () => {

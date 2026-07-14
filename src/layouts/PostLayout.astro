@@ -25,6 +25,29 @@ export interface Props {
 }
 
 const { title, subtitle, author, date, slug, tags, header_img, description, lang, type = 'article', gallery, camera, location, publishedDate, previousPhoto, nextPhoto, photoCollection } = Astro.props;
+const copy = lang === 'zh'
+  ? {
+      backToArchive: '返回文章归档',
+      details: '文章信息',
+      published: '发布于',
+      author: '作者',
+      filed: '标签',
+      archive: '归档',
+      notes: '文章',
+      notesArchive: '文章归档',
+      allTags: '所有标签',
+    }
+  : {
+      backToArchive: 'Back to notes archive',
+      details: 'Article details',
+      published: 'Published',
+      author: 'Author',
+      filed: 'Filed',
+      archive: 'Archive',
+      notes: 'Notes',
+      notesArchive: 'Notes archive',
+      allTags: 'All tags',
+    };
 const fallbackTitle = title || (type === 'photography'
   ? `摄影作品 · ${date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}`
   : '文章');
@@ -74,7 +97,7 @@ const structuredData = generateBlogPostStructuredData({
       <div class="shell">
         <div class="article-layout">
           <div class="reading-narrow article-primary">
-            <a href="/articles/" class="article-back-link text-sm muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="arrowLeft" size={14} /> <span>Back to notes archive</span></a>
+            <a href="/articles/" class="article-back-link text-sm muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="arrowLeft" size={14} /> <span>{copy.backToArchive}</span></a>
 
             <header class="mt-8 border-b pb-10" style="border-color: var(--line);">
               <p class="entry-meta skeleton-text">
@@ -98,10 +121,10 @@ const structuredData = generateBlogPostStructuredData({
             </header>
           </div>
 
-          <aside class="article-marginalia" aria-label="Article details">
+          <aside class="article-marginalia" aria-label={copy.details}>
             <dl>
               <div>
-                <dt>Published</dt>
+                <dt>{copy.published}</dt>
                 <dd>
                   {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
                     year: 'numeric',
@@ -111,18 +134,18 @@ const structuredData = generateBlogPostStructuredData({
                 </dd>
               </div>
               <div>
-                <dt>Author</dt>
+                <dt>{copy.author}</dt>
                 <dd>{author}</dd>
               </div>
               {tags.length > 0 && (
                 <div>
-                  <dt>Filed</dt>
+                  <dt>{copy.filed}</dt>
                   <dd>{tags.slice(0, 2).join(' / ')}</dd>
                 </div>
               )}
               <div>
-                <dt>Archive</dt>
-                <dd><a href="/articles/" data-astro-prefetch>Notes</a></dd>
+                <dt>{copy.archive}</dt>
+                <dd><a href="/articles/" data-astro-prefetch>{copy.notes}</a></dd>
               </div>
             </dl>
           </aside>
@@ -157,8 +180,8 @@ const structuredData = generateBlogPostStructuredData({
             )}
 
             <div class="mt-8 flex items-center justify-between border-t pt-6 text-sm" style="border-color: var(--line);">
-              <a href="/articles/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="article" size={14} /> <span>Notes archive</span></a>
-              <a href="/tags/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="tag" size={14} /> <span>All tags</span></a>
+              <a href="/articles/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="article" size={14} /> <span>{copy.notesArchive}</span></a>
+              <a href="/tags/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="tag" size={14} /> <span>{copy.allTags}</span></a>
             </div>
           </div>
         </div>
@@ -208,6 +231,20 @@ const structuredData = generateBlogPostStructuredData({
     .article-primary p,
     .article-content {
       overflow-wrap: anywhere;
+    }
+
+    .article-primary h1 {
+      text-wrap: balance;
+    }
+
+    .article-primary header > p:not(.entry-meta),
+    .article-content .prose {
+      text-wrap: pretty;
+    }
+
+    .article-content .prose {
+      font-size: clamp(1.05rem, 1.2vw, 1.125rem);
+      line-height: 1.9;
     }
 
     .article-marginalia {

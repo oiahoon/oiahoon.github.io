@@ -72,8 +72,9 @@ function photoMeta(photo: typeof photographs[number]) {
                   src={image.src}
                   alt={image.alt || photo.data.title || 'Selected photograph'}
                   class="selected-card__image"
-                  loading={index < 2 ? 'eager' : 'lazy'}
+                  loading="lazy"
                   decoding="async"
+                  fetchpriority="low"
                   width={image.width}
                   height={image.height}
                   sizes={index === 0 ? '(min-width: 960px) 54vw, 100vw' : '(min-width: 960px) 28vw, 50vw'}
@@ -185,6 +186,10 @@ function photoMeta(photo: typeof photographs[number]) {
     color: var(--bg);
     font-size: 0.95rem;
     text-decoration: none;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
   }
 
   .home-text-link,
@@ -197,6 +202,11 @@ function photoMeta(photo: typeof photographs[number]) {
     text-decoration: underline;
     text-underline-offset: 0.35em;
     text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in srgb, currentColor 56%, transparent);
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      text-decoration-color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
   }
 
   .home-section {
@@ -250,10 +260,6 @@ function photoMeta(photo: typeof photographs[number]) {
   .selected-card__image {
     aspect-ratio: 4 / 3;
     transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease;
-  }
-
-  .selected-card:hover .selected-card__image {
-    transform: scale(1.018);
   }
 
   .selected-card h3 {
@@ -374,6 +380,17 @@ function photoMeta(photo: typeof photographs[number]) {
     }
   }
 
+  @media (min-width: 641px) and (max-width: 959px) {
+    .home-hero__media {
+      aspect-ratio: 16 / 10;
+      max-height: 48vh;
+    }
+
+    .home-hero__image {
+      object-position: center 42%;
+    }
+  }
+
   @media (min-width: 960px) {
     .home-hero__grid {
       grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
@@ -397,6 +414,26 @@ function photoMeta(photo: typeof photographs[number]) {
 
     .selected-card--small {
       grid-column: span 4;
+    }
+  }
+
+  @media (hover: hover) {
+    .home-button:hover {
+      background: color-mix(in srgb, var(--text) 90%, var(--accent));
+      transform: translateY(-1px);
+    }
+
+    .home-text-link:hover,
+    .home-section__head a:hover,
+    .home-about a:hover {
+      color: var(--accent);
+      text-decoration-color: currentColor;
+      transform: translateY(-1px);
+    }
+
+    .selected-card:hover .selected-card__image,
+    .selected-card:focus-within .selected-card__image {
+      transform: scale(1.018);
     }
   }
 

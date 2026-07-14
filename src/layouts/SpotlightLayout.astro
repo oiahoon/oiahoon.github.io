@@ -12,17 +12,19 @@ export interface Props {
 }
 
 const props = Astro.props;
+const lang = props.lang ?? 'zh';
 const isPhotoArchive = Astro.url.pathname === '/photography/';
+const skipLabel = lang === 'zh' ? '跳到主要内容' : 'Skip to main content';
 ---
 
 <BaseLayout {...props} themeMode={isPhotoArchive ? 'locked-dark' : 'system'}>
   <div class={`min-h-screen w-full ${isPhotoArchive ? 'spotlight-layout--photo' : ''}`}>
-    <a class="skip-link" href="#main-content">跳到主要内容</a>
-    <SpotlightHeader />
+    <a class="skip-link" href="#main-content">{skipLabel}</a>
+    <SpotlightHeader lang={lang} />
     <main id="main-content" class={isPhotoArchive ? 'pb-0' : 'pb-24'}>
       <slot />
     </main>
-    <SpotlightFooter />
+    <SpotlightFooter lang={lang} />
   </div>
 </BaseLayout>
 

@@ -1,8 +1,16 @@
 ---
 import UiIcon from './UiIcon.astro';
 
+export interface Props {
+  lang?: 'zh' | 'en';
+}
+
+const { lang = 'zh' } = Astro.props;
 const currentPath = Astro.url.pathname;
 const isPhotoArchive = currentPath === '/photography/';
+const themeLabel = lang === 'zh' ? '深色' : 'Dark';
+const themeAriaLabel = lang === 'zh' ? '切换到深色主题' : 'Switch to dark theme';
+const navigationLabel = lang === 'zh' ? '导航' : 'Navigation';
 
 const navigation = [
   { name: 'Photographs', href: '/photography/', icon: 'camera' },
@@ -39,20 +47,20 @@ const navigation = [
             data-theme-toggle
             class="spotlight-header__button spotlight-header__theme-toggle rounded-full border px-3 py-1.5 text-xs font-medium transition hover:bg-black/5 dark:hover:bg-white/10"
             style="border-color: var(--line); color: var(--text);"
-            aria-label="切换主题"
+            aria-label={themeAriaLabel}
             aria-pressed="false"
           >
             <UiIcon name="moon" size={14} class="spotlight-header__theme-icon spotlight-header__theme-icon--dark" />
             <UiIcon name="sun" size={14} class="spotlight-header__theme-icon spotlight-header__theme-icon--light" />
-            <span data-theme-toggle-label>深色</span>
+            <span data-theme-toggle-label>{themeLabel}</span>
           </button>
         )}
 
         <details class="spotlight-header__menu-shell relative md:hidden">
-          <summary class="spotlight-header__button spotlight-header__menu-toggle cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium" style="border-color: var(--line); color: var(--text);" aria-label="导航">
+          <summary class="spotlight-header__button spotlight-header__menu-toggle cursor-pointer list-none rounded-full border px-3 py-1.5 text-xs font-medium" style="border-color: var(--line); color: var(--text);" aria-label={navigationLabel}>
             <UiIcon name="menu" size={16} />
           </summary>
-          <nav class="spotlight-header__menu absolute right-5 mt-2 min-w-40 rounded-xl border bg-[var(--surface)] p-2 text-sm shadow-sm" style="border-color: var(--line);">
+          <nav class="spotlight-header__menu absolute right-5 mt-2 min-w-40 rounded-xl border bg-[var(--surface)] p-2 text-sm shadow-sm" style="border-color: var(--line);" aria-label={navigationLabel}>
             {navigation.map((item) => (
               <a href={item.href} class="spotlight-header__menu-link muted flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-black/5 hover:text-[var(--text)] dark:hover:bg-white/5" aria-current={currentPath === item.href ? 'page' : undefined} data-astro-prefetch>
                 <UiIcon name={item.icon} size={14} />
@@ -112,6 +120,14 @@ const navigation = [
     gap: 0.38rem;
     min-height: 2.75rem;
     padding-inline: 0.85rem;
+  }
+
+  .spotlight-header__button {
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
   }
 
   :global(.spotlight-header__theme-icon) {
@@ -174,6 +190,8 @@ const navigation = [
 
   .spotlight-header__menu {
     z-index: 50;
+    transform-origin: top right;
+    animation: menu-reveal var(--duration-fast) var(--ease-out-quart);
   }
 
   .spotlight-header__menu-link {
@@ -184,5 +202,34 @@ const navigation = [
     color: var(--text);
     background: color-mix(in srgb, var(--accent) 10%, transparent);
     font-weight: 600;
+  }
+
+  .spotlight-header__menu-shell[open] .spotlight-header__menu-toggle {
+    border-color: color-mix(in srgb, var(--accent) 44%, var(--line)) !important;
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
+  }
+
+  @keyframes menu-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(-0.35rem) scale(0.98);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (hover: hover) {
+    .spotlight-header__button:hover {
+      transform: translateY(-1px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spotlight-header__menu {
+      animation: none;
+    }
   }
 </style>
