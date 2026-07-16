@@ -12,15 +12,15 @@ This guide covers the complete process of building and deploying Joey's Notes bl
 
 ### System Requirements
 
-- **Node.js**: 20.19.0 or higher (recommended to match `.nvmrc`)
-- **npm**: 10.0.0 or higher
+- **Node.js**: 24 LTS (match `.nvmrc` and `package.json`)
+- **npm**: 11.0.0 or higher
 - **Git**: For version control
 
 ### Verify Installation
 
 ```bash
-node --version  # Should be 20.19.0+
-npm --version   # Should be 10.0.0+
+node --version  # Should be 24.x
+npm --version   # Should be 11.0.0+
 git --version   # Any recent version
 ```
 
@@ -262,8 +262,8 @@ npm audit fix
 
 1. **Node.js Version**:
    ```bash
-   # Use Node 18+
-   nvm use 18
+   # Use the repository's Node 24 LTS version
+   nvm use
    ```
 
 2. **Memory Issues**:

@@ -89,7 +89,7 @@ To fetch photography metadata from Unsplash, you need to set up an API key:
 ## 本地开发
 
 ### 环境准备
-建议使用 Node.js 20.19.0 及以上版本（仓库提供 `.nvmrc`），npm 10 及以上版本。
+建议使用 Node.js 24 LTS（仓库提供 `.nvmrc`），npm 11 及以上版本。
 
 ### 开始开发
 
@@ -198,8 +198,8 @@ tags: ["摄影", "风光"]
 
 这个博客用了这些技术：
 
-- **Astro 6.x + TypeScript** - 主框架
-- **Tailwind CSS** - 样式框架
+- **Astro 7.x + TypeScript** - 主框架
+- **Tailwind CSS 4.x** - 样式框架
 - **Markdown** - 内容格式
 - **Vercel + GitHub Pages** - 正式域名与静态镜像并行部署
 - **notes.miaowu.org** - 自定义域名

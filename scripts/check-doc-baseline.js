@@ -9,11 +9,11 @@ const docsReadme = path.join(root, 'docs/README.md');
 
 function parseBuildOutput(output) {
   const normalizedOutput = output.replace(/\u001B\[[0-?]*[ -/]*[@-~]/g, '');
-  const match = normalizedOutput.match(/\[build\]\s+(\d+) page\(s\) built in ([0-9.]+)s/);
+  const match = normalizedOutput.match(/\[build\]\s+(\d+) page\(s\) built in ([0-9.]+(?:ms|s))/);
   if (!match) throw new Error('Could not parse build summary line from `npm run build` output.');
   return {
     pages: Number(match[1]),
-    time: `${match[2]}s`,
+    time: match[2],
   };
 }
 
