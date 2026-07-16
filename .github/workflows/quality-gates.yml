@@ -25,10 +25,7 @@ jobs:
       - name: Security audit
         run: npm run check:security
 
-      - name: Build
-        run: npm run build
-
-      - name: Verify docs baseline
+      - name: Build and verify docs baseline
         run: npm run check:docs-baseline
 
       - name: Check content health
