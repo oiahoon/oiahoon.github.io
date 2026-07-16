@@ -2,7 +2,7 @@
 
 **Project:** Joey's Notes - Modern Astro Blog  
 **Status:** Active / Improving  
-**Last Updated:** 2026-02-26
+**Last Updated:** 2026-07-16
 
 ## Current Baseline (Source of Truth)
 
@@ -12,9 +12,9 @@ This document is the single baseline entry for current project status. Metrics b
 
 | Metric | Current Value | Verified By | Date |
 |---|---:|---|---|
-| Build Time | 2.97s | `npm run build` | 2026-02-26 |
-| Pages Generated | 66 | `npm run build` | 2026-02-26 |
-| Build Result | Success | `npm run build` | 2026-02-26 |
+| Build Time | 1.53s | `npm run build` | 2026-07-16 |
+| Pages Generated | 189 | `npm run build` | 2026-07-16 |
+| Build Result | Success | `npm run build` | 2026-07-16 |
 
 ### Verification Command
 
