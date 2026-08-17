@@ -118,6 +118,9 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
   
 </head>
 <body class="h-full">
+  <div class="navigation-progress" aria-hidden="true">
+    <span class="navigation-progress__bar"></span>
+  </div>
   <div class="w-full page-root">
     <slot />
   </div>
@@ -241,5 +244,131 @@ const websiteStructuredData = Astro.url.pathname === '/' ? generateWebsiteStruct
       });
     }
   </script>
+
+  <script is:inline>
+    (() => {
+      if (window.__joeyNavigationFeedbackBound) return;
+      window.__joeyNavigationFeedbackBound = true;
+
+      let pendingLink = null;
+      let navigationToken = 0;
+      let transitionFinished = null;
+
+      function showNavigationFeedback() {
+        document.documentElement.classList.add('is-navigating');
+        document.body?.setAttribute('aria-busy', 'true');
+      }
+
+      function clearNavigationFeedback(token) {
+        if (typeof token === 'number' && token !== navigationToken) return;
+
+        document.documentElement.classList.remove('is-navigating');
+        document.body?.removeAttribute('aria-busy');
+        transitionFinished = null;
+
+        if (pendingLink) {
+          pendingLink.removeAttribute('aria-busy');
+          pendingLink.removeAttribute('data-navigation-pending');
+          pendingLink = null;
+        }
+      }
+
+      document.addEventListener('astro:before-preparation', (event) => {
+        clearNavigationFeedback();
+        const token = ++navigationToken;
+
+        const source = event.sourceElement;
+        if (source instanceof HTMLAnchorElement) {
+          source.setAttribute('aria-busy', 'true');
+          source.setAttribute('data-navigation-pending', 'true');
+          pendingLink = source;
+        }
+
+        showNavigationFeedback();
+        event.signal?.addEventListener('abort', () => clearNavigationFeedback(token), { once: true });
+      });
+
+      document.addEventListener('astro:before-swap', (event) => {
+        transitionFinished = event.viewTransition?.finished || null;
+      });
+
+      document.addEventListener('astro:after-swap', () => {
+        if (transitionFinished) showNavigationFeedback();
+      });
+
+      document.addEventListener('astro:page-load', () => {
+        const token = navigationToken;
+        const finished = transitionFinished;
+        if (!finished) {
+          clearNavigationFeedback(token);
+          return;
+        }
+
+        Promise.resolve(finished)
+          .catch(() => {})
+          .finally(() => clearNavigationFeedback(token));
+      });
+      window.addEventListener('pageshow', clearNavigationFeedback);
+    })();
+  </script>
 </body>
 </html>
+
+<style is:global>
+  .navigation-progress {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 1000;
+    height: 2px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 90ms ease;
+  }
+
+  .navigation-progress__bar {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--accent);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 58%, transparent);
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  html.is-navigating .navigation-progress {
+    opacity: 1;
+  }
+
+  html.is-navigating .navigation-progress__bar {
+    animation: navigation-progress 1.8s var(--ease-out-quart) both;
+  }
+
+  a[data-navigation-pending] {
+    pointer-events: none;
+    cursor: progress;
+  }
+
+  a[data-navigation-pending]:not(.contact-card__media) {
+    opacity: 0.58;
+  }
+
+  @keyframes navigation-progress {
+    0% {
+      transform: scaleX(0.08);
+    }
+    45% {
+      transform: scaleX(0.56);
+    }
+    100% {
+      transform: scaleX(0.86);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.is-navigating .navigation-progress__bar {
+      animation: none;
+      transform: scaleX(0.72);
+    }
+  }
+</style>

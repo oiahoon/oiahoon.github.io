@@ -343,6 +343,32 @@ function filterGroups(photo: typeof sorted[number]) {
     background: #191816;
   }
 
+  .contact-card__media::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    width: 1.6rem;
+    height: 1.6rem;
+    border: 1px solid rgba(238, 231, 220, 0.34);
+    border-top-color: #d08a72;
+    border-radius: 50%;
+    content: '';
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
+  .contact-card__media[data-navigation-pending]::after {
+    opacity: 1;
+    animation: photo-navigation-spin 680ms linear infinite;
+  }
+
+  .contact-card__media[data-navigation-pending] .contact-card__image {
+    opacity: 0.58;
+    transform: scale(1.012);
+  }
+
   .contact-card:not(.is-lead) .contact-card__media,
   .contact-card.is-lead .contact-card__media {
     flex: 1 1 auto;
@@ -569,6 +595,16 @@ function filterGroups(photo: typeof sorted[number]) {
     .contact-card__image,
     .contact-card__hover-label {
       transition: none;
+    }
+
+    .contact-card__media[data-navigation-pending]::after {
+      animation: none;
+    }
+  }
+
+  @keyframes photo-navigation-spin {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
     }
   }
 </style>
