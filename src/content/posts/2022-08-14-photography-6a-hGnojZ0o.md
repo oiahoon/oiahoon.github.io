@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "August 14, 2022"
 draft: false
 description: "a person sitting on a couch."
+unsplash:
+  id: "6a-hGnojZ0o"
+  photoUrl: "https://unsplash.com/photos/a-person-sitting-on-a-couch-6a-hGnojZ0o"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-person-sitting-on-a-couch-6a-hGnojZ0o -->

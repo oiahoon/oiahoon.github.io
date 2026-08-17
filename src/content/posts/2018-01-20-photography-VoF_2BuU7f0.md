@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "January 20, 2018"
 draft: false
 description: "bird's eye view of mountain with fog."
+unsplash:
+  id: "VoF_2BuU7f0"
+  photoUrl: "https://unsplash.com/photos/birds-eye-view-of-mountain-with-fog-VoF_2BuU7f0"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/birds-eye-view-of-mountain-with-fog-VoF_2BuU7f0 -->

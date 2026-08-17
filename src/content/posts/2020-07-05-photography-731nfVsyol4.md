@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "July 5, 2020"
 draft: false
 description: "brown and white mushrooms on brown wooden round plate."
+unsplash:
+  id: "731nfVsyol4"
+  photoUrl: "https://unsplash.com/photos/brown-and-white-mushrooms-on-brown-wooden-round-plate-731nfVsyol4"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/brown-and-white-mushrooms-on-brown-wooden-round-plate-731nfVsyol4 -->

@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "January 7, 2022"
 draft: false
 description: "a road in the middle of a forest on a foggy day."
+unsplash:
+  id: "wSZhQuXcXWw"
+  photoUrl: "https://unsplash.com/photos/a-road-in-the-middle-of-a-forest-on-a-foggy-day-wSZhQuXcXWw"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-road-in-the-middle-of-a-forest-on-a-foggy-day-wSZhQuXcXWw -->

@@ -17,6 +17,8 @@ Read this for publishing articles/photos, frontmatter, draft behavior, content h
 npm run new:post -- "文章标题"
 npm run new:photo -- "可选标题"
 npm run new:photo
+npm run photos:unsplash:sync -- --dry-run
+npm run photos:unsplash:sync
 ```
 
 Rules:
@@ -47,6 +49,9 @@ npm run check:security
 - Untitled photography is allowed.
 - No visible or metadata fallback may show `undefined`, `null`, or forced `未命名作品`.
 - Large local images should be compressed or flagged.
+- Unsplash is the default host for public photography; syncing is manual and incremental, never part of build or deploy.
+- Unsplash-hosted published works need attribution metadata and normalized image URLs.
+- Local `public/photos/` publishing remains an explicit fallback for work that should not be uploaded to Unsplash.
 
 ## Related Docs
 

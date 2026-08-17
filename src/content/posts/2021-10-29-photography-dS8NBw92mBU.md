@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "October 29, 2021"
 draft: false
 description: "People on the subway focused on their phones."
+unsplash:
+  id: "dS8NBw92mBU"
+  photoUrl: "https://unsplash.com/photos/a-man-wearing-a-face-mask-on-a-train-dS8NBw92mBU"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-man-wearing-a-face-mask-on-a-train-dS8NBw92mBU -->

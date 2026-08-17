@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "September 4, 2020"
 draft: false
 description: "white boat on sea under blue sky and white clouds during daytime."
+unsplash:
+  id: "JtKBcRjP4Sw"
+  photoUrl: "https://unsplash.com/photos/white-boat-on-sea-under-blue-sky-and-white-clouds-during-daytime-JtKBcRjP4Sw"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/white-boat-on-sea-under-blue-sky-and-white-clouds-during-daytime-JtKBcRjP4Sw -->

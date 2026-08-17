@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "October 8, 2022"
 draft: false
 description: "a person standing on a beach."
+unsplash:
+  id: "u4pVQbIoaKk"
+  photoUrl: "https://unsplash.com/photos/a-person-standing-on-a-beach-u4pVQbIoaKk"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-person-standing-on-a-beach-u4pVQbIoaKk -->

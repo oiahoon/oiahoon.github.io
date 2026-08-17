@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "January 7, 2022"
 draft: false
 description: "a curved road in the middle of a wooded area."
+unsplash:
+  id: "Z5_AllRh8X0"
+  photoUrl: "https://unsplash.com/photos/a-curved-road-in-the-middle-of-a-wooded-area-Z5_AllRh8X0"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-curved-road-in-the-middle-of-a-wooded-area-Z5_AllRh8X0 -->

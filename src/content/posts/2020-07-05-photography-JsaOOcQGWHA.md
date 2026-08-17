@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "July 5, 2020"
 draft: false
 description: "black and gray game console."
+unsplash:
+  id: "JsaOOcQGWHA"
+  photoUrl: "https://unsplash.com/photos/black-and-gray-game-console-JsaOOcQGWHA"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/black-and-gray-game-console-JsaOOcQGWHA -->

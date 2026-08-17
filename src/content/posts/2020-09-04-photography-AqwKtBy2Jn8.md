@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "September 4, 2020"
 draft: false
 description: "a large rock in the middle of a body of water."
+unsplash:
+  id: "AqwKtBy2Jn8"
+  photoUrl: "https://unsplash.com/photos/a-large-rock-in-the-middle-of-a-body-of-water-AqwKtBy2Jn8"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-large-rock-in-the-middle-of-a-body-of-water-AqwKtBy2Jn8 -->

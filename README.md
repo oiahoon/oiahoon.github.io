@@ -77,14 +77,22 @@ Joey's Notes是我的个人技术博客，主要分享软件开发经验、技�
 
 ## Environment Variables
 
-To fetch photography metadata from Unsplash, you need to set up an API key:
+To incrementally sync new photography drafts from Unsplash, set up an API key:
 
 1. Copy `.env.example` to `.env`
 2. Get your Unsplash API key from https://unsplash.com/oauth/applications
 3. Add your key to `.env`:
    ```
    UNSPLASH_ACCESS_KEY=your_key_here
+   UNSPLASH_USERNAME=onice
    ```
+
+The sync is manual and never runs during build or deploy:
+
+```bash
+npm run photos:unsplash:sync -- --dry-run
+npm run photos:unsplash:sync
+```
 
 ## 本地开发
 

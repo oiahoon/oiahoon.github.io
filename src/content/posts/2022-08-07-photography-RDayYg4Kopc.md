@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "August 8, 2022"
 draft: false
 description: "a store with a lot of clothes on the racks."
+unsplash:
+  id: "RDayYg4Kopc"
+  photoUrl: "https://unsplash.com/photos/a-store-with-a-lot-of-clothes-on-the-racks-RDayYg4Kopc"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-store-with-a-lot-of-clothes-on-the-racks-RDayYg4Kopc -->

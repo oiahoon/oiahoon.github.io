@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "November 22, 2025"
 draft: false
 description: "Child climbing a large pine tree in a field."
+unsplash:
+  id: "VYcP_Xs_A4A"
+  photoUrl: "https://unsplash.com/photos/child-climbing-a-large-pine-tree-in-a-field-VYcP_Xs_A4A"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/child-climbing-a-large-pine-tree-in-a-field-VYcP_Xs_A4A -->

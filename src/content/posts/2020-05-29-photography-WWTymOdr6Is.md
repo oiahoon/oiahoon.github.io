@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "May 29, 2020"
 draft: false
 description: "silhouette of man standing in front of orange light."
+unsplash:
+  id: "WWTymOdr6Is"
+  photoUrl: "https://unsplash.com/photos/silhouette-of-man-standing-in-front-of-orange-light-WWTymOdr6Is"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/silhouette-of-man-standing-in-front-of-orange-light-WWTymOdr6Is -->

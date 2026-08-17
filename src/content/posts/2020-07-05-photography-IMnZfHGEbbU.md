@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "July 6, 2020"
 draft: false
 description: "sliced of bread on white ceramic plate beside drinking glass and fork and knife."
+unsplash:
+  id: "IMnZfHGEbbU"
+  photoUrl: "https://unsplash.com/photos/sliced-of-bread-on-white-ceramic-plate-beside-drinking-glass-and-fork-and-knife-IMnZfHGEbbU"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/sliced-of-bread-on-white-ceramic-plate-beside-drinking-glass-and-fork-and-knife-IMnZfHGEbbU -->

@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "November 7, 2019"
 draft: false
 description: "LYNK & CO."
+unsplash:
+  id: "iUHROYdsvdg"
+  photoUrl: "https://unsplash.com/photos/macro-photography-of-vehicle-air-vent-iUHROYdsvdg"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/macro-photography-of-vehicle-air-vent-iUHROYdsvdg -->

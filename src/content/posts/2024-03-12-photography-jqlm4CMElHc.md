@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "March 12, 2024"
 draft: false
 description: "a black and white photo of chairs and luggage."
+unsplash:
+  id: "jqlm4CMElHc"
+  photoUrl: "https://unsplash.com/photos/a-black-and-white-photo-of-chairs-and-luggage-jqlm4CMElHc"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-black-and-white-photo-of-chairs-and-luggage-jqlm4CMElHc -->

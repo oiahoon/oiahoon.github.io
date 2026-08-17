@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "September 13, 2022"
 draft: false
 description: "a glass of juice sits on a desk next to a laptop."
+unsplash:
+  id: "ydz-xEv8rQM"
+  photoUrl: "https://unsplash.com/photos/a-glass-of-juice-sits-on-a-desk-next-to-a-laptop-ydz-xEv8rQM"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-glass-of-juice-sits-on-a-desk-next-to-a-laptop-ydz-xEv8rQM -->

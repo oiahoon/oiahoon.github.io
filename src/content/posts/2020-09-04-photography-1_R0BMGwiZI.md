@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "September 4, 2020"
 draft: false
 description: "grayscale photo of chain link fence."
+unsplash:
+  id: "1_R0BMGwiZI"
+  photoUrl: "https://unsplash.com/photos/grayscale-photo-of-chain-link-fence-1_R0BMGwiZI"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/grayscale-photo-of-chain-link-fence-1_R0BMGwiZI -->

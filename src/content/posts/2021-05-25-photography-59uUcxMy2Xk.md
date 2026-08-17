@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "May 25, 2021"
 draft: false
 description: "white and brown cat lying on black leather couch."
+unsplash:
+  id: "59uUcxMy2Xk"
+  photoUrl: "https://unsplash.com/photos/white-and-brown-cat-lying-on-black-leather-couch-59uUcxMy2Xk"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/white-and-brown-cat-lying-on-black-leather-couch-59uUcxMy2Xk -->

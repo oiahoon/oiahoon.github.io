@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "October 9, 2021"
 draft: false
 description: "Drops of water on withered lotus leaves."
+unsplash:
+  id: "wp06pK_JTJo"
+  photoUrl: "https://unsplash.com/photos/a-close-up-of-a-leaf-with-drops-of-water-on-it-wp06pK_JTJo"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-close-up-of-a-leaf-with-drops-of-water-on-it-wp06pK_JTJo -->

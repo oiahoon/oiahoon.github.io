@@ -19,12 +19,13 @@ export interface Props {
   camera?: { model?: string; lens?: string; settings?: string };
   location?: string;
   publishedDate?: string;
+  unsplash?: { id: string; photoUrl: string; profileUrl: string; photographer: string };
   previousPhoto?: { slug: string; title?: string; date: Date; image?: string };
   nextPhoto?: { slug: string; title?: string; date: Date; image?: string };
   photoCollection?: Array<{ slug: string; title?: string; date: Date; image?: string; active?: boolean }>;
 }
 
-const { title, subtitle, author, date, slug, tags, header_img, description, lang, type = 'article', gallery, camera, location, publishedDate, previousPhoto, nextPhoto, photoCollection } = Astro.props;
+const { title, subtitle, author, date, slug, tags, header_img, description, lang, type = 'article', gallery, camera, location, publishedDate, unsplash, previousPhoto, nextPhoto, photoCollection } = Astro.props;
 const copy = lang === 'zh'
   ? {
       backToArchive: '返回文章归档',
@@ -81,6 +82,7 @@ const structuredData = generateBlogPostStructuredData({
     camera={camera}
     location={location}
     publishedDate={publishedDate}
+    unsplash={unsplash}
     previousPhoto={previousPhoto}
     nextPhoto={nextPhoto}
     photoCollection={photoCollection}

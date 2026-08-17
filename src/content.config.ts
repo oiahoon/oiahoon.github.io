@@ -30,6 +30,12 @@ const postsCollection = defineCollection({
     }).optional(),
     location: z.string().optional(),
     publishedDate: z.string().optional(),
+    unsplash: z.object({
+      id: z.string().min(1),
+      photoUrl: z.string().url(),
+      profileUrl: z.string().url(),
+      photographer: z.string().min(1),
+    }).optional(),
   }).superRefine((data, ctx) => {
     if (data.draft || data.type !== 'photography') return;
 
@@ -97,6 +103,22 @@ const postsCollection = defineCollection({
         });
       }
     });
+
+    const usesUnsplash = gallery.some((item) => {
+      try {
+        return new URL(item.src).hostname === 'images.unsplash.com';
+      } catch {
+        return false;
+      }
+    });
+
+    if (usesUnsplash && !data.unsplash) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['unsplash'],
+        message: 'published Unsplash photography needs attribution metadata',
+      });
+    }
   }),
 });
 

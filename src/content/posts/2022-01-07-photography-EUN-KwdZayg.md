@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "January 7, 2022"
 draft: false
 description: "a group of people standing around a wooden bench."
+unsplash:
+  id: "EUN-KwdZayg"
+  photoUrl: "https://unsplash.com/photos/a-group-of-people-standing-around-a-wooden-bench-EUN-KwdZayg"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-group-of-people-standing-around-a-wooden-bench-EUN-KwdZayg -->

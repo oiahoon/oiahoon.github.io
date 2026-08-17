@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "January 7, 2022"
 draft: false
 description: "a woman standing at a counter in a coffee shop."
+unsplash:
+  id: "562XrGdu27k"
+  photoUrl: "https://unsplash.com/photos/a-woman-standing-at-a-counter-in-a-coffee-shop-562XrGdu27k"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-woman-standing-at-a-counter-in-a-coffee-shop-562XrGdu27k -->

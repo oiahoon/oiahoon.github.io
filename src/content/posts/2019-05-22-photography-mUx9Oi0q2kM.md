@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "May 22, 2019"
 draft: false
 description: "black point-and-shoot camera."
+unsplash:
+  id: "mUx9Oi0q2kM"
+  photoUrl: "https://unsplash.com/photos/black-point-and-shoot-camera-mUx9Oi0q2kM"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/black-point-and-shoot-camera-mUx9Oi0q2kM -->

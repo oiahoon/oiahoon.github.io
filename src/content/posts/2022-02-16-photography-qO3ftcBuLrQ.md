@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "February 16, 2022"
 draft: false
 description: "a panda bear sitting in the middle of a forest."
+unsplash:
+  id: "qO3ftcBuLrQ"
+  photoUrl: "https://unsplash.com/photos/a-panda-bear-sitting-in-the-middle-of-a-forest-qO3ftcBuLrQ"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-panda-bear-sitting-in-the-middle-of-a-forest-qO3ftcBuLrQ -->

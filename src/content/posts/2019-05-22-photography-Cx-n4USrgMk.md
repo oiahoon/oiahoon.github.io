@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "May 22, 2019"
 draft: false
 description: "gray action camera."
+unsplash:
+  id: "Cx-n4USrgMk"
+  photoUrl: "https://unsplash.com/photos/gray-action-camera-Cx-n4USrgMk"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/gray-action-camera-Cx-n4USrgMk -->

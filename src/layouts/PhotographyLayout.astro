@@ -17,12 +17,13 @@ export interface Props {
   camera?: { model?: string; lens?: string; settings?: string };
   location?: string;
   publishedDate?: string;
+  unsplash?: { id: string; photoUrl: string; profileUrl: string; photographer: string };
   previousPhoto?: { slug: string; title?: string; date: Date; image?: string };
   nextPhoto?: { slug: string; title?: string; date: Date; image?: string };
   photoCollection?: Array<{ slug: string; title?: string; date: Date; image?: string; active?: boolean }>;
 }
 
-const { slug, title, subtitle, date, tags, header_img, description, lang, gallery, camera, location, publishedDate, previousPhoto, nextPhoto, photoCollection = [] } = Astro.props;
+const { slug, title, subtitle, date, tags, header_img, description, lang, gallery, camera, location, publishedDate, unsplash, previousPhoto, nextPhoto, photoCollection = [] } = Astro.props;
 const cover = header_img || gallery?.[0]?.src;
 const heroPhoto = gallery?.[0];
 const galleryPhotos = heroPhoto ? gallery.slice(1) : gallery ?? [];
@@ -41,6 +42,9 @@ const fallbackTitle = title || `摄影作品 · ${date.toLocaleDateString(lang =
 const visiblePhotoCollection = photoCollection.filter((work) => Boolean(work.image));
 const activeWorkIndex = Math.max(visiblePhotoCollection.findIndex((work) => work.active), 0);
 const totalWorks = visiblePhotoCollection.length;
+const attributionParams = 'utm_source=joeys_notes&utm_medium=referral';
+const unsplashPhotoUrl = unsplash ? `${unsplash.photoUrl}${unsplash.photoUrl.includes('?') ? '&' : '?'}${attributionParams}` : undefined;
+const unsplashProfileUrl = unsplash ? `${unsplash.profileUrl}${unsplash.profileUrl.includes('?') ? '&' : '?'}${attributionParams}` : undefined;
 
 const navigation = [
   { name: 'Photographs', href: '/photography/', icon: 'camera' },
@@ -145,6 +149,11 @@ const navigation = [
               </p>
               {title && <h1 class="photo-hero__title" style={photoTransitionName ? `view-transition-name: photo-title-${slug};` : undefined}>{title}</h1>}
               {(subtitle || heroPhoto.caption) && <p class="photo-hero__subtitle">{subtitle || heroPhoto.caption}</p>}
+              {unsplash && (
+                <p class="photo-hero__attribution">
+                  Photo by <a href={unsplashProfileUrl} target="_blank" rel="noopener noreferrer">{unsplash.photographer}</a> on <a href={unsplashPhotoUrl} target="_blank" rel="noopener noreferrer">Unsplash</a>
+                </p>
+              )}
             </div>
 
             <details class="photo-hero__info" aria-label="EXIF details">
@@ -664,6 +673,25 @@ const navigation = [
     font-size: 1rem;
     line-height: 1.7;
     color: rgba(230, 236, 242, 0.82);
+  }
+
+  .photo-hero__attribution {
+    margin: 0.8rem 0 0;
+    font-size: 0.75rem;
+    color: rgba(226, 232, 240, 0.64);
+  }
+
+  .photo-hero__attribution a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: rgba(226, 232, 240, 0.32);
+    text-underline-offset: 0.2em;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  }
+
+  .photo-hero__attribution a:hover {
+    color: rgba(248, 250, 252, 0.92);
+    text-decoration-color: rgba(248, 250, 252, 0.7);
   }
 
   .photo-hero__overlay--bottom.is-quiet .photo-hero__caption,

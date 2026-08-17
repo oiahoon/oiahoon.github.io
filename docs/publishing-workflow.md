@@ -1,6 +1,6 @@
 # 内容发布流程
 
-**更新日期**：2026-04-19  
+**更新日期**：2026-08-17
 **目标**：记录当前手动发布文章和摄影作品的稳定流程，降低漏字段、路径错误和发布回归风险。
 
 ## 内容模型
@@ -96,57 +96,50 @@ git push origin master
 
 ## 发布摄影作品
 
-### 1. 准备图片
+### 1. 将公开作品上传到 Unsplash
 
-优先路径：
+摄影作品默认由 Unsplash 托管，仓库不重复保存原图。先在 Unsplash 网页或 App 上传照片，并完成标题、描述、地点和 EXIF 信息。只上传愿意按 Unsplash 授权公开的作品；原始文件仍应保存在自己的照片库或备份中。
 
-```text
-public/photos/
-```
+首次同步前：
 
-建议：
+1. 在 Unsplash Developer 页面创建应用并取得 Access Key。
+2. 复制 `.env.example` 为 `.env`。
+3. 填写 `UNSPLASH_ACCESS_KEY`；如果账号不是 `onice`，同时修改 `UNSPLASH_USERNAME`。
 
-- 单张图片控制在合理体积，避免页面过重。
-- 文件名使用英文、数字、短横线。
-- 同一组照片使用相近命名，便于维护。
+`.env` 已被 Git 忽略，Access Key 不会提交到仓库。
 
-### 2. 创建摄影草稿
+### 2. 手动增量同步
 
-如果需要手动填写摄影内容，推荐先生成草稿：
+同步不会在 `npm run build`、Git push 或定时任务中自动运行。上传新照片后，由发布者显式执行：
 
 ```bash
-npm run new:photo -- "可选标题"
+# 只查看将新增哪些草稿，不写文件
+npm run photos:unsplash:sync -- --dry-run
+
+# 创建缺失的摄影草稿
+npm run photos:unsplash:sync
 ```
 
-无标题摄影作品可以省略标题：
+也可以限制单次创建数量：
 
 ```bash
-npm run new:photo
+npm run photos:unsplash:sync -- --limit=5
 ```
 
-脚本会生成 `draft: true`，并预填 `type: photography`、`tags: [摄影]`、`gallery` 和基础 EXIF 字段。
+脚本通过 Unsplash 官方 API 分页读取账号照片，以原始图片路径去重，只为新增照片生成 `draft: true` 的 Markdown；不会覆盖或删除已有内容。图片 URL 保留 API 返回的 `ixid`，并添加响应式图片需要的格式、宽度和质量参数。正式写入新作品时，脚本还会调用 Unsplash 的下载追踪端点。
 
-### 3. 使用脚本同步照片
+### 3. 审阅并发布草稿
 
-如果照片在本地准备好，可以使用：
+同步后打开新生成的 `src/content/posts/*.md`，检查并完善：
 
-```bash
-npm run photos:sync
-```
+- 标题、描述和地点。
+- `gallery` 的 alt、caption、宽高。
+- `unsplash` 的照片、作者与个人页信息。
+- 可选的相机、镜头和曝光信息。
 
-建议先用 dry-run：
+确认无误后再把 `draft: true` 改为 `draft: false`。
 
-```bash
-node scripts/sync-photos.js --dry-run
-```
-
-脚本能力：
-
-- 复制图片到 `public/photos`
-- 超过 5MB 时尝试压缩
-- 提取 EXIF
-- 生成摄影 Markdown
-- 检测重复图片引用
+如需发布不适合上传 Unsplash 的本地图片，仍可使用 `npm run photos:sync`。它读取 `public/photos/`、压缩大图、提取 EXIF 并生成本地摄影草稿；这是备用流程，不是默认流程。
 
 ### 4. 摄影 frontmatter 参考
 
@@ -167,6 +160,11 @@ camera:
   settings: "ISO 100, f/2.8, 1/250s"
 location: "可选地点"
 publishedDate: "April 19, 2026"
+unsplash:
+  id: "UnsplashPhotoId"
+  photoUrl: "https://unsplash.com/photos/UnsplashPhotoId"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 draft: true
 description: 摄影作品。
 ---
@@ -184,7 +182,8 @@ description: 摄影作品。
 
 必须检查：
 
-- 图片路径是否可访问。
+- Unsplash 图片 URL 是否只有一个 `?`，并包含格式、宽度和质量参数。
+- Unsplash 来源和摄影师链接是否完整。
 - `gallery[0]` 是否存在。
 - 图片体积是否过大。
 - 手机端详情页是否可用。
@@ -200,7 +199,7 @@ npm run build
 ### 6. 提交和部署
 
 ```bash
-git add public/photos src/content/posts
+git add src/content/posts
 git commit -m "content: add photography work"
 git push origin master
 ```
@@ -243,9 +242,9 @@ git push origin master
 - `npm run new:post -- "文章标题"`：生成普通文章草稿模板。
 - `npm run new:photo -- "可选标题"`：生成摄影作品草稿模板。
 - `npm run check:content-health`：检查 title、description、tags、日期、重复 slug、摄影 gallery、摄影标签、本地图片路径等发布风险。
-- `npm run photos:sync`：从本地照片生成摄影内容。
+- `npm run photos:unsplash:sync`：从 Unsplash 官方 API 增量生成摄影草稿，仅在手动执行时同步。
+- `npm run photos:sync`：从本地照片生成摄影内容的备用流程。
 
 ## 后续可优化
 
-- 让 `photos:sync` 输出更完整的后续操作提示。
 - 增加可选的浏览器回归脚本，覆盖文章页、摄影列表页和摄影详情页移动端。

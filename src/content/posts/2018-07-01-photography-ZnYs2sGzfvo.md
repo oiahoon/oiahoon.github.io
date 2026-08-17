@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "July 1, 2018"
 draft: false
 description: "Garlic in the sun is very colorful."
+unsplash:
+  id: "ZnYs2sGzfvo"
+  photoUrl: "https://unsplash.com/photos/garlic-lot-ZnYs2sGzfvo"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/garlic-lot-ZnYs2sGzfvo -->

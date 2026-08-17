@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "July 1, 2018"
 draft: false
 description: "a group of elderly people playing a game of cards."
+unsplash:
+  id: "w7lIbEtmE9c"
+  photoUrl: "https://unsplash.com/photos/a-group-of-elderly-people-playing-a-game-of-cards-w7lIbEtmE9c"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-group-of-elderly-people-playing-a-game-of-cards-w7lIbEtmE9c -->

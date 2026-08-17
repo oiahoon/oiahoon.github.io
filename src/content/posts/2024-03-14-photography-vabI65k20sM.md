@@ -8,7 +8,7 @@ tags:
 type: photography
 gallery:
   - src: >-
-      https://images.unsplash.com/photo-1710398554448-80cc53e7b15b?ixid=M3w4MjA3NjB8MHwxfGFsbHx8fHx8fHx8fDE3NjEyNjE1Njd8&ixlib=rb-4.1.0?ixlib=rb-4.1.0&auto=format&fit=crop&w=1200&q=80
+      https://images.unsplash.com/photo-1710398554448-80cc53e7b15b?ixid=M3w4MjA3NjB8MHwxfGFsbHx8fHx8fHx8fDE3NjEyNjE1Njd8&ixlib=rb-4.1.0&auto=format&fit=crop&w=1200&q=80
     alt: 雾中的香港天际线前，一艘绿色小船停在海面上
     caption: 雾把楼群和山压得很浅，水面上的小船反而成了画面里最清楚的一点颜色。
     width: 1200
@@ -19,4 +19,9 @@ location: Hong Kong
 publishedDate: 'March 13, 2024'
 draft: false
 description: 雾中香港天际线、海面和绿色小船构成的港口照片。
+unsplash:
+  id: "vabI65k20sM"
+  photoUrl: "https://unsplash.com/photos/vabI65k20sM"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---

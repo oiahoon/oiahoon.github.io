@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "October 9, 2021"
 draft: false
 description: "Girl by the lake."
+unsplash:
+  id: "gynPke2OY5w"
+  photoUrl: "https://unsplash.com/photos/a-person-sitting-on-a-dock-looking-at-the-water-gynPke2OY5w"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-person-sitting-on-a-dock-looking-at-the-water-gynPke2OY5w -->

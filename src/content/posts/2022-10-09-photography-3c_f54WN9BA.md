@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "October 9, 2022"
 draft: false
 description: "a man fishing on a rock."
+unsplash:
+  id: "3c_f54WN9BA"
+  photoUrl: "https://unsplash.com/photos/a-man-fishing-on-a-rock-3c_f54WN9BA"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-man-fishing-on-a-rock-3c_f54WN9BA -->

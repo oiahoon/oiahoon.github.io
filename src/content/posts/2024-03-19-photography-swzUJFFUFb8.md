@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "March 19, 2024"
 draft: false
 description: "a couple of people walking down a sidewalk."
+unsplash:
+  id: "swzUJFFUFb8"
+  photoUrl: "https://unsplash.com/photos/a-couple-of-people-walking-down-a-sidewalk-swzUJFFUFb8"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-couple-of-people-walking-down-a-sidewalk-swzUJFFUFb8 -->

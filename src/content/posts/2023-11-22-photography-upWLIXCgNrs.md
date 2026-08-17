@@ -19,6 +19,11 @@ location: "A snapshot at the art museum"
 publishedDate: "November 22, 2023"
 draft: false
 description: "A snapshot at the art museum, people scurrying past."
+unsplash:
+  id: "upWLIXCgNrs"
+  photoUrl: "https://unsplash.com/photos/a-blurry-image-of-a-person-walking-by-a-window-upWLIXCgNrs"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-blurry-image-of-a-person-walking-by-a-window-upWLIXCgNrs -->

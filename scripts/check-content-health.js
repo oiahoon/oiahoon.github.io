@@ -38,6 +38,14 @@ function isRemoteAsset(src) {
   return /^https?:\/\//i.test(src) || src.startsWith('data:');
 }
 
+function parsedUrl(value) {
+  try {
+    return new URL(String(value || ''));
+  } catch {
+    return null;
+  }
+}
+
 function localAssetPath(src) {
   const cleanPath = String(src).split('?')[0].split('#')[0];
   if (!cleanPath.startsWith('/')) return null;
@@ -64,6 +72,8 @@ function main() {
     missingPhotographyGallery: [],
     missingPhotographyMetadata: [],
     missingPhotographyTag: [],
+    invalidUnsplashUrls: [],
+    missingUnsplashAttribution: [],
     missingLocalImages: [],
     oversizedLocalImages: [],
     draftWarnings: [],
@@ -122,13 +132,38 @@ function main() {
       }
 
       const gallery = Array.isArray(data.gallery) ? data.gallery : [];
+      const usesUnsplash = gallery.some((item) => parsedUrl(item?.src)?.hostname === 'images.unsplash.com');
       const firstImage = gallery[0]?.src;
       if (!isDraft && isBlank(firstImage)) {
         pushIssue(issues.missingPhotographyGallery, file, 'published photography content must have gallery[0].src');
       }
 
+      if (!isDraft && usesUnsplash) {
+        const attribution = data.unsplash;
+        const photoUrl = parsedUrl(attribution?.photoUrl);
+        const profileUrl = parsedUrl(attribution?.profileUrl);
+        const photoId = String(attribution?.id || '').trim();
+        if (
+          isBlank(photoId) ||
+          isBlank(attribution?.photographer) ||
+          photoUrl?.hostname !== 'unsplash.com' ||
+          !photoUrl.pathname.startsWith('/photos/') ||
+          !photoUrl.pathname.endsWith(photoId) ||
+          profileUrl?.hostname !== 'unsplash.com' ||
+          !profileUrl.pathname.startsWith('/@') ||
+          !file.includes(`-photography-${photoId}.`)
+        ) {
+          pushIssue(
+            issues.missingUnsplashAttribution,
+            file,
+            'published Unsplash photography needs id, photographer, photoUrl, and profileUrl',
+          );
+        }
+      }
+
       for (const [index, item] of gallery.entries()) {
         const src = String(item?.src || '').trim();
+        const remoteUrl = parsedUrl(src);
         if (!isDraft) {
           if (isBadPlaceholder(item?.alt)) {
             pushIssue(issues.missingPhotographyMetadata, file, `gallery[${index}].alt must describe the image`);
@@ -138,6 +173,21 @@ function main() {
           }
           if (!Number.isFinite(Number(item?.width)) || !Number.isFinite(Number(item?.height))) {
             pushIssue(issues.missingPhotographyMetadata, file, `gallery[${index}] must include width and height`);
+          }
+        }
+        if (remoteUrl?.hostname === 'images.unsplash.com') {
+          const questionMarks = (src.match(/\?/g) || []).length;
+          if (
+            questionMarks !== 1 ||
+            remoteUrl.searchParams.get('auto') !== 'format' ||
+            !remoteUrl.searchParams.get('w') ||
+            !remoteUrl.searchParams.get('q')
+          ) {
+            pushIssue(
+              issues.invalidUnsplashUrls,
+              file,
+              `gallery[${index}] has a malformed or unoptimized Unsplash URL`,
+            );
           }
         }
         if (!src || isRemoteAsset(src)) continue;
@@ -174,6 +224,8 @@ function main() {
     ['Missing photography gallery', issues.missingPhotographyGallery],
     ['Missing photography metadata', issues.missingPhotographyMetadata],
     ['Missing photography tag', issues.missingPhotographyTag],
+    ['Invalid Unsplash URLs', issues.invalidUnsplashUrls],
+    ['Missing Unsplash attribution', issues.missingUnsplashAttribution],
     ['Missing local images', issues.missingLocalImages],
   ];
 
@@ -204,6 +256,8 @@ function main() {
     `- Missing photography gallery: ${issues.missingPhotographyGallery.length}`,
     `- Missing photography metadata: ${issues.missingPhotographyMetadata.length}`,
     `- Missing photography tag: ${issues.missingPhotographyTag.length}`,
+    `- Invalid Unsplash URLs: ${issues.invalidUnsplashUrls.length}`,
+    `- Missing Unsplash attribution: ${issues.missingUnsplashAttribution.length}`,
     `- Missing local images: ${issues.missingLocalImages.length}`,
     `- Oversized local images: ${issues.oversizedLocalImages.length}`,
     `- Draft warnings: ${issues.draftWarnings.length}`,

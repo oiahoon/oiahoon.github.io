@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "January 15, 2022"
 draft: false
 description: "Seagull and Girl."
+unsplash:
+  id: "yBCF_LoDRNM"
+  photoUrl: "https://unsplash.com/photos/a-woman-standing-on-a-pier-feeding-seagulls-yBCF_LoDRNM"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/a-woman-standing-on-a-pier-feeding-seagulls-yBCF_LoDRNM -->

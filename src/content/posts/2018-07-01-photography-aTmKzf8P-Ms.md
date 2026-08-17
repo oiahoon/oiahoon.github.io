@@ -19,6 +19,11 @@ location: "Unsplash Archive"
 publishedDate: "July 1, 2018"
 draft: false
 description: "man and woman standing in front of pedestrian line."
+unsplash:
+  id: "aTmKzf8P-Ms"
+  photoUrl: "https://unsplash.com/photos/man-and-woman-standing-in-front-of-pedestrian-line-aTmKzf8P-Ms"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
 ---
 
 <!-- Unsplash source: https://unsplash.com/photos/man-and-woman-standing-in-front-of-pedestrian-line-aTmKzf8P-Ms -->
