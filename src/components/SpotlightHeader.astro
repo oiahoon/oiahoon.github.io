@@ -19,7 +19,7 @@ const navigation = [
 ] as const;
 ---
 
-<header class={`pt-8 sm:pt-10 ${isPhotoArchive ? 'spotlight-header--inverse' : ''}`}>
+<header class={`${isPhotoArchive ? 'pt-5 spotlight-header--inverse' : 'pt-8 sm:pt-10'}`}>
   <div class="shell">
     <div class="flex items-center justify-between gap-4 border-b pb-5 spotlight-header__bar" style="border-color: var(--line);">
       <a href="/" class="spotlight-header__brand text-lg font-semibold tracking-tight text-[var(--text)]" data-astro-prefetch style="view-transition-name: site-brand;">
@@ -41,6 +41,12 @@ const navigation = [
       </nav>
 
       <div class="flex items-center gap-2">
+        {isPhotoArchive && (
+          <a href="#archive" class="spotlight-header__archive-link hidden text-sm md:inline-flex">
+            Archive
+          </a>
+        )}
+
         {!isPhotoArchive && (
           <button
             type="button"
@@ -76,9 +82,11 @@ const navigation = [
 
 <style>
   .spotlight-header--inverse {
-    background:
-      radial-gradient(circle at top, rgba(255, 255, 255, 0.04), transparent 22%),
-      linear-gradient(180deg, #05070b 0%, #070a10 100%);
+    background: #0d0d0c;
+  }
+
+  .spotlight-header--inverse :global(.shell) {
+    width: min(82rem, 100%);
   }
 
   .spotlight-header__brand,
@@ -101,6 +109,19 @@ const navigation = [
   .spotlight-header__link {
     gap: 0.38rem;
     min-height: 2rem;
+  }
+
+  .spotlight-header__archive-link {
+    min-height: 2rem;
+    align-items: center;
+    color: rgba(195, 187, 178, 0.78);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .spotlight-header__archive-link:hover,
+  .spotlight-header__archive-link:focus-visible {
+    color: rgba(248, 242, 234, 0.95);
   }
 
   :global(.spotlight-header__nav-icon) {

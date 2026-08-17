@@ -37,11 +37,54 @@ const exifEntries = [
   camera?.lens,
   camera?.settings,
 ].filter(Boolean);
+const cameraModel = camera?.model?.trim() || '';
+const cameraBrand = /leica/i.test(cameraModel)
+  ? 'leica'
+  : /hasselblad/i.test(cameraModel)
+    ? 'hasselblad'
+    : /fujifilm|fuji|gfx\b|x100|x-t\d/i.test(cameraModel)
+      ? 'fujifilm'
+      : /noritsu|qss/i.test(cameraModel)
+        ? 'film'
+        : cameraModel
+          ? 'camera'
+          : 'neutral';
+const cameraMaker = cameraBrand === 'leica'
+  ? 'LEICA'
+  : cameraBrand === 'hasselblad'
+    ? 'HASSELBLAD'
+    : cameraBrand === 'fujifilm'
+      ? 'FUJIFILM'
+      : cameraBrand === 'film'
+        ? 'FILM SCAN'
+        : cameraModel
+          ? 'CAMERA'
+          : '';
+const cameraDisplayModel = cameraModel
+  .replace(/^Leica Camera AG,\s*/i, '')
+  .replace(/^Hasselblad,\s*/i, '')
+  .replace(/^FUJIFILM,?\s*/i, '')
+  .replace(/^FUJI PHOTO FILM CO\.?\s*,?\s*/i, '')
+  .replace(/^NORITSU KOKI,\s*/i, '')
+  .replace(/LEICA\s+/i, '')
+  .replace('QSS-32_33', 'QSS 32/33');
+const heroWidth = Number(heroPhoto?.width || 3);
+const heroHeight = Number(heroPhoto?.height || 2);
+const heroRatio = heroWidth > 0 && heroHeight > 0 ? heroWidth / heroHeight : 1.5;
+const heroShape = heroRatio < 0.9 ? 'portrait' : heroRatio > 1.1 ? 'landscape' : 'square';
 const photoTransitionName = slug ? `photo-cover-${slug}` : undefined;
 const fallbackTitle = title || `摄影作品 · ${date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}`;
 const visiblePhotoCollection = photoCollection.filter((work) => Boolean(work.image));
 const activeWorkIndex = Math.max(visiblePhotoCollection.findIndex((work) => work.active), 0);
 const totalWorks = visiblePhotoCollection.length;
+const workWindowSize = 15;
+const workWindowHalf = Math.floor(workWindowSize / 2);
+const workWindowStart = Math.min(
+  Math.max(activeWorkIndex - workWindowHalf, 0),
+  Math.max(totalWorks - workWindowSize, 0),
+);
+const nearbyPhotoCollection = visiblePhotoCollection.slice(workWindowStart, workWindowStart + workWindowSize);
+const photoWorkPaths = visiblePhotoCollection.map((work) => `/posts/${work.slug}/`);
 const attributionParams = 'utm_source=joeys_notes&utm_medium=referral';
 const unsplashPhotoUrl = unsplash ? `${unsplash.photoUrl}${unsplash.photoUrl.includes('?') ? '&' : '?'}${attributionParams}` : undefined;
 const unsplashProfileUrl = unsplash ? `${unsplash.profileUrl}${unsplash.profileUrl.includes('?') ? '&' : '?'}${attributionParams}` : undefined;
@@ -63,6 +106,8 @@ const navigation = [
       caption: photo.caption || '',
       index: index + 1,
     })))}
+    data-photo-work-paths={JSON.stringify(photoWorkPaths)}
+    data-current-photo-path={`/posts/${slug}/`}
   >
     <section class="photo-stage">
       <header class="photo-topbar">
@@ -100,27 +145,40 @@ const navigation = [
       </header>
 
       {heroPhoto && (
-        <section class="photo-hero" id="photo-1" data-photo-panel data-photo-index="1">
+        <section class={`photo-hero photo-hero--${cameraBrand}`} id="photo-1" data-photo-panel data-photo-index="1" data-camera-brand={cameraBrand}>
           <div class="photo-hero__frame">
-            <ProgressiveImage
-              src={heroPhoto.src}
-              alt={heroPhoto.alt || title || '摄影作品'}
-              class="photo-hero__image"
-              loading="eager"
-              decoding="async"
-              fetchpriority="high"
-              width={heroPhoto.width}
-              height={heroPhoto.height}
-              sizes="100vw"
-              style={photoTransitionName ? `view-transition-name: ${photoTransitionName};` : undefined}
-            />
-            <button
-              type="button"
-              class="photo-hero__viewer-trigger"
-              data-open-lightbox
-              data-photo-index="1"
-              aria-label={`全屏查看第 1 张照片${title ? `：${title}` : ''}`}
-            ></button>
+            <div
+              class={`photo-camera-frame photo-camera-frame--${cameraBrand} photo-camera-frame--${heroShape} ${cameraModel ? 'has-camera-mark' : ''}`}
+              style={`--hero-ratio: ${heroWidth} / ${heroHeight}; --hero-ratio-number: ${heroRatio};`}
+            >
+              <div class="photo-camera-frame__image">
+                <ProgressiveImage
+                  src={heroPhoto.src}
+                  alt={heroPhoto.alt || title || '摄影作品'}
+                  class="photo-hero__image"
+                  loading="eager"
+                  decoding="async"
+                  fetchpriority="high"
+                  width={heroPhoto.width}
+                  height={heroPhoto.height}
+                  sizes="100vw"
+                  style={photoTransitionName ? `view-transition-name: ${photoTransitionName};` : undefined}
+                />
+                <button
+                  type="button"
+                  class="photo-hero__viewer-trigger"
+                  data-open-lightbox
+                  data-photo-index="1"
+                  aria-label={`全屏查看第 1 张照片${title ? `：${title}` : ''}`}
+                ></button>
+              </div>
+              {cameraModel && (
+                <p class="photo-camera-frame__mark" aria-label={`拍摄设备：${cameraModel}`}>
+                  <span>{cameraMaker}</span>
+                  <span>{cameraDisplayModel}</span>
+                </p>
+              )}
+            </div>
             <div class="photo-hero__veil"></div>
           </div>
 
@@ -128,6 +186,28 @@ const navigation = [
             <div class="photo-hero__topbar">
               <a href="/photography/" class="photo-hero__back" data-astro-prefetch><UiIcon name="arrowLeft" size={15} /> <span>返回摄影列表</span></a>
               <div class="photo-hero__controls">
+                <nav class="photo-work-nav" aria-label="浏览摄影作品">
+                  {previousPhoto ? (
+                    <a href={`/posts/${previousPhoto.slug}/`} aria-label={`上一张：${previousPhoto.title || '摄影作品'}`} data-astro-prefetch>
+                      <UiIcon name="arrowLeft" size={12} />
+                      <span>上一张</span>
+                    </a>
+                  ) : (
+                    <span class="is-disabled" aria-disabled="true"><UiIcon name="arrowLeft" size={12} /><span>上一张</span></span>
+                  )}
+                  <button type="button" data-random-photo aria-label="随机浏览另一张摄影作品">
+                    <UiIcon name="spark" size={12} />
+                    <span>随机</span>
+                  </button>
+                  {nextPhoto ? (
+                    <a href={`/posts/${nextPhoto.slug}/`} aria-label={`下一张：${nextPhoto.title || '摄影作品'}`} data-astro-prefetch>
+                      <span>下一张</span>
+                      <UiIcon name="arrowRight" size={12} />
+                    </a>
+                  ) : (
+                    <span class="is-disabled" aria-disabled="true"><span>下一张</span><UiIcon name="arrowRight" size={12} /></span>
+                  )}
+                </nav>
                 {totalPhotos > 1 && (
                   <span class="photo-hero__index">01 / {String(totalPhotos).padStart(2, '0')}</span>
                 )}
@@ -160,7 +240,11 @@ const navigation = [
               <summary><UiIcon name="exif" size={14} /> <span>EXIF</span></summary>
               <div class="photo-hero__specs">
                 {exifEntries.length > 0 ? (
-                  exifEntries.map((entry) => <p>{entry}</p>)
+                  <dl>
+                    {camera?.model && <div><dt>Camera</dt><dd>{camera.model}</dd></div>}
+                    {camera?.lens && <div><dt>Lens</dt><dd>{camera.lens}</dd></div>}
+                    {camera?.settings && <div><dt>Exposure</dt><dd>{camera.settings}</dd></div>}
+                  </dl>
                 ) : (
                   <p>暂无 EXIF 信息</p>
                 )}
@@ -245,7 +329,7 @@ const navigation = [
         </div>
       </section>
 
-      {visiblePhotoCollection.length > 1 && (
+      {nearbyPhotoCollection.length > 1 && (
         <section class="photo-work-strip" aria-label="更多摄影作品">
           <div class="photo-work-strip__head">
             <div>
@@ -261,10 +345,11 @@ const navigation = [
                 {nextPhoto && <span>较早 →</span>}
               </p>
             )}
+            <a href="/photography/" class="photo-work-strip__all" data-astro-prefetch>All photographs</a>
           </div>
 
           <div class="photo-work-strip__rail" data-work-rail>
-            {visiblePhotoCollection.map((work) => (
+            {nearbyPhotoCollection.map((work) => (
               <a
                 href={`/posts/${work.slug}/`}
                 class={`photo-work-strip__item ${work.active ? 'is-active' : ''}`}
@@ -341,15 +426,13 @@ const navigation = [
 <style>
   .photo-page {
     min-height: 100vh;
-    background: #05070b;
-    color: #eef2f7;
+    background: #11100e;
+    color: #eee7dc;
   }
 
   .photo-stage {
     width: 100%;
-    background:
-      radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent 22%),
-      linear-gradient(180deg, #05070b 0%, #070a10 58%, #080c12 100%);
+    background: #11100e;
   }
 
   .photo-topbar {
@@ -357,14 +440,14 @@ const navigation = [
     top: 0;
     z-index: 40;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(4, 6, 10, 0.78);
+    background: rgba(13, 13, 12, 0.84);
     backdrop-filter: blur(10px);
     transition: background 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
   }
 
   .photo-topbar.is-quiet {
     border-bottom-color: rgba(255, 255, 255, 0.04);
-    background: rgba(4, 6, 10, 0.38);
+    background: rgba(13, 13, 12, 0.5);
     backdrop-filter: blur(4px);
   }
 
@@ -491,12 +574,16 @@ const navigation = [
   .photo-hero {
     position: relative;
     min-height: calc(100vh - 4.4rem);
-    background: #05070b;
+    background: #11100e;
   }
 
   .photo-hero__frame {
     position: relative;
+    display: grid;
+    place-items: center;
     min-height: calc(100vh - 4.4rem);
+    padding: clamp(0.75rem, 2vw, 1.65rem);
+    box-sizing: border-box;
   }
 
   .photo-hero__viewer-trigger,
@@ -510,19 +597,119 @@ const navigation = [
   }
 
   .photo-hero__viewer-trigger {
-    z-index: 1;
+    z-index: 0;
   }
 
-  .photo-hero__image {
+  .photo-camera-frame {
+    --frame-edge: rgba(218, 214, 206, 0.28);
+    --frame-surface: #0a0a09;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    max-width: 100%;
+    box-sizing: border-box;
+    width: min(
+      calc((100vh - 8.1rem) * var(--hero-ratio-number)),
+      calc(100vw - clamp(2rem, 6vw, 5rem))
+    );
+    padding: clamp(0.34rem, 0.7vw, 0.58rem);
+    border: 1px solid var(--frame-edge);
+    background: var(--frame-surface);
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.72),
+      0 18px 52px rgba(0, 0, 0, 0.42);
+  }
+
+  .photo-camera-frame.has-camera-mark {
+    padding-bottom: 0;
+  }
+
+  .photo-camera-frame--leica {
+    --frame-edge: rgba(198, 194, 185, 0.44);
+    --frame-surface: #0b0b0a;
+  }
+
+  .photo-camera-frame--hasselblad {
+    --frame-edge: rgba(210, 206, 197, 0.62);
+    --frame-surface: #141310;
+    border-width: 2px;
+    box-shadow:
+      0 0 0 1px rgba(55, 51, 44, 0.9),
+      0 20px 58px rgba(0, 0, 0, 0.46);
+  }
+
+  .photo-camera-frame--fujifilm {
+    --frame-edge: rgba(229, 225, 215, 0.76);
+    --frame-surface: #171715;
+    border-width: 2px;
+    box-shadow:
+      0 0 0 1px rgba(68, 65, 59, 0.88),
+      0 20px 56px rgba(0, 0, 0, 0.44);
+  }
+
+  .photo-camera-frame--film {
+    --frame-edge: rgba(191, 188, 181, 0.42);
+    --frame-surface: #10100f;
+  }
+
+  .photo-camera-frame__image {
+    position: relative;
     width: 100%;
-    height: calc(100vh - 4.4rem);
-    object-fit: cover;
+    aspect-ratio: var(--hero-ratio);
+    overflow: hidden;
+    background: #080807;
+  }
+
+  .photo-hero__frame :global(.progressive-image.photo-hero__image) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .photo-hero__frame :global(.photo-hero__image .progressive-image__low),
+  .photo-hero__frame :global(.photo-hero__image .progressive-image__high) {
+    object-fit: contain;
     object-position: center;
+  }
+
+  .photo-camera-frame__mark {
+    display: flex;
+    min-height: 1.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.72rem;
+    margin: 0;
+    padding: 0.52rem 0.55rem 0.44rem;
+    color: rgba(218, 214, 206, 0.74);
+    font-family: var(--font-sans);
+    font-size: 0.61rem;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .photo-camera-frame__mark span:last-child {
+    overflow: hidden;
+    opacity: 0.72;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .photo-camera-frame--hasselblad .photo-camera-frame__mark {
+    color: rgba(225, 220, 209, 0.8);
+  }
+
+  .photo-camera-frame--fujifilm .photo-camera-frame__mark {
+    color: rgba(234, 231, 223, 0.86);
+  }
+
+  .photo-camera-frame--film .photo-camera-frame__mark {
+    color: rgba(218, 214, 205, 0.72);
   }
 
   .photo-hero__veil {
     position: absolute;
     inset: 0;
+    z-index: 1;
     background:
       linear-gradient(180deg, rgba(5, 7, 11, 0.52) 0%, rgba(5, 7, 11, 0.14) 22%, rgba(5, 7, 11, 0.06) 48%, rgba(5, 7, 11, 0.58) 100%),
       linear-gradient(90deg, rgba(5, 7, 11, 0.2) 0%, transparent 20%, transparent 78%, rgba(5, 7, 11, 0.18) 100%);
@@ -559,7 +746,58 @@ const navigation = [
   .photo-hero__controls {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 0.85rem;
+  }
+
+  .photo-work-nav {
+    display: flex;
+    min-height: 2.55rem;
+    align-items: stretch;
+    overflow: hidden;
+    border: 1px solid rgba(224, 219, 210, 0.2);
+    border-radius: 0.2rem;
+    background: rgba(8, 8, 7, 0.62);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(10px);
+  }
+
+  .photo-work-nav :is(a, button, .is-disabled) {
+    display: inline-flex;
+    min-width: 5.4rem;
+    min-height: 2.55rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border: 0;
+    border-left: 1px solid rgba(224, 219, 210, 0.14);
+    padding: 0.66rem 0.8rem;
+    color: rgba(238, 234, 226, 0.78);
+    background: transparent;
+    font: inherit;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      background 0.2s ease;
+  }
+
+  .photo-work-nav > :first-child {
+    border-left: 0;
+  }
+
+  .photo-work-nav :is(a, button):hover,
+  .photo-work-nav :is(a, button):focus-visible {
+    color: #f2eee7;
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  .photo-work-nav .is-disabled {
+    opacity: 0.28;
+    cursor: default;
   }
 
   .photo-hero__overlay--bottom {
@@ -662,8 +900,9 @@ const navigation = [
 
   .photo-hero__title {
     margin: 0.65rem 0 0;
-    font-size: clamp(2.3rem, 4.8vw, 5rem);
-    line-height: 0.98;
+    max-width: 16ch;
+    font-size: clamp(2.3rem, 3.4vw, 3.4rem);
+    line-height: 1.02;
     color: #f8fafc;
   }
 
@@ -709,6 +948,35 @@ const navigation = [
     gap: 0.5rem;
     font-size: 0.95rem;
     color: rgba(245, 247, 250, 0.92);
+  }
+
+  .photo-hero__specs dl {
+    display: grid;
+    gap: 0.52rem;
+    margin: 0;
+  }
+
+  .photo-hero__specs dl div {
+    display: grid;
+    grid-template-columns: 4.6rem minmax(0, 1fr);
+    gap: 0.7rem;
+    align-items: baseline;
+  }
+
+  .photo-hero__specs :is(dt, dd) {
+    margin: 0;
+  }
+
+  .photo-hero__specs dt {
+    color: rgba(226, 232, 240, 0.54);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .photo-hero__specs dd {
+    color: rgba(245, 247, 250, 0.9);
+    line-height: 1.45;
   }
 
   .photo-hero__specs p {
@@ -894,6 +1162,25 @@ const navigation = [
     color: rgba(226, 232, 240, 0.52);
   }
 
+  .photo-work-strip__all {
+    display: inline-flex;
+    min-height: 2.5rem;
+    align-items: center;
+    border-bottom: 1px solid rgba(208, 138, 114, 0.5);
+    color: rgba(238, 231, 220, 0.78);
+    font-size: 0.82rem;
+    text-decoration: none;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .photo-work-strip__all:hover,
+  .photo-work-strip__all:focus-visible {
+    border-color: rgba(208, 138, 114, 0.9);
+    color: #eee7dc;
+  }
+
   .photo-work-strip__rail {
     display: flex;
     gap: 0.95rem;
@@ -909,8 +1196,8 @@ const navigation = [
   .photo-work-strip__item {
     display: grid;
     gap: 0.7rem;
-    min-width: min(18rem, 76vw);
-    width: 18rem;
+    min-width: min(14rem, 72vw);
+    width: 14rem;
     flex: 0 0 auto;
     color: rgba(248, 250, 252, 0.88);
     transition: transform 0.22s ease, opacity 0.22s ease;
@@ -931,7 +1218,7 @@ const navigation = [
   .photo-work-strip__thumb {
     width: 100%;
     aspect-ratio: 16 / 10;
-    border-radius: 1rem;
+    border-radius: 0.2rem;
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.03);
@@ -1124,7 +1411,7 @@ const navigation = [
 
   .photo-footer {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    background: #070a10;
+    background: #0d0d0c;
   }
 
   .photo-footer__inner {
@@ -1199,8 +1486,8 @@ const navigation = [
     }
 
     .photo-work-strip__item {
-      min-width: 19rem;
-      width: 19rem;
+      min-width: 15rem;
+      width: 15rem;
     }
 
     .photo-rail {
@@ -1221,6 +1508,38 @@ const navigation = [
 
     .photo-rail__item {
       min-width: 0;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .photo-hero__frame {
+      padding-left: clamp(21rem, 27vw, 25rem);
+    }
+
+    .photo-hero__overlay--bottom {
+      right: auto;
+      width: clamp(20rem, 26vw, 23rem);
+      box-sizing: border-box;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.9rem;
+      margin-inline: 0;
+    }
+
+    .photo-camera-frame {
+      width: min(
+        calc((100vh - 8.1rem) * var(--hero-ratio-number)),
+        calc(100vw - clamp(23rem, 29vw, 27rem))
+      );
+    }
+
+    .photo-hero__caption,
+    .photo-hero__info {
+      width: 100%;
+    }
+
+    .photo-hero__title {
+      max-width: none;
+      font-size: clamp(2.35rem, 3.25vw, 3.35rem);
     }
   }
 
@@ -1249,6 +1568,18 @@ const navigation = [
       max-height: 72vh;
     }
 
+    .photo-camera-frame {
+      transform: translateY(-3rem);
+    }
+
+    .photo-camera-frame--portrait {
+      width: min(
+        calc((max(19rem, 100svh - 30rem)) * var(--hero-ratio-number)),
+        calc(100vw - 12rem)
+      );
+      transform: translateY(-3.8rem);
+    }
+
     :global(.photo-lightbox__thumb) {
       width: 3.5rem;
       height: 4.35rem;
@@ -1270,12 +1601,8 @@ const navigation = [
       min-height: calc(100svh - 4.4rem);
     }
 
-    .photo-hero__image {
-      height: calc(100svh - 4.4rem);
-    }
-
     .photo-hero__overlay--top {
-      top: 0.9rem;
+      top: 1.6rem;
     }
 
     .photo-hero__topbar {
@@ -1285,7 +1612,35 @@ const navigation = [
 
     .photo-hero__controls {
       width: 100%;
+      flex-wrap: wrap;
       justify-content: space-between;
+    }
+
+    .photo-work-nav {
+      order: 2;
+      width: 100%;
+    }
+
+    .photo-work-nav :is(a, button, .is-disabled) {
+      min-width: 0;
+      flex: 1 1 0;
+      padding-inline: 0.55rem;
+    }
+
+    .photo-camera-frame {
+      width: min(
+        calc((100svh - 10.2rem) * var(--hero-ratio-number)),
+        calc(100vw - 1.2rem)
+      );
+      transform: translateY(-0.85rem);
+    }
+
+    .photo-camera-frame--portrait {
+      width: min(
+        calc((max(19rem, 100svh - 30rem)) * var(--hero-ratio-number)),
+        calc(100vw - 8rem)
+      );
+      transform: translateY(-3.8rem);
     }
 
     .photo-hero__overlay--bottom {
@@ -1354,9 +1709,31 @@ const navigation = [
       padding-inline: 0.85rem;
     }
   }
+
+  @media (max-width: 720px) and (max-height: 740px) {
+    .photo-camera-frame {
+      width: min(
+        calc((100svh - 22rem) * var(--hero-ratio-number)),
+        calc(100vw - 6rem)
+      );
+      transform: translateY(-4.2rem);
+    }
+
+    .photo-camera-frame--portrait {
+      width: min(
+        calc((100svh - 27rem) * var(--hero-ratio-number)),
+        calc(100vw - 14.5rem)
+      );
+    }
+
+    .photo-hero__title {
+      font-size: clamp(1.9rem, 9vw, 2.4rem);
+    }
+  }
 </style>
 
-<script>
+<script is:inline data-astro-rerun>
+  (() => {
   const galleryRoot = document.querySelector('.photo-page');
   const photoRailLinks = Array.from(document.querySelectorAll('[data-photo-link]'));
   const workLinks = Array.from(document.querySelectorAll('[data-work-link]'));
@@ -1372,6 +1749,10 @@ const navigation = [
   const lightboxTriggers = Array.from(document.querySelectorAll('[data-open-lightbox]'));
   const galleryData = galleryRoot?.getAttribute('data-photo-gallery');
   const photos = galleryData ? JSON.parse(galleryData) : [];
+  const workPathsData = galleryRoot?.getAttribute('data-photo-work-paths');
+  const photoWorkPaths = workPathsData ? JSON.parse(workPathsData) : [];
+  const currentPhotoPath = galleryRoot?.getAttribute('data-current-photo-path');
+  const randomPhotoButton = document.querySelector('[data-random-photo]');
   const topbar = document.querySelector('.photo-topbar');
   const heroTopOverlay = document.querySelector('[data-photo-overlay-top]');
   const heroBottomOverlay = document.querySelector('[data-photo-overlay-bottom]');
@@ -1441,6 +1822,13 @@ const navigation = [
 
   const activeWorkLink = workLinks.find((link) => link.classList.contains('is-active'));
   centerInlineItem(activeWorkLink);
+
+  randomPhotoButton?.addEventListener('click', () => {
+    const candidates = photoWorkPaths.filter((path) => path !== currentPhotoPath);
+    if (!candidates.length) return;
+    const destination = candidates[Math.floor(Math.random() * candidates.length)];
+    if (destination) window.location.assign(destination);
+  }, { signal: controller.signal });
 
   function renderLightbox() {
     if (!photos[lightboxIndex] || !lightbox || !lightboxImage || !lightboxCaption || !lightboxCounter) return;
@@ -1632,4 +2020,5 @@ const navigation = [
     unlockPageScroll();
     controller.abort();
   }, { once: true, signal: controller.signal });
+  })();
 </script>

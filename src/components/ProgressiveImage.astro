@@ -71,6 +71,7 @@ function resolveResponsiveSrcSet(imageSrc: string) {
         candidate.searchParams.set('w', String(candidateWidth));
         candidate.searchParams.set('q', candidateWidth <= 768 ? '76' : '80');
         candidate.searchParams.set('auto', 'format');
+        candidate.searchParams.set('fit', 'max');
         return `${candidate.toString()} ${candidateWidth}w`;
       }).join(', ');
     }

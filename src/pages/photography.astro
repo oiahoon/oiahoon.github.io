@@ -5,8 +5,6 @@ import ProgressiveImage from '../components/ProgressiveImage.astro';
 
 const photos = await getCollection('posts', ({ data }) => !data.draft && data.type === 'photography');
 const sorted = photos.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
-const selected = sorted.slice(0, 6);
-const archive = sorted.slice(selected.length);
 const filters = [
   { label: 'All', value: 'all' },
   { label: 'Cafe', value: 'cafe' },
@@ -17,7 +15,12 @@ const filters = [
   { label: 'Film', value: 'film' },
 ] as const;
 const years = [...new Set(sorted.map((photo) => photo.data.date.getFullYear()))].sort((a, b) => b - a);
-const archiveStartYear = archive[0]?.data.date.getFullYear() ?? years[0];
+const firstPhotoByYear = new Map<number, string>();
+
+sorted.forEach((photo) => {
+  const year = photo.data.date.getFullYear();
+  if (!firstPhotoByYear.has(year)) firstPhotoByYear.set(year, photo.id);
+});
 
 function firstImage(photo: typeof sorted[number]) {
   return photo.data.gallery?.[0];
@@ -29,6 +32,22 @@ function cardMeta(photo: typeof sorted[number], includeCamera = false) {
     values.push(photo.data.camera.model.replace('Leica Camera AG, ', '').replace('Hasselblad, ', ''));
   }
   return values.filter(Boolean).join(' · ');
+}
+
+function displayTitle(photo: typeof sorted[number]) {
+  return photo.data.description || photo.data.title || firstImage(photo)?.alt || 'Photograph';
+}
+
+function cardVariant(photo: typeof sorted[number], index: number) {
+  if (index === 0) return 'is-lead';
+
+  const image = firstImage(photo);
+  const width = Number(image?.width || 0);
+  const height = Number(image?.height || 0);
+  if (width && height && width / height < 0.82) return 'is-portrait';
+
+  const pattern = ['is-wide', 'is-standard', 'is-standard', 'is-wide', 'is-standard', 'is-compact', 'is-standard', 'is-wide'];
+  return pattern[(index - 1) % pattern.length];
 }
 
 function filterGroups(photo: typeof sorted[number]) {
@@ -55,112 +74,86 @@ function filterGroups(photo: typeof sorted[number]) {
 ---
 
 <SpotlightLayout title="Photographs | Joey's Notes" description="Personal photographs from cafes, streets, transit windows, trees, and quiet daily light." lang="zh">
-  <section class="photo-index-page">
+  <section class="photo-index-page" id="archive">
     <div class="photo-shell shell">
-      <header class="photo-intro">
-        <p class="eyebrow">Photography</p>
-        <div class="photo-intro__grid">
-          <div>
-            <h1>Personal photographs from streets, cafes, and elsewhere.</h1>
-            <p>街头、车窗、咖啡馆、树影与水面里的安静片段。使用 Leica、Hasselblad、胶片与数码记录。</p>
-          </div>
-          <dl class="photo-index-stats" aria-label="摄影归档概览">
-            <div>
-              <dt>Photographs</dt>
-              <dd>{sorted.length}</dd>
-            </div>
-            <div>
-              <dt>Latest year</dt>
-              <dd>{years[0]}</dd>
-            </div>
-            <div>
-              <dt>Archive</dt>
-              <dd>{years.length}</dd>
-            </div>
-          </dl>
+      <header class="photo-index-head">
+        <div class="photo-index-title">
+          <h1>Photographs</h1>
         </div>
+        <nav class="filter-index" aria-label="摄影筛选索引">
+          {filters.map((filter, index) => (
+            <a
+              href={index === 0 ? '/photography/' : `/photography/?tag=${filter.value}`}
+              aria-current={index === 0 ? 'page' : undefined}
+              data-photo-filter={filter.value}
+            >
+              {filter.label}
+            </a>
+          ))}
+        </nav>
       </header>
 
-      <section class="photo-section" aria-labelledby="selected-title">
-        <div class="photo-section__head">
-          <div>
-            <h2 id="selected-title">Selected photographs</h2>
-            <nav class="filter-index" aria-label="摄影筛选索引">
-              {filters.map((filter, index) => (
-                <a
-                  href={index === 0 ? '/photography/' : `/photography/?tag=${filter.value}`}
-                  aria-current={index === 0 ? 'page' : undefined}
-                  data-photo-filter={filter.value}
-                >
-                  {filter.label}
-                </a>
-              ))}
-            </nav>
-          </div>
-        </div>
+      <div class="photo-browser">
+        <nav class="year-index" aria-label="按年份浏览摄影作品">
+          {years.map((year, index) => (
+            <a
+              href={`#year-${year}`}
+              aria-current={index === 0 ? 'location' : undefined}
+              data-photo-year-link={year}
+            >
+              {year}
+            </a>
+          ))}
+        </nav>
 
-        <div class="selected-photo-grid">
-          {selected.map((photo, index) => {
+        <div class="contact-sheet" aria-live="polite">
+          {sorted.map((photo, index) => {
             const image = firstImage(photo);
             if (!image) return null;
-            const size = index === 0 ? 'is-lead' : index === 1 || index === 3 ? 'is-medium' : 'is-small';
+            const year = photo.data.date.getFullYear();
+            const isYearStart = firstPhotoByYear.get(year) === photo.id;
+            const title = displayTitle(photo);
+            const ratio = image.width && image.height ? `${image.width} / ${image.height}` : '3 / 2';
             return (
-              <article class={`photo-tile ${size}`} data-photo-filter-groups={filterGroups(photo)}>
-                <a href={`/posts/${photo.id}/`} class="photo-tile__media" data-astro-prefetch>
+              <article
+                class={`contact-card ${cardVariant(photo, index)}`}
+                id={isYearStart ? `year-${year}` : undefined}
+                data-photo-year={year}
+                data-photo-filter-groups={filterGroups(photo)}
+                style={`--photo-ratio: ${ratio};`}
+              >
+                <a
+                  href={`/posts/${photo.id}/`}
+                  class="contact-card__media"
+                  aria-label={title}
+                  data-astro-prefetch
+                >
                   <ProgressiveImage
                     src={image.src}
-                    alt={image.alt || photo.data.title || 'Photograph'}
-                    class="photo-tile__image"
+                    alt={image.alt || title}
+                    class="contact-card__image"
                     loading={index === 0 ? 'eager' : 'lazy'}
                     decoding="async"
                     fetchpriority={index === 0 ? 'high' : 'low'}
                     width={image.width}
                     height={image.height}
-                    sizes={index === 0 ? '(min-width: 960px) 54vw, 100vw' : '(min-width: 960px) 30vw, 50vw'}
+                    sizes={index === 0 ? '(min-width: 960px) 30vw, 100vw' : '(min-width: 960px) 24vw, 50vw'}
                     style={`view-transition-name: photo-cover-${photo.id};`}
                   />
+                  {index !== 0 && <span class="contact-card__hover-label">{photo.data.title || title}</span>}
                 </a>
-                <h3><a href={`/posts/${photo.id}/`} data-astro-prefetch style={`view-transition-name: photo-title-${photo.id};`}>{photo.data.title}</a></h3>
-                <p>{cardMeta(photo, index > 0)}</p>
+                {index === 0 && (
+                  <div class="contact-card__caption">
+                    <h2><a href={`/posts/${photo.id}/`} data-astro-prefetch style={`view-transition-name: photo-title-${photo.id};`}>{title}</a></h2>
+                    <p>{cardMeta(photo, true)}</p>
+                  </div>
+                )}
               </article>
             );
           })}
+          <p class="contact-sheet__empty" data-photo-empty hidden>没有符合当前筛选的摄影作品。</p>
         </div>
-      </section>
-
-      <section class="photo-section" aria-labelledby="archive-title">
-        <div class="photo-section__head">
-          <div>
-            <p class="eyebrow">Archive</p>
-            <h2 id="archive-title">Archive · {archiveStartYear}</h2>
-          </div>
-        </div>
-
-        <div class="archive-grid">
-          {archive.map((photo) => {
-            const image = firstImage(photo);
-            if (!image) return null;
-            return (
-              <article class="archive-card" data-photo-filter-groups={filterGroups(photo)}>
-                <a href={`/posts/${photo.id}/`} data-astro-prefetch>
-                  <ProgressiveImage
-                    src={image.src}
-                    alt={image.alt || photo.data.title || 'Photograph'}
-                    class="archive-card__image"
-                    loading="lazy"
-                    decoding="async"
-                    width={image.width}
-                    height={image.height}
-                    sizes="(min-width: 960px) 18vw, 45vw"
-                  />
-                </a>
-                <h3><a href={`/posts/${photo.id}/`} data-astro-prefetch>{photo.data.title}</a></h3>
-                <p>{photo.data.location} · {photo.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-              </article>
-            );
-          })}
-        </div>
-      </section>
+      </div>
     </div>
   </section>
 </SpotlightLayout>
@@ -168,10 +161,9 @@ function filterGroups(photo: typeof sorted[number]) {
 <style>
   .photo-index-page {
     margin-top: 0;
-    padding-block: clamp(2rem, 4vw, 3.5rem) clamp(4rem, 8vw, 7rem);
-    background:
-      radial-gradient(circle at top, rgba(208, 138, 114, 0.08), transparent 24%),
-      linear-gradient(180deg, #11100e 0%, #141210 54%, #11100e 100%);
+    min-height: 100vh;
+    padding-block: clamp(1.75rem, 3vw, 2.8rem) clamp(4rem, 8vw, 7rem);
+    background: #11100e;
     color: #eee7dc;
   }
 
@@ -179,96 +171,33 @@ function filterGroups(photo: typeof sorted[number]) {
     width: min(100%, 92rem);
   }
 
-  .photo-shell :is(h1, h2, h3, a, dd) {
+  .photo-shell :is(h1, h2, a) {
     color: #eee7dc;
   }
 
-  .photo-shell .eyebrow,
-  .photo-shell p,
-  .photo-shell dt {
+  .photo-shell p {
     color: #aaa197;
   }
 
-  .photo-intro {
-    padding-top: clamp(0.5rem, 1.5vw, 1.25rem);
-  }
-
-  .photo-intro__grid {
-    display: grid;
-    gap: clamp(2rem, 5vw, 4rem);
+  .photo-index-head {
+    display: flex;
     align-items: end;
-    margin-top: 1.2rem;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: clamp(1.4rem, 2vw, 1.7rem);
   }
 
-  .photo-intro h1 {
-    max-width: 13ch;
+  .photo-index-title {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+  }
+
+  .photo-index-title h1 {
     margin: 0;
-    font-size: clamp(3.2rem, 8vw, 6.4rem);
-    line-height: 0.98;
-    font-weight: 600;
-  }
-
-  .photo-intro p {
-    max-width: 39rem;
-    margin: 1.35rem 0 0;
-    font-size: clamp(1rem, 2vw, 1.18rem);
-    line-height: 1.85;
-  }
-
-  .photo-index-stats {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.4rem;
-    border-top: 1px solid #34302b;
-    padding-top: 1.5rem;
-  }
-
-  .photo-index-stats div,
-  .photo-index-stats dd,
-  .photo-index-stats dt {
-    margin: 0;
-  }
-
-  .photo-index-stats dt {
-    font-size: 0.74rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .photo-index-stats dd {
-    margin-top: 0.45rem;
-    font-family: var(--font-serif);
-    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    font-size: clamp(2.25rem, 3.2vw, 2.65rem);
     line-height: 1;
-  }
-
-  .photo-section {
-    margin-top: clamp(4rem, 8vw, 7rem);
-    border-top: 1px solid #34302b;
-    padding-top: clamp(2rem, 4vw, 3rem);
-  }
-
-  .photo-section__head {
-    display: grid;
-    gap: 1rem;
-    align-items: start;
-  }
-
-  .photo-section__head > * {
-    min-width: 0;
-  }
-
-  .photo-section h2 {
-    margin: 0;
-    font-size: clamp(2.1rem, 5vw, 3.5rem);
-    line-height: 1.05;
     font-weight: 600;
-  }
-
-  .photo-section__head > p {
-    max-width: 25rem;
-    margin: 0;
-    line-height: 1.8;
   }
 
   .filter-index {
@@ -276,19 +205,19 @@ function filterGroups(photo: typeof sorted[number]) {
     flex-wrap: wrap;
     gap: 0.45rem;
     max-width: 100%;
-    margin-top: 1.25rem;
+    justify-content: flex-end;
   }
 
   .filter-index a {
     display: inline-flex;
-    min-height: 2.5rem;
+    min-height: 2.35rem;
     align-items: center;
     justify-content: center;
     border: 1px solid rgba(238, 231, 220, 0.13);
     border-radius: 999px;
-    padding: 0.44rem 0.78rem;
+    padding: 0.4rem 0.84rem;
     color: #aaa197;
-    background: rgba(255, 255, 255, 0.025);
+    background: transparent;
     font-size: 0.88rem;
     line-height: 1;
     text-decoration: none;
@@ -301,9 +230,9 @@ function filterGroups(photo: typeof sorted[number]) {
   .filter-index a:hover,
   .filter-index a:focus-visible,
   .filter-index a[aria-current='page'] {
-    border-color: rgba(238, 231, 220, 0.34);
+    border-color: rgba(208, 138, 114, 0.76);
     color: #eee7dc;
-    background: rgba(238, 231, 220, 0.07);
+    background: rgba(208, 138, 114, 0.045);
   }
 
   .filter-index a:focus-visible {
@@ -311,138 +240,221 @@ function filterGroups(photo: typeof sorted[number]) {
     outline-offset: 3px;
   }
 
-  .selected-photo-grid,
-  .archive-grid {
-    display: grid;
-    gap: clamp(1rem, 2vw, 1.65rem);
-    margin-top: 2rem;
-  }
-
-  .photo-tile[hidden],
-  .archive-card[hidden] {
+  .contact-card[hidden],
+  .year-index a[hidden] {
     display: none;
   }
 
-  .selected-photo-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .photo-browser {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: clamp(1rem, 2vw, 1.6rem);
+    align-items: start;
   }
 
-  .photo-tile.is-lead {
-    grid-column: 1 / -1;
+  .year-index {
+    position: sticky;
+    top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+    border-left: 1px solid #34302b;
+    padding-block: 0.15rem;
   }
 
-  .photo-tile__media,
-  .archive-card a:first-child {
+  .year-index a {
+    display: flex;
+    min-height: 1.8rem;
+    align-items: center;
+    border-left: 2px solid transparent;
+    margin-left: -1px;
+    padding-left: 0.75rem;
+    color: #8e867e;
+    font-size: 0.84rem;
+    line-height: 1;
+    text-decoration: none;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .year-index a:hover,
+  .year-index a:focus-visible,
+  .year-index a[aria-current='location'] {
+    border-left-color: #b86f55;
+    color: #d08a72;
+  }
+
+  .contact-sheet {
+    display: grid;
+    grid-template-columns: repeat(15, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    grid-auto-rows: clamp(3.5rem, 4.5vw, 4.1rem);
+    gap: clamp(0.55rem, 0.9vw, 0.78rem);
+    min-width: 0;
+  }
+
+  .contact-card {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    background: #191816;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 18rem;
+    scroll-margin-top: 1rem;
+  }
+
+  .contact-card.is-lead {
+    grid-column: span 5;
+    grid-row: span 7;
+    flex-direction: column;
+    border: 1px solid rgba(184, 111, 85, 0.9);
+  }
+
+  .contact-card.is-wide {
+    grid-column: span 4;
+    grid-row: span 3;
+  }
+
+  .contact-card.is-standard {
+    grid-column: span 3;
+    grid-row: span 3;
+  }
+
+  .contact-card.is-compact {
+    grid-column: span 2;
+    grid-row: span 3;
+  }
+
+  .contact-card.is-portrait {
+    grid-column: span 3;
+    grid-row: span 4;
+  }
+
+  .contact-card__media {
+    position: relative;
     display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
     overflow: hidden;
     background: #191816;
   }
 
-  .photo-tile__image,
-  .archive-card__image {
+  .contact-card:not(.is-lead) .contact-card__media,
+  .contact-card.is-lead .contact-card__media {
+    flex: 1 1 auto;
+  }
+
+  .contact-card__media :global(.progressive-image) {
     width: 100%;
+    height: 100%;
+  }
+
+  .contact-card__image {
     transition:
       transform var(--duration-slow) var(--ease-standard),
       opacity var(--duration-base) var(--ease-standard);
   }
 
-  .photo-tile__image {
-    aspect-ratio: 4 / 3;
+  .contact-card__caption {
+    flex: 0 0 auto;
+    border-top: 1px solid rgba(184, 111, 85, 0.48);
+    padding: 0.65rem 0.85rem 0.72rem;
+    background: #151311;
   }
 
-  .archive-card__image {
-    aspect-ratio: 1 / 1;
-  }
-
-  .archive-card {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 18rem;
-  }
-
-  .photo-tile h3,
-  .archive-card h3 {
-    margin: 0.85rem 0 0;
+  .contact-card__caption h2 {
+    margin: 0;
     font-family: var(--font-sans);
-    font-size: clamp(1rem, 1.8vw, 1.18rem);
+    font-size: clamp(0.84rem, 1.15vw, 1rem);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .contact-card__caption h2 a {
+    text-decoration: none;
+  }
+
+  .contact-card__caption p {
+    margin: 0.18rem 0 0;
+    font-size: 0.74rem;
     line-height: 1.35;
   }
 
-  .photo-tile h3 a,
-  .archive-card h3 a {
-    display: inline-flex;
-    min-height: 2rem;
-    align-items: center;
+  .contact-card__hover-label {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 1;
+    overflow: hidden;
+    padding: 0.55rem 0.65rem;
+    color: #eee7dc;
+    background: rgba(17, 16, 14, 0.88);
+    font-size: 0.74rem;
+    line-height: 1.3;
+    opacity: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transform: translateY(0.35rem);
+    transition:
+      opacity var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
   }
 
-  .photo-tile p,
-  .archive-card p {
-    margin: 0.22rem 0 0;
-    font-size: 0.9rem;
-    line-height: 1.5;
+  .contact-card__media:hover .contact-card__hover-label,
+  .contact-card__media:focus-visible .contact-card__hover-label {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  .archive-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .contact-sheet__empty {
+    grid-column: 1 / -1;
+    margin: 2rem 0;
+    font-size: 0.92rem;
   }
 
-  @media (min-width: 760px) {
-    .archive-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 900px) {
-    .photo-intro__grid,
-    .photo-section__head {
-      grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+  @media (min-width: 641px) {
+    .photo-index-title {
+      margin-left: calc(3.5rem + clamp(1rem, 2vw, 1.6rem));
     }
   }
 
-  @media (min-width: 1100px) {
-    .archive-grid {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 960px) {
-    .photo-intro h1 {
-      max-width: 17ch;
-      font-size: clamp(3.3rem, 5.25vw, 4.45rem);
+  @media (max-width: 960px) {
+    .photo-index-head {
+      align-items: start;
+      flex-direction: column;
+      gap: 1.1rem;
     }
 
-    .photo-section {
-      margin-top: clamp(2.8rem, 4.2vw, 4rem);
+    .filter-index {
+      justify-content: flex-start;
     }
 
-    .selected-photo-grid {
-      grid-template-columns: repeat(12, minmax(0, 1fr));
+    .contact-sheet {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      grid-auto-rows: 4.2rem;
     }
 
-    .photo-tile.is-lead {
-      grid-column: span 7;
-      grid-row: span 2;
-    }
-
-    .photo-tile.is-medium {
-      grid-column: span 5;
-    }
-
-    .photo-tile.is-small {
+    .contact-card.is-lead {
       grid-column: span 4;
+    }
+
+    .contact-card.is-wide,
+    .contact-card.is-standard,
+    .contact-card.is-portrait {
+      grid-column: span 4;
+    }
+
+    .contact-card.is-compact {
+      grid-column: span 2;
     }
   }
 
   @media (max-width: 640px) {
     .photo-index-page {
-      padding-top: 1.65rem;
-    }
-
-    .photo-intro {
-      padding-top: 0.35rem;
-    }
-
-    .photo-section {
-      margin-top: 3.35rem;
+      padding-top: 1.3rem;
     }
 
     .filter-index {
@@ -463,20 +475,93 @@ function filterGroups(photo: typeof sorted[number]) {
       min-height: 2.75rem;
       padding-inline: 0.9rem;
     }
+
+    .photo-index-title h1 {
+      font-size: 2.35rem;
+    }
+
+    .photo-browser {
+      display: block;
+    }
+
+    .year-index {
+      position: static;
+      flex-direction: row;
+      gap: 0;
+      width: 100%;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      border: 0;
+      scrollbar-width: none;
+    }
+
+    .year-index::-webkit-scrollbar {
+      display: none;
+    }
+
+    .year-index a {
+      flex: 0 0 auto;
+      min-height: 2.75rem;
+      border-left: 0;
+      border-bottom: 2px solid transparent;
+      margin: 0;
+      padding-inline: 0.85rem;
+    }
+
+    .year-index a:hover,
+    .year-index a:focus-visible,
+    .year-index a[aria-current='location'] {
+      border-left-color: transparent;
+      border-bottom-color: #b86f55;
+    }
+
+    .contact-sheet {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-flow: row;
+      grid-auto-rows: auto;
+      gap: 0.72rem;
+    }
+
+    .contact-card,
+    .contact-card.is-wide,
+    .contact-card.is-standard,
+    .contact-card.is-compact,
+    .contact-card.is-portrait {
+      grid-column: span 1;
+      grid-row: auto;
+      display: block;
+      overflow: visible;
+      background: transparent;
+    }
+
+    .contact-card.is-lead {
+      grid-column: 1 / -1;
+      grid-row: auto;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .contact-card:not(.is-lead) .contact-card__media {
+      aspect-ratio: var(--photo-ratio);
+      max-height: 22rem;
+    }
+
+    .contact-card.is-lead .contact-card__media {
+      aspect-ratio: var(--photo-ratio);
+      max-height: none;
+    }
   }
 
   @media (hover: hover) {
-    .photo-tile:hover .photo-tile__image,
-    .photo-tile:focus-within .photo-tile__image,
-    .archive-card:hover .archive-card__image,
-    .archive-card:focus-within .archive-card__image {
+    .contact-card:hover .contact-card__image,
+    .contact-card:focus-within .contact-card__image {
       transform: scale(1.018);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .photo-tile__image,
-    .archive-card__image {
+    .contact-card__image,
+    .contact-card__hover-label {
       transition: none;
     }
   }
@@ -489,6 +574,8 @@ function filterGroups(photo: typeof sorted[number]) {
 
     const links = Array.from(root.querySelectorAll('[data-photo-filter]'));
     const items = Array.from(root.querySelectorAll('[data-photo-filter-groups]'));
+    const yearLinks = Array.from(root.querySelectorAll('[data-photo-year-link]'));
+    const emptyState = root.querySelector('[data-photo-empty]');
     if (!links.length || !items.length) return;
 
     root.dataset.photoFiltersBound = 'true';
@@ -512,9 +599,12 @@ function filterGroups(photo: typeof sorted[number]) {
     }
 
     function applyFilter(filter) {
+      let visibleCount = 0;
       items.forEach((item) => {
         const groups = (item.getAttribute('data-photo-filter-groups') || '').split(/\s+/);
-        item.hidden = filter !== 'all' && !groups.includes(filter);
+        const hidden = filter !== 'all' && !groups.includes(filter);
+        item.hidden = hidden;
+        if (!hidden) visibleCount += 1;
       });
 
       links.forEach((link) => {
@@ -525,6 +615,16 @@ function filterGroups(photo: typeof sorted[number]) {
           link.removeAttribute('aria-current');
         }
       });
+
+      yearLinks.forEach((link) => {
+        const year = link.getAttribute('data-photo-year-link');
+        link.hidden = !items.some((item) => !item.hidden && item.getAttribute('data-photo-year') === year);
+      });
+
+      const firstVisibleYear = yearLinks.find((link) => !link.hidden);
+      yearLinks.forEach((link) => link.removeAttribute('aria-current'));
+      firstVisibleYear?.setAttribute('aria-current', 'location');
+      if (emptyState) emptyState.hidden = visibleCount !== 0;
     }
 
     links.forEach((link) => {
@@ -533,6 +633,23 @@ function filterGroups(photo: typeof sorted[number]) {
         event.preventDefault();
         applyFilter(filter);
         updateUrl(filter);
+      }, { signal: controller.signal });
+    });
+
+    yearLinks.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const year = link.getAttribute('data-photo-year-link');
+        const target = items.find((item) => !item.hidden && item.getAttribute('data-photo-year') === year);
+        if (!target) return;
+
+        yearLinks.forEach((item) => item.removeAttribute('aria-current'));
+        link.setAttribute('aria-current', 'location');
+        target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+
+        const url = new URL(window.location.href);
+        url.hash = `year-${year}`;
+        history.pushState({ photoYear: year }, '', url);
       }, { signal: controller.signal });
     });
 

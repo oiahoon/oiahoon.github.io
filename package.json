@@ -12,6 +12,7 @@
     "astro": "astro",
     "photos:sync": "node scripts/sync-photos.js",
     "photos:unsplash:sync": "node --env-file-if-exists=.env scripts/sync-unsplash-photos.js",
+    "photos:exif:audit": "node scripts/sync-unsplash-photos.js --audit-exif",
     "test:unsplash-sync": "node --test scripts/sync-unsplash-photos.test.js",
     "check:docs-baseline": "node scripts/check-doc-baseline.js",
     "check:content-health": "node scripts/check-content-health.js",

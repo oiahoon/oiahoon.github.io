@@ -26,6 +26,8 @@ function parseArgs(argv = process.argv.slice(2)) {
   }
 
   return {
+    auditExif: args.has("--audit-exif"),
+    backfillExif: args.has("--backfill-exif"),
     dryRun: args.has("--dry-run"),
     help: args.has("--help") || args.has("-h"),
     limit,
@@ -39,12 +41,16 @@ Usage:
   npm run photos:unsplash:sync -- --dry-run
   npm run photos:unsplash:sync
   npm run photos:unsplash:sync -- --limit=5
+  npm run photos:unsplash:sync -- --audit-exif
+  npm run photos:unsplash:sync -- --backfill-exif --dry-run --limit=40
+  npm run photos:unsplash:sync -- --backfill-exif --limit=40
 
 Environment:
   UNSPLASH_ACCESS_KEY  Required Unsplash API access key
   UNSPLASH_USERNAME    Optional profile username (default: ${DEFAULT_USERNAME})
 
-The command is manual and incremental. It never deletes or overwrites existing posts.`);
+The normal import is manual and incremental. EXIF backfill only updates the camera
+block on existing Unsplash posts and is safest in batches of 40.`);
 }
 
 function normalizeText(value) {
@@ -132,7 +138,7 @@ function yamlBlockUrl(value) {
   return `>-\n      ${value}`;
 }
 
-function cameraBlock(photo) {
+function cameraData(photo) {
   const exif = photo.exif || {};
   const model =
     normalizeText(exif.name) ||
@@ -144,18 +150,118 @@ function cameraBlock(photo) {
     exif.focal_length ? `${exif.focal_length}mm` : "",
   ].filter(Boolean);
 
-  if (!model && settings.length === 0) return "";
+  return {
+    model,
+    settings: settings.join(", "),
+  };
+}
+
+function cameraBlockFromData(camera = {}) {
+  const model = normalizeText(camera.model);
+  const lens = normalizeText(camera.lens);
+  const settings = normalizeText(camera.settings);
+  if (!model && !lens && !settings) return "";
+
   return (
     [
       "camera:",
       model ? `  model: ${yamlString(model)}` : "",
-      settings.length > 0
-        ? `  settings: ${yamlString(settings.join(", "))}`
-        : "",
+      lens ? `  lens: ${yamlString(lens)}` : "",
+      settings ? `  settings: ${yamlString(settings)}` : "",
     ]
       .filter(Boolean)
       .join("\n") + "\n"
   );
+}
+
+function cameraBlock(photo) {
+  return cameraBlockFromData(cameraData(photo));
+}
+
+function existingUnsplashPosts() {
+  return fs
+    .readdirSync(postsDir)
+    .filter((file) => /\.mdx?$/.test(file))
+    .map((file) => {
+      const filePath = path.join(postsDir, file);
+      const raw = fs.readFileSync(filePath, "utf8");
+      const { data } = matter(raw);
+      if (!data.unsplash?.id) return null;
+      return {
+        file,
+        filePath,
+        raw,
+        id: String(data.unsplash.id),
+        camera: data.camera || {},
+      };
+    })
+    .filter(Boolean);
+}
+
+function summarizeExifCoverage(records) {
+  const models = {};
+  let withModel = 0;
+  let withLens = 0;
+  let withSettings = 0;
+
+  for (const record of records) {
+    const model = normalizeText(record.camera?.model);
+    if (model) {
+      withModel += 1;
+      models[model] = (models[model] || 0) + 1;
+    }
+    if (normalizeText(record.camera?.lens)) withLens += 1;
+    if (normalizeText(record.camera?.settings)) withSettings += 1;
+  }
+
+  return {
+    total: records.length,
+    withModel,
+    withLens,
+    withSettings,
+    missingModel: records.length - withModel,
+    modelCoverage: records.length
+      ? `${((withModel / records.length) * 100).toFixed(1)}%`
+      : "0.0%",
+    models,
+  };
+}
+
+function upsertCameraBlock(raw, incoming) {
+  const parsed = matter(raw);
+  const existing = parsed.data.camera || {};
+  const existingModel = normalizeText(existing.model);
+  const existingLens = normalizeText(existing.lens);
+  const existingSettings = normalizeText(existing.settings);
+  const incomingModel = normalizeText(incoming.model);
+  const incomingLens = normalizeText(incoming.lens);
+  const incomingSettings = normalizeText(incoming.settings);
+  const hasNewValue =
+    (!existingModel && incomingModel) ||
+    (!existingLens && incomingLens) ||
+    (!existingSettings && incomingSettings);
+  if (!hasNewValue) return raw;
+
+  const merged = {
+    model: existingModel || incomingModel,
+    lens: existingLens || incomingLens,
+    settings: existingSettings || incomingSettings,
+  };
+  const block = cameraBlockFromData(merged);
+  if (!block) return raw;
+
+  const currentBlock = raw.match(
+    /\ncamera:\n(?: {2}(?:model|lens|settings):[^\n]*\n)+/,
+  );
+  if (currentBlock) {
+    return raw.replace(currentBlock[0], `\n${block}`);
+  }
+
+  if (/\nlocation:/.test(raw)) {
+    return raw.replace(/\nlocation:/, `\n${block}location:`);
+  }
+
+  return raw.replace(/\n---\n/, `\n${block}---\n`);
 }
 
 function frontmatterFor(photo) {
@@ -287,10 +393,76 @@ async function triggerDownload(photo, accessKey) {
   return true;
 }
 
+async function backfillExif(options, accessKey) {
+  const records = existingUnsplashPosts();
+  const batchLimit = Number.isFinite(options.limit) ? options.limit : 40;
+  const candidates = records
+    .filter(
+      (record) =>
+        !normalizeText(record.camera?.model) ||
+        !normalizeText(record.camera?.settings),
+    )
+    .slice(0, batchLimit);
+  const files = [];
+  let unchanged = 0;
+  let withoutExif = 0;
+
+  for (const record of candidates) {
+    const detailedPhoto = await fetchPhotoDetails(record.id, accessKey);
+    const incoming = cameraData(detailedPhoto);
+    if (!incoming.model && !incoming.settings) {
+      withoutExif += 1;
+      continue;
+    }
+
+    const next = upsertCameraBlock(record.raw, incoming);
+    if (next === record.raw) {
+      unchanged += 1;
+      continue;
+    }
+
+    files.push(path.relative(root, record.filePath));
+    if (!options.dryRun) fs.writeFileSync(record.filePath, next, "utf8");
+  }
+
+  console.log(
+    JSON.stringify(
+      {
+        mode: options.dryRun ? "backfill-exif-dry-run" : "backfill-exif",
+        checked: candidates.length,
+        updated: files.length,
+        unchanged,
+        withoutExif,
+        remainingBeforeRun: Math.max(
+          0,
+          records.length - summarizeExifCoverage(records).withSettings,
+        ),
+        files,
+      },
+      null,
+      2,
+    ),
+  );
+}
+
 async function main() {
   const options = parseArgs();
   if (options.help) {
     printHelp();
+    return;
+  }
+
+  if (options.auditExif) {
+    console.log(
+      JSON.stringify(
+        {
+          mode: "audit-exif",
+          ...summarizeExifCoverage(existingUnsplashPosts()),
+        },
+        null,
+        2,
+      ),
+    );
     return;
   }
 
@@ -300,6 +472,11 @@ async function main() {
     throw new Error(
       "UNSPLASH_ACCESS_KEY is required. Add it to `.env` before syncing.",
     );
+  }
+
+  if (options.backfillExif) {
+    await backfillExif(options, accessKey);
+    return;
   }
 
   const existingBases = existingUnsplashImageBases();
@@ -363,4 +540,12 @@ if (isMain) {
   });
 }
 
-export { buildImageUrl, frontmatterFor, imageBase, parseArgs };
+export {
+  buildImageUrl,
+  cameraData,
+  frontmatterFor,
+  imageBase,
+  parseArgs,
+  summarizeExifCoverage,
+  upsertCameraBlock,
+};

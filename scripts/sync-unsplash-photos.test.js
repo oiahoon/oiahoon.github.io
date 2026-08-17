@@ -2,9 +2,12 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   buildImageUrl,
+  cameraData,
   frontmatterFor,
   imageBase,
   parseArgs,
+  summarizeExifCoverage,
+  upsertCameraBlock,
 } from "./sync-unsplash-photos.js";
 
 const samplePhoto = {
@@ -73,9 +76,49 @@ test("frontmatter creates a draft with source metadata and dimensions", () => {
 
 test("parseArgs supports dry-run and bounded imports", () => {
   assert.deepEqual(parseArgs(["--dry-run", "--limit=3"]), {
+    auditExif: false,
+    backfillExif: false,
     dryRun: true,
     help: false,
     limit: 3,
   });
   assert.throws(() => parseArgs(["--limit=0"]), /positive integer/);
+});
+
+test("cameraData formats detail endpoint EXIF values", () => {
+  assert.deepEqual(cameraData(samplePhoto), {
+    model: "Leica M11",
+    settings: "ISO 200, f/2.8, 1/250s, 35mm",
+  });
+});
+
+test("upsertCameraBlock preserves existing model and fills settings", () => {
+  const source = `---\ntitle: Test\ncamera:\n  model: "Leica M11"\nlocation: Wetzlar\n---\n`;
+  const updated = upsertCameraBlock(source, {
+    model: "Leica Camera AG, Leica M11",
+    settings: "ISO 200, f/2.8, 1/250s, 35mm",
+  });
+
+  assert.match(updated, /model: "Leica M11"/);
+  assert.match(updated, /settings: "ISO 200, f\/2\.8, 1\/250s, 35mm"/);
+  assert.match(updated, /location: Wetzlar/);
+});
+
+test("summarizeExifCoverage reports partial archive coverage", () => {
+  assert.deepEqual(
+    summarizeExifCoverage([
+      { camera: { model: "Leica M11", settings: "ISO 200" } },
+      { camera: { model: "Leica M11" } },
+      { camera: {} },
+    ]),
+    {
+      total: 3,
+      withModel: 2,
+      withLens: 0,
+      withSettings: 1,
+      missingModel: 1,
+      modelCoverage: "66.7%",
+      models: { "Leica M11": 2 },
+    },
+  );
 });

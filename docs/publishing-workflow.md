@@ -126,6 +126,21 @@ npm run photos:unsplash:sync
 npm run photos:unsplash:sync -- --limit=5
 ```
 
+检查当前仓库的 EXIF 覆盖率不需要 Access Key：
+
+```bash
+npm run photos:exif:audit
+```
+
+历史作品需要读取每张照片的详情接口才能可靠取得 EXIF。配置 Access Key 后，建议按 40 张一批先预览再回填：
+
+```bash
+npm run photos:unsplash:sync -- --backfill-exif --dry-run --limit=40
+npm run photos:unsplash:sync -- --backfill-exif --limit=40
+```
+
+回填只会补充现有 Markdown 的 `camera` 区块，不会覆盖已有机型、删除内容或触发下载追踪。
+
 脚本通过 Unsplash 官方 API 分页读取账号照片，以原始图片路径去重，只为新增照片生成 `draft: true` 的 Markdown；不会覆盖或删除已有内容。图片 URL 保留 API 返回的 `ixid`，并添加响应式图片需要的格式、宽度和质量参数。正式写入新作品时，脚本还会调用 Unsplash 的下载追踪端点。
 
 ### 3. 审阅并发布草稿
