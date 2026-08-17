@@ -485,13 +485,19 @@ function filterGroups(photo: typeof sorted[number]) {
     }
 
     .year-index {
-      position: static;
+      position: sticky;
+      top: 0;
+      z-index: 6;
       flex-direction: row;
       gap: 0;
       width: 100%;
+      margin-inline: -0.5rem;
       margin-bottom: 1rem;
+      padding-inline: 0.5rem;
       overflow-x: auto;
       border: 0;
+      background: rgba(17, 16, 14, 0.94);
+      backdrop-filter: blur(12px);
       scrollbar-width: none;
     }
 
@@ -567,7 +573,7 @@ function filterGroups(photo: typeof sorted[number]) {
   }
 </style>
 
-<script>
+<script is:inline data-astro-rerun>
   (() => {
     const root = document.querySelector('.photo-index-page');
     if (!root || root.dataset.photoFiltersBound === 'true') return;
@@ -575,12 +581,14 @@ function filterGroups(photo: typeof sorted[number]) {
     const links = Array.from(root.querySelectorAll('[data-photo-filter]'));
     const items = Array.from(root.querySelectorAll('[data-photo-filter-groups]'));
     const yearLinks = Array.from(root.querySelectorAll('[data-photo-year-link]'));
+    const yearIndex = root.querySelector('.year-index');
     const emptyState = root.querySelector('[data-photo-empty]');
     if (!links.length || !items.length) return;
 
     root.dataset.photoFiltersBound = 'true';
     const controller = new AbortController();
     const filters = new Set(links.map((link) => link.getAttribute('data-photo-filter')).filter(Boolean));
+    let yearScrollFrame = 0;
 
     function getFilterFromUrl() {
       const tag = new URL(window.location.href).searchParams.get('tag') || 'all';
@@ -596,6 +604,41 @@ function filterGroups(photo: typeof sorted[number]) {
       }
       url.hash = '';
       history.pushState({ photoFilter: filter }, '', url);
+    }
+
+    function setActiveYear(year, reveal = true) {
+      if (!year) return;
+
+      const activeLink = yearLinks.find((link) => !link.hidden && link.getAttribute('data-photo-year-link') === year);
+      if (!activeLink) return;
+
+      const changed = activeLink.getAttribute('aria-current') !== 'location';
+      yearLinks.forEach((link) => link.removeAttribute('aria-current'));
+      activeLink.setAttribute('aria-current', 'location');
+
+      if (changed && reveal && yearIndex && yearIndex.scrollWidth > yearIndex.clientWidth) {
+        const left = activeLink.offsetLeft - (yearIndex.clientWidth - activeLink.clientWidth) / 2;
+        yearIndex.scrollTo({
+          left: Math.max(0, left),
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        });
+      }
+    }
+
+    function syncActiveYear(reveal = true) {
+      const firstVisibleLink = yearLinks.find((link) => !link.hidden);
+      const threshold = Math.max(24, Math.min(window.innerHeight * 0.16, 144));
+      const activeItem = items.find((item) => !item.hidden && item.getBoundingClientRect().bottom > threshold);
+      const year = activeItem?.getAttribute('data-photo-year') || firstVisibleLink?.getAttribute('data-photo-year-link');
+      setActiveYear(year, reveal);
+    }
+
+    function scheduleYearSync() {
+      if (yearScrollFrame) return;
+      yearScrollFrame = window.requestAnimationFrame(() => {
+        yearScrollFrame = 0;
+        syncActiveYear();
+      });
     }
 
     function applyFilter(filter) {
@@ -621,10 +664,8 @@ function filterGroups(photo: typeof sorted[number]) {
         link.hidden = !items.some((item) => !item.hidden && item.getAttribute('data-photo-year') === year);
       });
 
-      const firstVisibleYear = yearLinks.find((link) => !link.hidden);
-      yearLinks.forEach((link) => link.removeAttribute('aria-current'));
-      firstVisibleYear?.setAttribute('aria-current', 'location');
       if (emptyState) emptyState.hidden = visibleCount !== 0;
+      window.requestAnimationFrame(() => syncActiveYear(false));
     }
 
     links.forEach((link) => {
@@ -643,8 +684,7 @@ function filterGroups(photo: typeof sorted[number]) {
         const target = items.find((item) => !item.hidden && item.getAttribute('data-photo-year') === year);
         if (!target) return;
 
-        yearLinks.forEach((item) => item.removeAttribute('aria-current'));
-        link.setAttribute('aria-current', 'location');
+        setActiveYear(year);
         target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
 
         const url = new URL(window.location.href);
@@ -653,8 +693,13 @@ function filterGroups(photo: typeof sorted[number]) {
       }, { signal: controller.signal });
     });
 
+    window.addEventListener('scroll', scheduleYearSync, { passive: true, signal: controller.signal });
+    window.addEventListener('resize', scheduleYearSync, { passive: true, signal: controller.signal });
     window.addEventListener('popstate', () => applyFilter(getFilterFromUrl()), { signal: controller.signal });
-    document.addEventListener('astro:before-swap', () => controller.abort(), { once: true, signal: controller.signal });
+    document.addEventListener('astro:before-swap', () => {
+      if (yearScrollFrame) window.cancelAnimationFrame(yearScrollFrame);
+      controller.abort();
+    }, { once: true, signal: controller.signal });
     applyFilter(getFilterFromUrl());
   })();
 </script>
