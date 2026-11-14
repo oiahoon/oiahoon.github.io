@@ -1,0 +1,26 @@
+---
+title: "湖边吃草的牛"
+author: Joey
+date: 2025-09-27
+tags:
+  - "摄影"
+type: photography
+gallery:
+  - src: "https://images.unsplash.com/photo-1794675077651-6a52f1d90535?ixid=NHwxMjA3fDA%3D&ixlib=rb-4.1.0&auto=format&fit=max&w=1600&q=80"
+    alt: "几头牛散在山坡下，旁边就是湖。"
+    caption: "几头牛散在山坡下，旁边就是湖。"
+    width: 3888
+    height: 2918
+camera:
+  model: "Hasselblad, CFV 100C/907X"
+  lens: "XCD 45P"
+  settings: "ISO 64, f/4.8, 1/125s"
+location: "拍摄地未记录"
+draft: false
+description: "几头牛散在山坡下，旁边就是湖。"
+unsplash:
+  id: "-Gj4odkC_Nw"
+  photoUrl: "https://unsplash.com/photos/-Gj4odkC_Nw"
+  profileUrl: "https://unsplash.com/@onice"
+  photographer: "Joey Huang"
+---

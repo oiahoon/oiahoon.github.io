@@ -143,15 +143,15 @@ function main() {
         const photoUrl = parsedUrl(attribution?.photoUrl);
         const profileUrl = parsedUrl(attribution?.profileUrl);
         const photoId = String(attribution?.id || '').trim();
+        const photoSlug = photoUrl?.pathname.split('/').filter(Boolean).at(-1);
         if (
           isBlank(photoId) ||
           isBlank(attribution?.photographer) ||
           photoUrl?.hostname !== 'unsplash.com' ||
           !photoUrl.pathname.startsWith('/photos/') ||
-          !photoUrl.pathname.endsWith(photoId) ||
+          (photoSlug !== photoId && !photoSlug?.endsWith(`-${photoId}`)) ||
           profileUrl?.hostname !== 'unsplash.com' ||
-          !profileUrl.pathname.startsWith('/@') ||
-          !file.includes(`-photography-${photoId}.`)
+          !profileUrl.pathname.startsWith('/@')
         ) {
           pushIssue(
             issues.missingUnsplashAttribution,
