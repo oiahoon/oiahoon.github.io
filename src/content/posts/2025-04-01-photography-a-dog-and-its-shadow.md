@@ -9,12 +9,12 @@ type: photography
 gallery:
   - src: "/photos/a-dog-and-its-shadow.webp"
     alt: "黑狗从有斑驳树影的石砖上走过，长影伸向画面边缘。"
-    caption: "石砖上，黑狗和它的长影一起经过树荫边缘。"
+    caption: "一只黑狗走过石砖路，影子拉得很长。"
     width: 2200
     height: 1456
 camera:
   model: "Leica M6"
 location: "成都"
 draft: false
-description: "石砖上，黑狗和它的长影一起经过树荫边缘。"
+description: "一只黑狗走过石砖路，影子拉得很长。"
 ---

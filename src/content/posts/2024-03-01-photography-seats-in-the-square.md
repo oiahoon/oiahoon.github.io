@@ -9,12 +9,12 @@ type: photography
 gallery:
   - src: "/photos/seats-in-the-square.webp"
     alt: "黑白照片里，几个人沿广场各自坐在一排球形路障上。"
-    caption: "几个人各坐一颗石球，朝向和姿势都不一样。"
+    caption: "几个人坐在广场上的石球上。"
     width: 2200
     height: 1479
 camera:
   model: "Leica M6"
 location: "拍摄地未记录"
 draft: false
-description: "几个人各坐一颗石球，朝向和姿势都不一样。"
+description: "几个人坐在广场上的石球上。"
 ---

@@ -9,12 +9,12 @@ type: photography
 gallery:
   - src: "/photos/fruit-at-the-door.webp"
     alt: "两个人在门边处理和品尝果子，一只黑狗从果箱前经过。"
-    caption: "两个人坐在果箱边，黑狗正好从脚边穿过。"
+    caption: "两个人坐在门口吃果子，一只黑狗从跟前走过。"
     width: 2200
     height: 1472
 camera:
   model: "Yashica Electro 35 GT"
 location: "拍摄地未记录"
 draft: false
-description: "两个人坐在果箱边，黑狗正好从脚边穿过。"
+description: "两个人坐在门口吃果子，一只黑狗从跟前走过。"
 ---

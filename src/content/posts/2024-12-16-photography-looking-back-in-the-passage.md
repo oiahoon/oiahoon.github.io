@@ -8,7 +8,7 @@ type: photography
 gallery:
   - src: "/photos/looking-back-in-the-passage.webp"
     alt: "一名女子在有斜光的通道里回望，身后还有几名行人。"
-    caption: "她在墙边回了头，身后的脚步还在继续。"
+    caption: "走到通道里，她回头看了一眼。"
     width: 2200
     height: 1651
 camera:
@@ -17,5 +17,5 @@ camera:
   settings: "ISO 64, f/3.4, 1/800s"
 location: "日本"
 draft: false
-description: "她在墙边回了头，身后的脚步还在继续。"
+description: "走到通道里，她回头看了一眼。"
 ---

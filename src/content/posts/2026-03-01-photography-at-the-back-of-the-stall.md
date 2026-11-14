@@ -9,12 +9,12 @@ type: photography
 gallery:
   - src: "/photos/at-the-back-of-the-stall.webp"
     alt: "摊主在垂挂的货物之间低头看手机，右侧路人的背影挡住一角。"
-    caption: "垂挂的货物之间，摊主坐在里面低头看手机。"
+    caption: "摊主坐在里面看手机。"
     width: 2200
     height: 1459
 camera:
   model: "Leica M6"
 location: "成都"
 draft: false
-description: "垂挂的货物之间，摊主坐在里面低头看手机。"
+description: "摊主坐在里面看手机。"
 ---

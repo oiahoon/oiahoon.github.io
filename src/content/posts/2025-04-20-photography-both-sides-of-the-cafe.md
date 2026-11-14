@@ -8,7 +8,7 @@ type: photography
 gallery:
   - src: "/photos/both-sides-of-the-cafe.webp"
     alt: "咖啡馆暗处有人站在柜台后、有人坐在门边，门外的白衣人坐在阳光里。"
-    caption: "门柱把咖啡馆分成两侧，蓝衣路人从最远的一层经过。"
+    caption: "从咖啡馆里往外看，门口有人坐着晒太阳。"
     width: 2200
     height: 1651
 camera:
@@ -17,5 +17,5 @@ camera:
   settings: "ISO 400, f/3.4, 1/160s"
 location: "拍摄地未记录"
 draft: false
-description: "门柱把咖啡馆分成两侧，蓝衣路人从最远的一层经过。"
+description: "从咖啡馆里往外看，门口有人坐着晒太阳。"
 ---

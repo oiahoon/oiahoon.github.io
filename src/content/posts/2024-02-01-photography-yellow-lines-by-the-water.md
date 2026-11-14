@@ -9,12 +9,12 @@ type: photography
 gallery:
   - src: "/photos/yellow-lines-by-the-water.webp"
     alt: "从上方俯看，一个戴黄帽的人沿蓝绿色海水和黄色台阶走过。"
-    caption: "临水台阶上的黄色条纹，接住了砖地上经过的一顶黄帽子。"
+    caption: "从上面往下看，有个戴黄帽的人从海边走过。"
     width: 2200
     height: 1459
 camera:
   model: "Leica M6"
 location: "香港"
 draft: false
-description: "临水台阶上的黄色条纹，接住了砖地上经过的一顶黄帽子。"
+description: "从上面往下看，有个戴黄帽的人从海边走过。"
 ---
