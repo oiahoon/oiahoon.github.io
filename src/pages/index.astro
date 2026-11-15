@@ -149,6 +149,26 @@ function photoMeta(photo: typeof photographs[number]) {
 
   document.addEventListener('pointerup', clearTouchFeedback);
   document.addEventListener('pointercancel', clearTouchFeedback);
+
+  document.addEventListener('astro:page-load', () => {
+    if (!('IntersectionObserver' in window) || !matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+
+    const photos = Array.from(document.querySelectorAll('.selected-card__media'))
+      .filter((photo) => photo.getBoundingClientRect().top >= window.innerHeight);
+    if (photos.length === 0) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.12) continue;
+
+        entry.target.classList.add('selected-card__media--entered');
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: 0.12 });
+
+    for (const photo of photos) observer.observe(photo);
+    document.addEventListener('astro:before-swap', () => observer.disconnect(), { once: true });
+  });
 </script>
 
 <style>
@@ -217,8 +237,7 @@ function photoMeta(photo: typeof photographs[number]) {
     text-decoration: none;
     transition:
       color var(--duration-fast) var(--ease-standard),
-      background-color var(--duration-fast) var(--ease-standard),
-      transform var(--duration-fast) var(--ease-standard);
+      background-color var(--duration-fast) var(--ease-standard);
   }
 
   .home-text-link,
@@ -232,10 +251,17 @@ function photoMeta(photo: typeof photographs[number]) {
     text-underline-offset: 0.35em;
     text-decoration-thickness: 1px;
     text-decoration-color: color-mix(in srgb, currentColor 56%, transparent);
+  }
+
+  :is(.home-text-link, .home-section__head a, .home-about a, .selected-card h3 a, .legacy-row h3 a) {
     transition:
       color var(--duration-fast) var(--ease-standard),
-      text-decoration-color var(--duration-fast) var(--ease-standard),
-      transform var(--duration-fast) var(--ease-standard);
+      text-decoration-color var(--duration-fast) var(--ease-standard);
+  }
+
+  :is(.selected-card h3 a, .legacy-row h3 a) {
+    text-decoration: underline 2px transparent;
+    text-underline-offset: 0.24em;
   }
 
   .home-section {
@@ -499,24 +525,39 @@ function photoMeta(photo: typeof photographs[number]) {
       background: color-mix(in srgb, var(--text) 90%, var(--accent));
     }
 
-    .home-text-link:hover,
-    .home-section__head a:hover,
-    .home-about a:hover {
+    :is(.home-text-link, .home-section__head a, .home-about a, .selected-card h3 a, .legacy-row h3 a):hover {
       color: var(--accent);
       text-decoration-color: currentColor;
+      text-decoration-thickness: 2px;
     }
   }
 
-  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .home-button:hover,
-    .home-text-link:hover,
-    .home-section__head a:hover,
-    .home-about a:hover {
-      transform: translateY(-1px);
-    }
+  :is(.home-text-link, .home-section__head a, .home-about a, .selected-card h3 a, .legacy-row h3 a):focus-visible {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 2px;
+  }
 
-    .selected-card:hover .selected-card__image {
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .selected-card__media:hover .selected-card__image {
       transform: scale(1.018);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .selected-card__media--entered {
+      animation: selected-photo-enter 320ms var(--ease-standard);
+    }
+  }
+
+  @keyframes selected-photo-enter {
+    from {
+      opacity: 0.94;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
