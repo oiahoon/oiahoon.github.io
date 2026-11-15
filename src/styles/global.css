@@ -15,7 +15,6 @@
   --muted: #6f685f;
   --line: #d9d0c3;
   --accent: #9c4f3f;
-  --ambient: rgba(156, 79, 63, 0.07);
   --text-soft: color-mix(in srgb, var(--text) 88%, var(--muted));
   --inline-code-bg: color-mix(in srgb, var(--accent) 9%, var(--surface));
   --inline-code-text: color-mix(in srgb, var(--text) 84%, var(--accent));
@@ -43,7 +42,6 @@
   --muted: #aaa197;
   --line: #34302b;
   --accent: #d08a72;
-  --ambient: rgba(208, 138, 114, 0.08);
   --text-soft: color-mix(in srgb, var(--text) 88%, var(--muted));
   --inline-code-bg: color-mix(in srgb, var(--accent) 13%, var(--surface));
   --inline-code-text: #f1d4c6;
@@ -52,6 +50,7 @@
 
 @layer base {
   html {
+    background-color: var(--bg);
     font-family: var(--font-sans);
     line-height: 1.7;
     text-rendering: optimizeLegibility;
@@ -64,13 +63,9 @@
   body {
     margin: 0;
     color: var(--text);
-    background-color: var(--bg);
-    background-image: radial-gradient(1200px 400px at 10% -10%, var(--ambient), transparent 70%);
     font-family: var(--font-sans);
     overflow-x: clip;
-    transition:
-      color var(--duration-base) var(--ease-standard),
-      background-color var(--duration-base) var(--ease-standard);
+    transition: color var(--duration-base) var(--ease-standard);
   }
 
   .page-root {
