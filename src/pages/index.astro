@@ -6,9 +6,9 @@ import ProgressiveImage from '../components/ProgressiveImage.astro';
 const posts = await getCollection('posts', ({ data }) => !data.draft);
 const sorted = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 const legacyNotes = sorted.filter((p) => p.data.type !== 'photography').slice(0, 4);
-const photographs = sorted.filter((p) => p.data.type === 'photography');
-const heroPhoto = photographs[0];
-const selectedPhotos = photographs.slice(0, 5);
+const photographs = sorted.filter((p) => p.data.type === 'photography' && p.data.gallery?.[0]);
+const [heroPhoto, ...otherPhotos] = photographs;
+const selectedPhotos = otherPhotos.slice(0, 5);
 
 const description = 'Joey Huang 的摄影作品、生活观察，以及一些早年的工程笔记。';
 
@@ -53,7 +53,7 @@ function photoMeta(photo: typeof photographs[number]) {
     </div>
   </section>
 
-  <section class="home-section">
+  <section class="home-section home-section--selected">
     <div class="shell">
       <div class="home-section__head">
         <h2>Selected photographs</h2>
@@ -78,7 +78,7 @@ function photoMeta(photo: typeof photographs[number]) {
                   width={image.width}
                   height={image.height}
                   sizes={index === 0 ? '(min-width: 960px) 54vw, 100vw' : '(min-width: 960px) 28vw, 50vw'}
-                  style={index === 0 ? undefined : `view-transition-name: photo-cover-${photo.id};`}
+                  style={`view-transition-name: photo-cover-${photo.id};`}
                 />
               </a>
               <h3><a href={`/posts/${photo.id}/`} data-astro-prefetch>{photo.data.title}</a></h3>
@@ -152,12 +152,17 @@ function photoMeta(photo: typeof photographs[number]) {
     height: 100%;
   }
 
+  .home-hero__copy {
+    min-width: 0;
+    container-type: inline-size;
+  }
+
   .home-hero__copy h1 {
-    max-width: 10ch;
     margin: 0;
-    font-size: clamp(3.4rem, 10vw, 6.4rem);
+    font-size: min(6rem, 15cqi);
     line-height: 0.95;
     font-weight: 600;
+    overflow-wrap: anywhere;
   }
 
   .home-hero__lede {
@@ -229,6 +234,11 @@ function photoMeta(photo: typeof photographs[number]) {
     font-weight: 600;
   }
 
+  .home-section--notes h2 {
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+    line-height: 1.15;
+  }
+
   .home-section__head p {
     max-width: 28rem;
     margin: 0;
@@ -255,6 +265,10 @@ function photoMeta(photo: typeof photographs[number]) {
     display: block;
     overflow: hidden;
     background: var(--line);
+  }
+
+  .selected-card__media:focus-visible {
+    outline-color: var(--accent);
   }
 
   .selected-card__image {
@@ -318,6 +332,10 @@ function photoMeta(photo: typeof photographs[number]) {
     font-size: 0.88rem;
   }
 
+  .legacy-row time {
+    font-variant-numeric: tabular-nums;
+  }
+
   .legacy-row h3 {
     margin: 0;
     font-family: var(--font-sans);
@@ -338,25 +356,29 @@ function photoMeta(photo: typeof photographs[number]) {
 
   @media (min-width: 720px) {
     .home-section__head,
-    .home-about,
-    .legacy-row {
+    .home-about {
       grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.42fr);
     }
 
+    .legacy-row {
+      grid-template-columns: 6rem minmax(0, 1fr) minmax(8.5rem, 0.28fr);
+      align-items: baseline;
+      column-gap: clamp(1rem, 3vw, 2.5rem);
+    }
   }
 
   @media (max-width: 640px) {
     .home-hero {
-      margin-top: 2rem;
+      margin-top: 1.25rem;
     }
 
     .home-hero__grid {
-      gap: 1.45rem;
+      gap: 1.1rem;
     }
 
     .home-hero__media {
-      aspect-ratio: 16 / 13;
-      max-height: 43vh;
+      aspect-ratio: 16 / 10;
+      max-height: 36svh;
     }
 
     .home-hero__image {
@@ -364,30 +386,56 @@ function photoMeta(photo: typeof photographs[number]) {
     }
 
     .home-hero__copy h1 {
-      max-width: 11ch;
-      font-size: clamp(2.85rem, 13vw, 3.85rem);
+      font-size: min(3.85rem, 13.5cqi);
       line-height: 0.98;
     }
 
     .home-hero__lede {
-      margin-top: 0.9rem;
+      margin-top: 0.75rem;
       font-size: 0.98rem;
       line-height: 1.72;
     }
 
     .home-hero__actions {
-      margin-top: 1.35rem;
+      margin-top: 1rem;
+    }
+
+    .home-section--selected {
+      margin-top: 2.5rem;
+    }
+
+    .home-section--selected .home-section__head {
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: 0.75rem;
+      align-items: center;
+      padding-top: 1.3rem;
+    }
+
+    .home-section--selected h2 {
+      font-size: 1.9rem;
+    }
+
+    .selected-grid {
+      margin-top: 1.25rem;
     }
   }
 
   @media (min-width: 641px) and (max-width: 959px) {
+    .home-hero__grid {
+      gap: 1.75rem;
+    }
+
     .home-hero__media {
       aspect-ratio: 16 / 10;
-      max-height: 48vh;
+      max-height: 38svh;
     }
 
     .home-hero__image {
       object-position: center 42%;
+    }
+
+    .home-hero__copy h1 {
+      font-size: min(4.75rem, 13cqi);
     }
   }
 
@@ -430,16 +478,11 @@ function photoMeta(photo: typeof photographs[number]) {
       text-decoration-color: currentColor;
       transform: translateY(-1px);
     }
-
-    .selected-card:hover .selected-card__image,
-    .selected-card:focus-within .selected-card__image {
-      transform: scale(1.018);
-    }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .selected-card__image {
-      transition: none;
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .selected-card:hover .selected-card__image {
+      transform: scale(1.018);
     }
   }
 </style>

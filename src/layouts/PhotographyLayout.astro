@@ -29,6 +29,7 @@ const heroPhoto = gallery?.[0];
 const galleryPhotos = heroPhoto ? gallery.slice(1) : gallery ?? [];
 const allPhotos = heroPhoto ? [heroPhoto, ...galleryPhotos] : galleryPhotos;
 const totalPhotos = heroPhoto ? galleryPhotos.length + 1 : galleryPhotos.length;
+const hasMultiplePhotos = totalPhotos > 1;
 const currentPath = Astro.url.pathname;
 const year = new Date().getFullYear();
 const visibleTags = tags.filter((tag) => tag !== '摄影');
@@ -146,45 +147,9 @@ const navigation = [
 
       {heroPhoto && (
         <section class={`photo-hero photo-hero--${cameraBrand}`} id="photo-1" data-photo-panel data-photo-index="1" data-camera-brand={cameraBrand}>
-          <div class="photo-hero__frame">
-            <div
-              class={`photo-camera-frame photo-camera-frame--${cameraBrand} photo-camera-frame--${heroShape} ${cameraModel ? 'has-camera-mark' : ''}`}
-              style={`--hero-ratio: ${heroWidth} / ${heroHeight}; --hero-ratio-number: ${heroRatio};`}
-            >
-              <div class="photo-camera-frame__image">
-                <ProgressiveImage
-                  src={heroPhoto.src}
-                  alt={heroPhoto.alt || title || '摄影作品'}
-                  class="photo-hero__image"
-                  loading="eager"
-                  decoding="async"
-                  fetchpriority="high"
-                  width={heroPhoto.width}
-                  height={heroPhoto.height}
-                  sizes="100vw"
-                  style={photoTransitionName ? `view-transition-name: ${photoTransitionName};` : undefined}
-                />
-                <button
-                  type="button"
-                  class="photo-hero__viewer-trigger"
-                  data-open-lightbox
-                  data-photo-index="1"
-                  aria-label={`全屏查看第 1 张照片${title ? `：${title}` : ''}`}
-                ></button>
-              </div>
-              {cameraModel && (
-                <p class="photo-camera-frame__mark" aria-label={`拍摄设备：${cameraModel}`}>
-                  <span>{cameraMaker}</span>
-                  <span>{cameraDisplayModel}</span>
-                </p>
-              )}
-            </div>
-            <div class="photo-hero__veil"></div>
-          </div>
-
           <div class="photo-hero__overlay photo-hero__overlay--top" data-photo-overlay-top>
             <div class="photo-hero__topbar">
-              <a href="/photography/" class="photo-hero__back" data-astro-prefetch><UiIcon name="arrowLeft" size={15} /> <span>返回摄影列表</span></a>
+              <a href="/photography/" class="photo-hero__back" data-photo-archive-back data-astro-prefetch><UiIcon name="arrowLeft" size={15} /> <span>返回摄影列表</span></a>
               <div class="photo-hero__controls">
                 <nav class="photo-work-nav" aria-label="浏览摄影作品">
                   {previousPhoto ? (
@@ -219,6 +184,42 @@ const navigation = [
                 )}
               </div>
             </div>
+          </div>
+
+          <div class="photo-hero__frame">
+            <div
+              class={`photo-camera-frame photo-camera-frame--${cameraBrand} photo-camera-frame--${heroShape} ${cameraModel ? 'has-camera-mark' : ''}`}
+              style={`--hero-ratio: ${heroWidth} / ${heroHeight}; --hero-ratio-number: ${heroRatio};`}
+            >
+              <div class="photo-camera-frame__image">
+                <ProgressiveImage
+                  src={heroPhoto.src}
+                  alt={heroPhoto.alt || title || '摄影作品'}
+                  class="photo-hero__image"
+                  loading="eager"
+                  decoding="async"
+                  fetchpriority="high"
+                  width={heroPhoto.width}
+                  height={heroPhoto.height}
+                  sizes="100vw"
+                  style={photoTransitionName ? `view-transition-name: ${photoTransitionName};` : undefined}
+                />
+                <button
+                  type="button"
+                  class="photo-hero__viewer-trigger"
+                  data-open-lightbox
+                  data-photo-index="1"
+                  aria-label={`全屏查看第 1 张照片${title ? `：${title}` : ''}`}
+                ></button>
+              </div>
+              {cameraModel && (
+                <p class="photo-camera-frame__mark" aria-label={`拍摄设备：${cameraModel}`}>
+                  <span>{cameraMaker}</span>
+                  <span>{cameraDisplayModel}</span>
+                </p>
+              )}
+            </div>
+            <div class="photo-hero__veil"></div>
           </div>
 
           <div class="photo-hero__overlay photo-hero__overlay--bottom" data-photo-overlay-bottom>
@@ -374,18 +375,20 @@ const navigation = [
         </section>
       )}
 
-      <div class="photo-lightbox" data-photo-lightbox hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Photo viewer" tabindex="-1">
+      <div class:list={['photo-lightbox', { 'photo-lightbox--single': !hasMultiplePhotos }]} data-photo-lightbox hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Photo viewer" tabindex="-1">
         <button type="button" class="photo-lightbox__close" data-lightbox-close aria-label="关闭全屏查看">关闭</button>
-        <button type="button" class="photo-lightbox__nav photo-lightbox__nav--prev" data-lightbox-prev aria-label="查看上一张">←</button>
+        {hasMultiplePhotos && <button type="button" class="photo-lightbox__nav photo-lightbox__nav--prev" data-lightbox-prev aria-label="查看上一张">←</button>}
         <div class="photo-lightbox__stage">
           <img src="" alt="" class="photo-lightbox__image" data-lightbox-image />
-          <div class="photo-lightbox__meta">
-            <p class="photo-lightbox__counter" data-lightbox-counter></p>
-            <p class="photo-lightbox__caption" data-lightbox-caption></p>
-            <div class="photo-lightbox__thumbs" data-lightbox-thumbs></div>
-          </div>
+          {(hasMultiplePhotos || heroPhoto?.caption?.trim()) && (
+            <div class="photo-lightbox__meta">
+              {hasMultiplePhotos && <p class="photo-lightbox__counter" data-lightbox-counter></p>}
+              <p class="photo-lightbox__caption" data-lightbox-caption></p>
+              {hasMultiplePhotos && <div class="photo-lightbox__thumbs" data-lightbox-thumbs></div>}
+            </div>
+          )}
         </div>
-        <button type="button" class="photo-lightbox__nav photo-lightbox__nav--next" data-lightbox-next aria-label="查看下一张">→</button>
+        {hasMultiplePhotos && <button type="button" class="photo-lightbox__nav photo-lightbox__nav--next" data-lightbox-next aria-label="查看下一张">→</button>}
       </div>
 
       <footer class="photo-footer">
@@ -1598,11 +1601,20 @@ const navigation = [
 
     .photo-hero,
     .photo-hero__frame {
-      min-height: calc(100svh - 4.4rem);
+      min-height: 0;
+    }
+
+    .photo-hero__frame {
+      padding-block: clamp(2.25rem, 8svh, 4rem) clamp(2rem, 5svh, 3rem);
+    }
+
+    .photo-hero__overlay {
+      position: relative;
     }
 
     .photo-hero__overlay--top {
-      top: 1.6rem;
+      top: auto;
+      padding-top: 1.6rem;
     }
 
     .photo-hero__topbar {
@@ -1632,7 +1644,6 @@ const navigation = [
         calc((100svh - 10.2rem) * var(--hero-ratio-number)),
         calc(100vw - 1.2rem)
       );
-      transform: translateY(-0.85rem);
     }
 
     .photo-camera-frame--portrait {
@@ -1640,7 +1651,6 @@ const navigation = [
         calc((max(19rem, 100svh - 30rem)) * var(--hero-ratio-number)),
         calc(100vw - 8rem)
       );
-      transform: translateY(-3.8rem);
     }
 
     .photo-hero__overlay--bottom {
@@ -1710,22 +1720,27 @@ const navigation = [
     }
   }
 
+  .photo-lightbox--single {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 4rem;
+    overflow: auto;
+  }
+
+  .photo-lightbox--single .photo-lightbox__stage {
+    margin-top: 0;
+    gap: 0.75rem;
+  }
+
+  .photo-lightbox--single .photo-lightbox__image {
+    max-width: min(100%, 110rem);
+    max-height: max(5rem, calc(100dvh - 11rem));
+  }
+
+  .photo-lightbox--single .photo-lightbox__caption {
+    margin: 0;
+  }
+
   @media (max-width: 720px) and (max-height: 740px) {
-    .photo-camera-frame {
-      width: min(
-        calc((100svh - 22rem) * var(--hero-ratio-number)),
-        calc(100vw - 6rem)
-      );
-      transform: translateY(-4.2rem);
-    }
-
-    .photo-camera-frame--portrait {
-      width: min(
-        calc((100svh - 27rem) * var(--hero-ratio-number)),
-        calc(100vw - 14.5rem)
-      );
-    }
-
     .photo-hero__title {
       font-size: clamp(1.9rem, 9vw, 2.4rem);
     }
@@ -1757,6 +1772,17 @@ const navigation = [
   const heroTopOverlay = document.querySelector('[data-photo-overlay-top]');
   const heroBottomOverlay = document.querySelector('[data-photo-overlay-bottom]');
   const controller = new AbortController();
+  const archiveBackLink = galleryRoot?.querySelector('[data-photo-archive-back]');
+  const incomingArchiveUrl = archiveBackLink?.dataset.photoArchiveUrl;
+  const archiveOrigin = incomingArchiveUrl
+    ? { url: incomingArchiveUrl, top: Number(archiveBackLink.dataset.photoArchiveTop) }
+    : history.state?.photoArchiveOrigin;
+
+  if (archiveBackLink && archiveOrigin) {
+    archiveBackLink.href = archiveOrigin.url;
+    if (incomingArchiveUrl) history.replaceState({ ...history.state, photoArchiveOrigin: archiveOrigin }, '');
+  }
+
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const scrollBehavior = reduceMotion.matches ? 'auto' : 'smooth';
   let lightboxCloseTimer = 0;
@@ -1831,14 +1857,18 @@ const navigation = [
   }, { signal: controller.signal });
 
   function renderLightbox() {
-    if (!photos[lightboxIndex] || !lightbox || !lightboxImage || !lightboxCaption || !lightboxCounter) return;
     const current = photos[lightboxIndex];
+    if (!current || !lightboxImage) return;
+
     lightboxImage.src = current.src;
     lightboxImage.alt = current.alt || '';
-    lightboxCaption.textContent = current.caption || '';
-    lightboxCounter.textContent = `照片 ${String(lightboxIndex + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}`;
+    if (lightboxCaption) lightboxCaption.textContent = current.caption || '';
+    if (lightboxCounter) {
+      lightboxCounter.textContent = `照片 ${String(lightboxIndex + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}`;
+    }
     resetLightboxTransform();
     if (lightboxThumbs) {
+      const restoreThumbnailFocus = lightboxThumbs.contains(document.activeElement);
       lightboxThumbs.replaceChildren();
       photos.forEach((photo, index) => {
         const thumb = document.createElement('button');
@@ -1858,6 +1888,7 @@ const navigation = [
       });
 
       const activeThumb = lightboxThumbs.querySelector('.photo-lightbox__thumb.is-active');
+      if (restoreThumbnailFocus) activeThumb?.focus({ preventScroll: true });
       activeThumb?.scrollIntoView({ behavior: scrollBehavior, block: 'nearest', inline: 'center' });
     }
   }
@@ -1926,11 +1957,11 @@ const navigation = [
         lightboxReturnFocus?.focus?.({ preventScroll: true });
         lightboxReturnFocus = null;
       }
-    }, 240);
+    }, reduceMotion.matches ? 0 : 240);
   }
 
   function stepLightbox(direction) {
-    if (!photos.length) return;
+    if (photos.length < 2) return;
     lightboxIndex = (lightboxIndex + direction + photos.length) % photos.length;
     renderLightbox();
   }
@@ -2014,7 +2045,18 @@ const navigation = [
 
   syncTopbarState();
   window.addEventListener('scroll', syncTopbarState, { passive: true, signal: controller.signal });
-  document.addEventListener('astro:before-swap', () => {
+  document.addEventListener('astro:before-swap', (event) => {
+    if (archiveOrigin && event.navigationType === 'push') {
+      const archive = event.newDocument.querySelector('.photo-index-page');
+      const nextBackLink = event.newDocument.querySelector('[data-photo-archive-back]');
+      if (archive && event.sourceElement === archiveBackLink) {
+        archive.dataset.photoArchiveTop = String(archiveOrigin.top);
+      } else if (nextBackLink) {
+        nextBackLink.dataset.photoArchiveUrl = archiveOrigin.url;
+        nextBackLink.dataset.photoArchiveTop = String(archiveOrigin.top);
+      }
+    }
+
     window.clearTimeout(lightboxCloseTimer);
     observer?.disconnect();
     unlockPageScroll();

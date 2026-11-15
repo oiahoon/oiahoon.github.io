@@ -3,7 +3,9 @@ import { getCollection } from 'astro:content';
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
 import ProgressiveImage from '../components/ProgressiveImage.astro';
 
-const photos = await getCollection('posts', ({ data }) => !data.draft && data.type === 'photography');
+const photos = await getCollection('posts', ({ data }) =>
+  !data.draft && data.type === 'photography' && Boolean(data.gallery?.[0])
+);
 const sorted = photos.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 const filters = [
   { label: 'All', value: 'all' },
@@ -14,13 +16,8 @@ const filters = [
   { label: 'Trees', value: 'trees' },
   { label: 'Film', value: 'film' },
 ] as const;
-const years = [...new Set(sorted.map((photo) => photo.data.date.getFullYear()))].sort((a, b) => b - a);
-const firstPhotoByYear = new Map<number, string>();
-
-sorted.forEach((photo) => {
-  const year = photo.data.date.getFullYear();
-  if (!firstPhotoByYear.has(year)) firstPhotoByYear.set(year, photo.id);
-});
+const photosByYear = Map.groupBy(sorted.entries(), ([, photo]) => photo.data.date.getFullYear());
+const years = [...photosByYear.keys()];
 
 function firstImage(photo: typeof sorted[number]) {
   return photo.data.gallery?.[0];
@@ -86,6 +83,7 @@ function filterGroups(photo: typeof sorted[number]) {
               href={index === 0 ? '/photography/' : `/photography/?tag=${filter.value}`}
               aria-current={index === 0 ? 'page' : undefined}
               data-photo-filter={filter.value}
+              data-astro-reload
             >
               {filter.label}
             </a>
@@ -100,6 +98,7 @@ function filterGroups(photo: typeof sorted[number]) {
               href={`#year-${year}`}
               aria-current={index === 0 ? 'location' : undefined}
               data-photo-year-link={year}
+              data-astro-reload
             >
               {year}
             </a>
@@ -107,50 +106,52 @@ function filterGroups(photo: typeof sorted[number]) {
         </nav>
 
         <div class="contact-sheet" aria-live="polite">
-          {sorted.map((photo, index) => {
-            const image = firstImage(photo);
-            if (!image) return null;
-            const year = photo.data.date.getFullYear();
-            const isYearStart = firstPhotoByYear.get(year) === photo.id;
-            const title = displayTitle(photo);
-            const ratio = image.width && image.height ? `${image.width} / ${image.height}` : '3 / 2';
-            return (
-              <article
-                class={`contact-card ${cardVariant(photo, index)}`}
-                id={isYearStart ? `year-${year}` : undefined}
-                data-photo-year={year}
-                data-photo-filter-groups={filterGroups(photo)}
-                style={`--photo-ratio: ${ratio};`}
-              >
-                <a
-                  href={`/posts/${photo.id}/`}
-                  class="contact-card__media"
-                  aria-label={title}
-                  data-astro-prefetch
-                >
-                  <ProgressiveImage
-                    src={image.src}
-                    alt={image.alt || title}
-                    class="contact-card__image"
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                    decoding="async"
-                    fetchpriority={index === 0 ? 'high' : 'low'}
-                    width={image.width}
-                    height={image.height}
-                    sizes={index === 0 ? '(min-width: 960px) 30vw, 100vw' : '(min-width: 960px) 24vw, 50vw'}
-                    style={`view-transition-name: photo-cover-${photo.id};`}
-                  />
-                  {index !== 0 && <span class="contact-card__hover-label">{photo.data.title || title}</span>}
-                </a>
-                {index === 0 && (
-                  <div class="contact-card__caption">
-                    <h2><a href={`/posts/${photo.id}/`} data-astro-prefetch style={`view-transition-name: photo-title-${photo.id};`}>{title}</a></h2>
-                    <p>{cardMeta(photo, true)}</p>
-                  </div>
-                )}
-              </article>
-            );
-          })}
+          {[...photosByYear].map(([year, entries]) => (
+            <div class="contact-sheet__year" data-photo-year-group={year}>
+              {entries.map(([index, photo], yearIndex) => {
+                const image = firstImage(photo);
+                if (!image) return null;
+                const title = displayTitle(photo);
+                const ratio = image.width && image.height ? `${image.width} / ${image.height}` : '3 / 2';
+                return (
+                  <article
+                    class={`contact-card ${cardVariant(photo, index)}`}
+                    id={yearIndex === 0 ? `year-${year}` : undefined}
+                    data-photo-year={year}
+                    data-photo-filter-groups={filterGroups(photo)}
+                    style={`--photo-ratio: ${ratio};`}
+                  >
+                    <a
+                      href={`/posts/${photo.id}/`}
+                      class="contact-card__media"
+                      aria-label={title}
+                      data-astro-prefetch
+                    >
+                      <ProgressiveImage
+                        src={image.src}
+                        alt={image.alt || title}
+                        class="contact-card__image"
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                        decoding="async"
+                        fetchpriority={index === 0 ? 'high' : 'low'}
+                        width={image.width}
+                        height={image.height}
+                        sizes={index === 0 ? '(min-width: 960px) 30vw, 100vw' : '(min-width: 960px) 24vw, 50vw'}
+                        style={`view-transition-name: photo-cover-${photo.id};`}
+                      />
+                      {index !== 0 && <span class="contact-card__hover-label">{photo.data.title || title}</span>}
+                    </a>
+                    {index === 0 && (
+                      <div class="contact-card__caption">
+                        <h2><a href={`/posts/${photo.id}/`} data-astro-prefetch style={`view-transition-name: photo-title-${photo.id};`}>{title}</a></h2>
+                        <p>{cardMeta(photo, true)}</p>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+          ))}
           <p class="contact-sheet__empty" data-photo-empty hidden>没有符合当前筛选的摄影作品。</p>
         </div>
       </div>
@@ -162,6 +163,7 @@ function filterGroups(photo: typeof sorted[number]) {
   .photo-index-page {
     margin-top: 0;
     min-height: 100vh;
+    overflow-anchor: none;
     padding-block: clamp(1.75rem, 3vw, 2.8rem) clamp(4rem, 8vw, 7rem);
     background: #11100e;
     color: #eee7dc;
@@ -241,6 +243,7 @@ function filterGroups(photo: typeof sorted[number]) {
   }
 
   .contact-card[hidden],
+  .contact-sheet__year[hidden],
   .year-index a[hidden] {
     display: none;
   }
@@ -286,6 +289,12 @@ function filterGroups(photo: typeof sorted[number]) {
   }
 
   .contact-sheet {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    min-width: 0;
+  }
+
+  .contact-sheet__year {
     display: grid;
     grid-template-columns: repeat(15, minmax(0, 1fr));
     grid-auto-flow: dense;
@@ -458,7 +467,7 @@ function filterGroups(photo: typeof sorted[number]) {
       justify-content: flex-start;
     }
 
-    .contact-sheet {
+    .contact-sheet__year {
       grid-template-columns: repeat(8, minmax(0, 1fr));
       grid-auto-rows: 4.2rem;
     }
@@ -483,23 +492,20 @@ function filterGroups(photo: typeof sorted[number]) {
       padding-top: 1.3rem;
     }
 
-    .filter-index {
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      width: 100%;
-      overflow-x: auto;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
+    .photo-index-head {
+      gap: 0.9rem;
+      margin-bottom: 1rem;
     }
 
-    .filter-index::-webkit-scrollbar {
-      display: none;
+    .filter-index {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      width: 100%;
     }
 
     .filter-index a {
-      flex: 0 0 auto;
       min-height: 2.75rem;
-      padding-inline: 0.9rem;
+      padding-inline: 0.25rem;
     }
 
     .photo-index-title h1 {
@@ -547,7 +553,7 @@ function filterGroups(photo: typeof sorted[number]) {
       border-bottom-color: #b86f55;
     }
 
-    .contact-sheet {
+    .contact-sheet__year {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-auto-flow: row;
       grid-auto-rows: auto;
@@ -573,9 +579,18 @@ function filterGroups(photo: typeof sorted[number]) {
       overflow: hidden;
     }
 
-    .contact-card:not(.is-lead) .contact-card__media {
+    .contact-card[id^="year-"] {
+      scroll-margin-top: 3.75rem;
+    }
+
+    .contact-card:not(.is-lead) {
       aspect-ratio: var(--photo-ratio);
       max-height: 22rem;
+      contain-intrinsic-size: none;
+    }
+
+    .contact-card:not(.is-lead) .contact-card__media {
+      height: 100%;
     }
 
     .contact-card.is-lead .contact-card__media {
@@ -584,7 +599,7 @@ function filterGroups(photo: typeof sorted[number]) {
     }
   }
 
-  @media (hover: hover) {
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .contact-card:hover .contact-card__image,
     .contact-card:focus-within .contact-card__image {
       transform: scale(1.018);
@@ -616,6 +631,7 @@ function filterGroups(photo: typeof sorted[number]) {
 
     const links = Array.from(root.querySelectorAll('[data-photo-filter]'));
     const items = Array.from(root.querySelectorAll('[data-photo-filter-groups]'));
+    const yearGroups = Array.from(root.querySelectorAll('[data-photo-year-group]'));
     const yearLinks = Array.from(root.querySelectorAll('[data-photo-year-link]'));
     const yearIndex = root.querySelector('.year-index');
     const emptyState = root.querySelector('[data-photo-empty]');
@@ -624,11 +640,23 @@ function filterGroups(photo: typeof sorted[number]) {
     root.dataset.photoFiltersBound = 'true';
     const controller = new AbortController();
     const filters = new Set(links.map((link) => link.getAttribute('data-photo-filter')).filter(Boolean));
+    const yearTargets = new Map();
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let yearScrollFrame = 0;
+    let restoreFrame = 0;
+    let photoOpen;
 
     function getFilterFromUrl() {
       const tag = new URL(window.location.href).searchParams.get('tag') || 'all';
       return filters.has(tag) ? tag : 'all';
+    }
+
+    function pushArchiveUrl(url) {
+      if (url.href === location.href) return;
+
+      const state = { ...history.state, scrollX, scrollY };
+      history.replaceState(state, '');
+      history.pushState({ ...state, photoArchiveReturnTop: null }, '', url);
     }
 
     function updateUrl(filter) {
@@ -639,7 +667,7 @@ function filterGroups(photo: typeof sorted[number]) {
         url.searchParams.set('tag', filter);
       }
       url.hash = '';
-      history.pushState({ photoFilter: filter }, '', url);
+      pushArchiveUrl(url);
     }
 
     function setActiveYear(year, reveal = true) {
@@ -656,16 +684,24 @@ function filterGroups(photo: typeof sorted[number]) {
         const left = activeLink.offsetLeft - (yearIndex.clientWidth - activeLink.clientWidth) / 2;
         yearIndex.scrollTo({
           left: Math.max(0, left),
-          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+          behavior: reduceMotion.matches ? 'instant' : 'smooth',
         });
       }
     }
 
     function syncActiveYear(reveal = true) {
-      const firstVisibleLink = yearLinks.find((link) => !link.hidden);
-      const threshold = Math.max(24, Math.min(window.innerHeight * 0.16, 144));
-      const activeItem = items.find((item) => !item.hidden && item.getBoundingClientRect().bottom > threshold);
-      const year = activeItem?.getAttribute('data-photo-year') || firstVisibleLink?.getAttribute('data-photo-year-link');
+      const anchorYear = location.hash.slice('#year-'.length);
+      const anchor = location.hash.startsWith('#year-') && yearTargets.get(anchorYear);
+      if (anchor && Math.abs(anchor.getBoundingClientRect().top - parseFloat(getComputedStyle(anchor).scrollMarginTop)) < 2) {
+        setActiveYear(anchorYear, reveal);
+        return;
+      }
+
+      const threshold = Math.max(68, Math.min(window.innerHeight * 0.16, 144));
+      let year = yearTargets.keys().next().value;
+      for (const [candidate, target] of yearTargets) {
+        if (target.getBoundingClientRect().top <= threshold) year = candidate;
+      }
       setActiveYear(year, reveal);
     }
 
@@ -678,12 +714,21 @@ function filterGroups(photo: typeof sorted[number]) {
     }
 
     function applyFilter(filter) {
+      yearTargets.clear();
       let visibleCount = 0;
       items.forEach((item) => {
+        if (item.id.startsWith('year-')) item.removeAttribute('id');
         const groups = (item.getAttribute('data-photo-filter-groups') || '').split(/\s+/);
         const hidden = filter !== 'all' && !groups.includes(filter);
         item.hidden = hidden;
-        if (!hidden) visibleCount += 1;
+        if (hidden) return;
+
+        visibleCount += 1;
+        const year = item.getAttribute('data-photo-year');
+        if (!yearTargets.has(year)) {
+          yearTargets.set(year, item);
+          item.id = `year-${year}`;
+        }
       });
 
       links.forEach((link) => {
@@ -697,45 +742,95 @@ function filterGroups(photo: typeof sorted[number]) {
 
       yearLinks.forEach((link) => {
         const year = link.getAttribute('data-photo-year-link');
-        link.hidden = !items.some((item) => !item.hidden && item.getAttribute('data-photo-year') === year);
+        link.hidden = !yearTargets.has(year);
+        if (link.hidden) link.removeAttribute('aria-current');
+      });
+
+      yearGroups.forEach((group) => {
+        group.hidden = !yearTargets.has(group.dataset.photoYearGroup);
       });
 
       if (emptyState) emptyState.hidden = visibleCount !== 0;
-      window.requestAnimationFrame(() => syncActiveYear(false));
+    }
+
+    function jumpToYear(year, behavior) {
+      const target = yearTargets.get(year);
+      if (!target) return;
+
+      target.scrollIntoView({ behavior, block: 'start' });
+      setActiveYear(year);
+    }
+
+    function restoreFromUrl(scrollTop = null, returnTop = null) {
+      applyFilter(getFilterFromUrl());
+      window.cancelAnimationFrame(restoreFrame);
+      restoreFrame = window.requestAnimationFrame(() => {
+        const match = /^#year-(\d{4})$/.exec(location.hash);
+        if (Number.isFinite(returnTop)) {
+          window.scrollTo({ top: returnTop, behavior: 'instant' });
+          syncActiveYear();
+        } else if (match && yearTargets.has(match[1])) {
+          jumpToYear(match[1], 'instant');
+        } else {
+          if (Number.isFinite(scrollTop)) window.scrollTo({ top: scrollTop, behavior: 'instant' });
+          syncActiveYear(false);
+        }
+      });
     }
 
     links.forEach((link) => {
       link.addEventListener('click', (event) => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         const filter = link.getAttribute('data-photo-filter') || 'all';
         event.preventDefault();
-        applyFilter(filter);
         updateUrl(filter);
+        restoreFromUrl();
       }, { signal: controller.signal });
     });
 
     yearLinks.forEach((link) => {
       link.addEventListener('click', (event) => {
-        event.preventDefault();
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         const year = link.getAttribute('data-photo-year-link');
-        const target = items.find((item) => !item.hidden && item.getAttribute('data-photo-year') === year);
-        if (!target) return;
-
-        setActiveYear(year);
-        target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        if (!yearTargets.has(year)) return;
+        event.preventDefault();
 
         const url = new URL(window.location.href);
         url.hash = `year-${year}`;
-        history.pushState({ photoYear: year }, '', url);
+        pushArchiveUrl(url);
+        jumpToYear(year, reduceMotion.matches ? 'instant' : 'smooth');
       }, { signal: controller.signal });
     });
 
     window.addEventListener('scroll', scheduleYearSync, { passive: true, signal: controller.signal });
     window.addEventListener('resize', scheduleYearSync, { passive: true, signal: controller.signal });
-    window.addEventListener('popstate', () => applyFilter(getFilterFromUrl()), { signal: controller.signal });
-    document.addEventListener('astro:before-swap', () => {
+    window.addEventListener('popstate', (event) => restoreFromUrl(event.state?.scrollY, event.state?.photoArchiveReturnTop), { signal: controller.signal });
+    window.addEventListener('hashchange', () => {
+      if (location.hash.startsWith('#year-')) restoreFromUrl();
+    }, { signal: controller.signal });
+    document.addEventListener('astro:before-preparation', (event) => {
+      if (event.navigationType === 'push' && event.sourceElement?.closest('.contact-card')) {
+        photoOpen = { signal: event.signal, url: location.pathname + location.search + location.hash, top: scrollY };
+      }
+    }, { signal: controller.signal });
+    document.addEventListener('astro:before-swap', (event) => {
+      const backLink = event.newDocument.querySelector('[data-photo-archive-back]');
+      if (backLink && photoOpen && photoOpen.signal === event.signal) {
+        backLink.dataset.photoArchiveUrl = photoOpen.url;
+        backLink.dataset.photoArchiveTop = String(photoOpen.top);
+        history.replaceState({ ...history.state, photoArchiveReturnTop: photoOpen.top }, '');
+      }
+
       if (yearScrollFrame) window.cancelAnimationFrame(yearScrollFrame);
+      window.cancelAnimationFrame(restoreFrame);
       controller.abort();
     }, { once: true, signal: controller.signal });
-    applyFilter(getFilterFromUrl());
+    const returnTop = root.hasAttribute('data-photo-archive-top') ? Number(root.dataset.photoArchiveTop) : null;
+    if (returnTop !== null) history.replaceState({ ...history.state, photoArchiveReturnTop: returnTop }, '');
+    const restoreInitialPosition = () => restoreFromUrl(history.state?.scrollY, history.state?.photoArchiveReturnTop);
+    restoreInitialPosition();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', restoreInitialPosition, { once: true, signal: controller.signal });
+    }
   })();
 </script>

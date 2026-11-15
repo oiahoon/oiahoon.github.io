@@ -30,8 +30,6 @@ const copy = lang === 'zh'
   ? {
       backToArchive: '返回文章归档',
       details: '文章信息',
-      published: '发布于',
-      author: '作者',
       filed: '标签',
       archive: '归档',
       notes: '文章',
@@ -41,8 +39,6 @@ const copy = lang === 'zh'
   : {
       backToArchive: 'Back to notes archive',
       details: 'Article details',
-      published: 'Published',
-      author: 'Author',
       filed: 'Filed',
       archive: 'Archive',
       notes: 'Notes',
@@ -95,7 +91,7 @@ const structuredData = generateBlogPostStructuredData({
       <span data-reading-progress></span>
     </div>
 
-    <article class="section-gap" data-article-page>
+    <article class="section-gap article-page" data-article-page>
       <div class="shell">
         <div class="article-layout">
           <div class="reading-narrow article-primary">
@@ -105,11 +101,13 @@ const structuredData = generateBlogPostStructuredData({
               <p class="entry-meta skeleton-text">
                 <UiIcon name="calendar" size={13} />
                 <span>
-                  {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
+                  <time datetime={date.toISOString()}>
+                    {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </time>
                   · {author}
                 </span>
               </p>
@@ -125,20 +123,6 @@ const structuredData = generateBlogPostStructuredData({
 
           <aside class="article-marginalia" aria-label={copy.details}>
             <dl>
-              <div>
-                <dt>{copy.published}</dt>
-                <dd>
-                  {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </dd>
-              </div>
-              <div>
-                <dt>{copy.author}</dt>
-                <dd>{author}</dd>
-              </div>
               {tags.length > 0 && (
                 <div>
                   <dt>{copy.filed}</dt>
@@ -250,15 +234,13 @@ const structuredData = generateBlogPostStructuredData({
     }
 
     .article-marginalia {
+      display: none;
       min-width: 0;
       max-width: 100%;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 1.2rem;
     }
 
     .article-marginalia dl {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 1rem;
       margin: 0;
     }
@@ -337,6 +319,10 @@ const structuredData = generateBlogPostStructuredData({
     }
 
     @media (max-width: 640px) {
+      .article-page {
+        margin-top: 1.85rem;
+      }
+
       .article-layout {
         gap: 1.1rem;
       }
@@ -358,25 +344,8 @@ const structuredData = generateBlogPostStructuredData({
         line-height: 1.7;
       }
 
-      .article-marginalia {
-        padding-bottom: 0.95rem;
-      }
-
-      .article-marginalia dl {
-        gap: 0.8rem 0.9rem;
-      }
-
-      .article-marginalia dt {
-        font-size: 0.64rem;
-      }
-
-      .article-marginalia dd {
-        margin-top: 0.22rem;
-        font-size: 0.8rem;
-      }
-
       .article-content .prose {
-        margin-top: 2rem;
+        margin-top: 1.3rem;
       }
     }
 
@@ -393,6 +362,7 @@ const structuredData = generateBlogPostStructuredData({
       }
 
       .article-marginalia {
+        display: block;
         position: sticky;
         top: 2rem;
         grid-column: 1;
@@ -400,13 +370,7 @@ const structuredData = generateBlogPostStructuredData({
         align-self: start;
         margin-top: 5.3rem;
         border-right: 1px solid var(--line);
-        border-bottom: 0;
         padding-right: 1.2rem;
-        padding-bottom: 0;
-      }
-
-      .article-marginalia dl {
-        grid-template-columns: 1fr;
       }
     }
   </style>
