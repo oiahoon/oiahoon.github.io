@@ -127,6 +127,30 @@ function photoMeta(photo: typeof photographs[number]) {
   </section>
 </SpotlightLayout>
 
+<script>
+  let pressed: { link: HTMLAnchorElement; pointerId: number } | undefined;
+
+  document.addEventListener('pointerdown', (event) => {
+    if (event.pointerType !== 'touch' || !event.isPrimary || !(event.target instanceof Element)) return;
+
+    const link = event.target.closest<HTMLAnchorElement>('.home-hero__actions a');
+    if (!link) return;
+
+    pressed = { link, pointerId: event.pointerId };
+    link.dataset.touchPressed = '';
+  });
+
+  function clearTouchFeedback(event: PointerEvent) {
+    if (pressed?.pointerId !== event.pointerId) return;
+
+    delete pressed.link.dataset.touchPressed;
+    pressed = undefined;
+  }
+
+  document.addEventListener('pointerup', clearTouchFeedback);
+  document.addEventListener('pointercancel', clearTouchFeedback);
+</script>
+
 <style>
   .home-hero {
     margin-top: clamp(2rem, 5vw, 4.5rem);
@@ -496,13 +520,17 @@ function photoMeta(photo: typeof photographs[number]) {
     }
   }
 
-  .home-button:active {
+  .home-button:is(:active, [data-touch-pressed]) {
     background-color: color-mix(in srgb, var(--text) 76%, var(--accent));
   }
 
-  .home-hero__actions .home-text-link:active {
+  .home-hero__actions .home-text-link:is(:active, [data-touch-pressed]) {
     color: var(--accent);
     text-decoration-color: currentColor;
     text-decoration-thickness: 2px;
+  }
+
+  .home-hero__actions a[data-touch-pressed] {
+    transition-duration: 0ms;
   }
 </style>
