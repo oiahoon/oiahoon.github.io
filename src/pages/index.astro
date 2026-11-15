@@ -394,10 +394,15 @@ function photoMeta(photo: typeof photographs[number]) {
       margin-top: 0.75rem;
       font-size: 0.98rem;
       line-height: 1.72;
+      text-wrap: balance;
     }
 
     .home-hero__actions {
       margin-top: 1rem;
+    }
+
+    .home-hero__actions .home-text-link {
+      min-height: 2.75rem;
     }
 
     .home-section--selected {
@@ -468,7 +473,6 @@ function photoMeta(photo: typeof photographs[number]) {
   @media (hover: hover) {
     .home-button:hover {
       background: color-mix(in srgb, var(--text) 90%, var(--accent));
-      transform: translateY(-1px);
     }
 
     .home-text-link:hover,
@@ -476,13 +480,29 @@ function photoMeta(photo: typeof photographs[number]) {
     .home-about a:hover {
       color: var(--accent);
       text-decoration-color: currentColor;
-      transform: translateY(-1px);
     }
   }
 
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .home-button:hover,
+    .home-text-link:hover,
+    .home-section__head a:hover,
+    .home-about a:hover {
+      transform: translateY(-1px);
+    }
+
     .selected-card:hover .selected-card__image {
       transform: scale(1.018);
     }
+  }
+
+  .home-button:active {
+    background-color: color-mix(in srgb, var(--text) 76%, var(--accent));
+  }
+
+  .home-hero__actions .home-text-link:active {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 2px;
   }
 </style>
