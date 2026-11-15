@@ -1,0 +1,63 @@
+<script>
+  let pressed: { link: HTMLAnchorElement; pointerId: number } | undefined;
+
+  document.addEventListener('pointerdown', (event) => {
+    if (event.pointerType !== 'touch' || !event.isPrimary || !(event.target instanceof Element)) return;
+
+    const link = event.target.closest<HTMLAnchorElement>('a[data-article-link], [data-article-content] a[href]');
+    if (!link) return;
+
+    pressed = { link, pointerId: event.pointerId };
+    link.dataset.touchPressed = '';
+  });
+
+  function clearTouchFeedback(event: PointerEvent) {
+    if (pressed?.pointerId !== event.pointerId) return;
+
+    delete pressed.link.dataset.touchPressed;
+    pressed = undefined;
+  }
+
+  document.addEventListener('pointerup', clearTouchFeedback);
+  document.addEventListener('pointercancel', clearTouchFeedback);
+</script>
+
+<style is:global>
+  :where(a[data-article-link], [data-article-content] a[href]) {
+    --article-link-line: transparent;
+    --article-link-weight: 1px;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  [data-article-link='subtle'] {
+    --article-link-line: var(--line);
+  }
+
+  [data-article-content] a[href] {
+    --article-link-line: color-mix(in srgb, currentColor 56%, transparent);
+  }
+
+  :is(a[data-article-link] > [data-article-link-label], [data-article-content] a[href]) {
+    text-decoration: underline var(--article-link-weight) var(--article-link-line);
+    text-underline-offset: 0.24em;
+    text-decoration-skip-ink: auto;
+  }
+
+  :is(a[data-article-link], [data-article-content] a[href]):is(:focus-visible, :active, [data-touch-pressed]) {
+    --article-link-line: currentColor;
+    --article-link-weight: 2px;
+    color: var(--accent);
+  }
+
+  :is(a[data-article-link], [data-article-content] a[href])[data-touch-pressed] {
+    transition-duration: 0ms;
+  }
+
+  @media (hover: hover) {
+    :is(a[data-article-link], [data-article-content] a[href]):hover {
+      --article-link-line: currentColor;
+      --article-link-weight: 2px;
+      color: var(--accent);
+    }
+  }
+</style>

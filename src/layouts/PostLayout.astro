@@ -2,6 +2,7 @@
 import SpotlightLayout from './SpotlightLayout.astro';
 import PhotographyLayout from './PhotographyLayout.astro';
 import { generateBlogPostStructuredData } from '../utils/seo';
+import ArticleLinkFeedback from '../components/ArticleLinkFeedback.astro';
 import UiIcon from '../components/UiIcon.astro';
 
 export interface Props {
@@ -87,6 +88,7 @@ const structuredData = generateBlogPostStructuredData({
   </PhotographyLayout>
 ) : (
   <SpotlightLayout title={`${fallbackTitle} | Joey's Notes`} description={description || subtitle || fallbackTitle} image={previewImage || undefined} lang={lang} structuredData={structuredData}>
+    <ArticleLinkFeedback />
     <div class="reading-progress" aria-hidden="true">
       <span data-reading-progress></span>
     </div>
@@ -95,7 +97,7 @@ const structuredData = generateBlogPostStructuredData({
       <div class="shell">
         <div class="article-layout">
           <div class="reading-narrow article-primary">
-            <a href="/articles/" class="article-back-link text-sm muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="arrowLeft" size={14} /> <span>{copy.backToArchive}</span></a>
+            <a href="/articles/" class="article-back-link text-sm muted" data-astro-prefetch data-article-link><UiIcon name="arrowLeft" size={14} /> <span data-article-link-label>{copy.backToArchive}</span></a>
 
             <header class="mt-8 border-b pb-10" style="border-color: var(--line);">
               <p class="entry-meta skeleton-text">
@@ -131,7 +133,7 @@ const structuredData = generateBlogPostStructuredData({
               )}
               <div>
                 <dt>{copy.archive}</dt>
-                <dd><a href="/articles/" data-astro-prefetch>{copy.notes}</a></dd>
+                <dd><a href="/articles/" data-astro-prefetch data-article-link><span data-article-link-label>{copy.notes}</span></a></dd>
               </div>
             </dl>
           </aside>
@@ -156,9 +158,9 @@ const structuredData = generateBlogPostStructuredData({
               <footer class="mt-14 border-t pt-6" style="border-color: var(--line);">
                 <div class="article-tag-list">
                   {tags.map((tag) => (
-                    <a href={`/tags/${encodeURIComponent(tag)}/`} class="article-tag-link muted hover:text-[var(--text)]" data-astro-prefetch>
+                    <a href={`/tags/${encodeURIComponent(tag)}/`} class="article-tag-link muted" data-astro-prefetch data-article-link>
                       <UiIcon name="tag" size={12} />
-                      <span>{tag}</span>
+                      <span data-article-link-label>{tag}</span>
                     </a>
                   ))}
                 </div>
@@ -166,8 +168,8 @@ const structuredData = generateBlogPostStructuredData({
             )}
 
             <div class="mt-8 flex items-center justify-between border-t pt-6 text-sm" style="border-color: var(--line);">
-              <a href="/articles/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="article" size={14} /> <span>{copy.notesArchive}</span></a>
-              <a href="/tags/" class="article-back-link muted hover:text-[var(--text)]" data-astro-prefetch><UiIcon name="tag" size={14} /> <span>{copy.allTags}</span></a>
+              <a href="/articles/" class="article-back-link muted" data-astro-prefetch data-article-link><UiIcon name="article" size={14} /> <span data-article-link-label>{copy.notesArchive}</span></a>
+              <a href="/tags/" class="article-back-link muted" data-astro-prefetch data-article-link><UiIcon name="tag" size={14} /> <span data-article-link-label>{copy.allTags}</span></a>
             </div>
           </div>
         </div>
@@ -274,12 +276,6 @@ const structuredData = generateBlogPostStructuredData({
       text-decoration: none;
     }
 
-    .article-marginalia a:hover {
-      color: var(--accent);
-      text-decoration: underline;
-      text-underline-offset: 0.28em;
-    }
-
     .article-back-link,
     .article-tag-link {
       display: inline-flex;
@@ -304,11 +300,6 @@ const structuredData = generateBlogPostStructuredData({
 
     .article-tag-link {
       text-decoration: none;
-    }
-
-    .article-tag-link:hover {
-      text-decoration: underline;
-      text-underline-offset: 0.3em;
     }
 
     .article-back-link:focus-visible,

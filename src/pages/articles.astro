@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import ArticleLinkFeedback from '../components/ArticleLinkFeedback.astro';
 import SpotlightLayout from '../layouts/SpotlightLayout.astro';
 
 const posts = await getCollection('posts', ({ data }) => !data.draft && data.type !== 'photography');
@@ -25,6 +26,7 @@ const shouldShowTopicLinks = topTags.length >= 3;
 ---
 
 <SpotlightLayout title="Legacy Notes Archive | Joey's Notes" description="早年的工程实践、工具折腾和技术笔记，作为长期 archive 保留。" lang="zh">
+  <ArticleLinkFeedback />
   <section class="section-gap articles-page">
     <div class="shell">
       <div class="hero-intro articles-hero">
@@ -39,12 +41,13 @@ const shouldShowTopicLinks = topTags.length >= 3;
               class:list={['articles-topic-link', { 'articles-topic-link--extra': index >= 4 }]}
               aria-label={`浏览 ${tag} 标签，共 ${count} 篇文章`}
               data-astro-prefetch
+              data-article-link
             >
-              <span>{tag}</span>
+              <span data-article-link-label>{tag}</span>
               <span class="articles-topic-count" aria-hidden="true">{count}</span>
             </a>
           ))}
-          <a href="/tags/" class="articles-topic-link articles-topic-link--all" data-astro-prefetch>全部标签</a>
+          <a href="/tags/" class="articles-topic-link articles-topic-link--all" data-astro-prefetch data-article-link="subtle"><span data-article-link-label>全部标签</span></a>
         </nav>
       </div>
 
@@ -55,8 +58,8 @@ const shouldShowTopicLinks = topTags.length >= 3;
               <span>{post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replaceAll('/', '.')}</span>
             </time>
             <h2 class="entry-title skeleton-text articles-entry-title">
-              <a href={`/posts/${post.id}/`} data-astro-prefetch style={`view-transition-name: article-title-${post.id};`}>
-                {post.data.title}
+              <a href={`/posts/${post.id}/`} data-astro-prefetch data-article-link style={`view-transition-name: article-title-${post.id};`}>
+                <span data-article-link-label>{post.data.title}</span>
               </a>
             </h2>
             <p class="entry-desc skeleton-text articles-entry-desc">{post.data.description || post.data.subtitle || '点击查看完整内容。'}</p>
@@ -116,21 +119,10 @@ const shouldShowTopicLinks = topTags.length >= 3;
     font-size: 0.9rem;
     line-height: 1.4;
     text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .articles-topic-link:hover,
-  .articles-topic-link:focus-visible {
-    color: var(--text);
-    text-decoration: underline;
-    text-underline-offset: 0.35em;
   }
 
   .articles-topic-link--all {
     color: var(--text);
-    text-decoration: underline;
-    text-underline-offset: 0.35em;
-    text-decoration-color: var(--line);
   }
 
   .articles-topic-link:focus-visible {
